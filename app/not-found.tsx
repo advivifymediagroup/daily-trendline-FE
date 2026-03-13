@@ -5,11 +5,11 @@ import { Button } from "@mui/material";
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white px-4 text-center">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white text-center max-w-312.5!">
       {/* 404 Code with gradient glow */}
       <h1 className="text-7xl md:text-9xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 drop-shadow-lg animate-pulse">
         404
-      </h1>  
+      </h1>
 
       <h2 className="text-3xl md:text-4xl font-semibold mb-2 text-gray-200">
         Oops! Page not found

@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <div className="homepage min-h-[75vh]">
+    <div className="homepage">
       <p>Getting started with Daily Trendline website.</p>
     </div>
   );
