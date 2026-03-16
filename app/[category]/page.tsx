@@ -8,11 +8,9 @@ import {
   Divider,
 } from "@mui/material";
 import Link from "next/link";
-import { FaClock } from "react-icons/fa";
 import Image from "next/image";
-
 import { featuredNews, secondaryNews, gridNews } from "@/components/dummyData";
-
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 type Props = {
   params: Promise<{ category: string }>;
 };
@@ -43,7 +41,7 @@ const Page = async ({ params }: Props) => {
           Latest updates and breaking stories from {category}.
         </Typography>
 
-        <Divider className="mt-4" />
+        <Divider className="mt-4!" />
       </Box>
 
       <Box className="grid lg:grid-cols-4 gap-10">
@@ -71,7 +69,8 @@ const Page = async ({ params }: Props) => {
                 )}
 
                 <Box className="flex items-center gap-2 mt-4 text-sm text-gray-500">
-                  <FaClock />
+                  <AccessTimeIcon />
+
                   {featured.date}
                 </Box>
               </CardContent>
@@ -100,7 +99,7 @@ const Page = async ({ params }: Props) => {
                     </Typography>
 
                     <Box className="flex items-center gap-2 mt-3 text-sm text-gray-500">
-                      <FaClock />
+                      <AccessTimeIcon />
                       {item.date}
                     </Box>
                   </CardContent>
@@ -118,7 +117,7 @@ const Page = async ({ params }: Props) => {
 
         {/* Sidebar */}
         <Box className="hidden lg:flex flex-col gap-6">
-          <Typography variant="h6" className="font-semibold">
+          <Typography variant="h5" className="font-bold">
             Trending
           </Typography>
 

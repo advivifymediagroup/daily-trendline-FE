@@ -41,7 +41,7 @@ export const secondaryNews = [
 
 export const gridNews = [
   {
-    imgUrl: "https://images.unsplash.com/photo-1549924231-f129b911e442",
+    imgUrl: "https://c.files.bbci.co.uk/c27e/live/c3a39390-66d1-11ef-a065-11da863b60a9.jpg",
     height: 250,
     headline: "Champions League quarter-finals begin",
     category: "Sports",

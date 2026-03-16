@@ -13,10 +13,10 @@ import {
   ListItemText,
 } from "@mui/material";
 import SearchBar from "./SearchBar";
-
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -27,6 +27,7 @@ const navLinks = [
 
 const Header = () => {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   const toggleDrawer = (state: boolean) => {
     setOpen(state);
@@ -48,16 +49,25 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <Box className="hidden md:flex items-center gap-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="text-gray-300 hover:text-white transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const isActive =
+                pathname === link.href || pathname.startsWith(link.href + "/");
 
+              return (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className={`px-3 py-1 rounded transition-colors
+      ${
+        isActive
+          ? "border-2 border-white text-white"
+          : "text-gray-300 hover:text-white"
+      }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
             {/* Search Bar */}
             <SearchBar />
           </Box>
@@ -92,17 +102,26 @@ const Header = () => {
 
           {/* Navigation Links */}
           <List>
-            {navLinks.map((link) => (
-              <ListItem
-                key={link.label}
-                component={Link}
-                href={link.href}
-                onClick={() => toggleDrawer(false)}
-                className="hover:bg-gray-900 rounded"
-              >
-                <ListItemText primary={link.label} />
-              </ListItem>
-            ))}
+            {navLinks.map((link) => {
+              const isActive =
+                pathname === link.href || pathname.startsWith(link.href + "/");
+
+              return (
+                <ListItem
+                  key={link.label}
+                  component={Link}
+                  href={link.href}
+                  onClick={() => toggleDrawer(false)}
+                  className={`rounded ${
+                    isActive
+                      ? "border-2 border-white bg-gray-900"
+                      : "hover:bg-gray-900"
+                  }`}
+                >
+                  <ListItemText primary={link.label} />
+                </ListItem>
+              );
+            })}
           </List>
         </Box>
       </Drawer>

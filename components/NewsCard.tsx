@@ -1,16 +1,9 @@
+"use client";
+
 import React from "react";
 import { Box, Typography, Chip } from "@mui/material";
-
-interface NewsCardProps {
-  imgUrl: string;
-  width?: string | number;
-  height?: string | number;
-  headline: string;
-  category: string;
-  description?: string;
-  author: string;
-  date: string;
-}
+import { useRouter } from "next/navigation";
+import { NewsCardProps } from "@/types/NewsCard";
 
 const NewsCard: React.FC<NewsCardProps> = ({
   imgUrl,
@@ -22,9 +15,18 @@ const NewsCard: React.FC<NewsCardProps> = ({
   author,
   date,
 }) => {
+  const router = useRouter();
+
+  const slug = headline.toLowerCase().replace(/\s+/g, "-");
+
+  const handleClick = () => {
+    router.push(`/${category.toLowerCase()}/${slug}`);
+  };
+
   return (
     <Box
       sx={{ width, height }}
+      onClick={handleClick}
       className="relative rounded-sm overflow-hidden group cursor-pointer"
     >
       {/* Background Image */}

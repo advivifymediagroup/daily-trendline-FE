@@ -1,24 +1,19 @@
-// components/shared/Footer.tsx
 "use client";
 
 import React from "react";
 import { Box, Typography, IconButton } from "@mui/material";
-import {
-  FaFacebookF,
-  FaTwitter,
-  FaLinkedinIn,
-  FaInstagram,
-} from "react-icons/fa";
 import Link from "next/link";
-
+import FacebookIcon from "@mui/icons-material/Facebook";
+import XIcon from "@mui/icons-material/X";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 const footerLinks = [
   {
     title: "News",
     links: [
-      { label: "Latest News", href: "/latest" },
-      { label: "Politics", href: "/politics" },
       { label: "Business", href: "/business" },
       { label: "Technology", href: "/technology" },
+      { label: "Sports", href: "/sports" },
     ],
   },
   {
@@ -42,15 +37,15 @@ const footerLinks = [
 ];
 
 const socialLinks = [
-  { icon: <FaFacebookF />, href: "https://facebook.com" },
-  { icon: <FaTwitter />, href: "https://twitter.com" },
-  { icon: <FaLinkedinIn />, href: "https://linkedin.com" },
-  { icon: <FaInstagram />, href: "https://instagram.com" },
+  { icon: <FacebookIcon />, href: "https://facebook.com" },
+  { icon: <XIcon />, href: "https://x.com" },
+  { icon: <LinkedInIcon />, href: "https://linkedin.com" },
+  { icon: <InstagramIcon />, href: "https://instagram.com" },
 ];
 
 const Footer: React.FC = () => {
   return (
-    <footer className="w-full bg-black text-gray-200">
+    <footer className="w-full bg-black text-gray-200 mt-4">
       <Box className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid md:grid-cols-4 gap-8">
         {/* Logo + Description */}
         <Box className="space-y-4">
@@ -59,9 +54,9 @@ const Footer: React.FC = () => {
           </Typography>
 
           <Typography variant="body2" className="text-gray-400">
-            Daily Trendline brings you the latest news, breaking stories,
-            in-depth analysis, and trending updates from around the world
-            covering politics, technology, business, entertainment and more.
+            Daily Trendline brings you the latest news, breaking stories, and
+            trending updates from around the world in very few words - covering
+            politics, technology, business, entertainment and more.
           </Typography>
 
           <Box className="flex space-x-3 mt-2">
@@ -72,7 +67,7 @@ const Footer: React.FC = () => {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-400! hover:text-white! transition-colors!"
               >
                 {social.icon}
               </IconButton>

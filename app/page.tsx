@@ -23,7 +23,7 @@ export default function Home() {
 
       {/* Top Stories */}
       <Box className="flex flex-col gap-4">
-        <Typography variant="h5" className="font-semibold">
+        <Typography variant="h5" className="font-bold">
           Top Stories
         </Typography>
 
@@ -36,7 +36,7 @@ export default function Home() {
 
       {/* Latest News */}
       <Box className="flex flex-col gap-4">
-        <Typography variant="h5" className="font-semibold">
+        <Typography variant="h5" className="font-bold">
           Latest News
         </Typography>
 
