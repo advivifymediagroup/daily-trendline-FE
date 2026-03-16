@@ -31,7 +31,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header />
-        <Container className="max-w-312.5! m-auto min-h-[85vh]">
+        <Container className="max-w-[1310px]! m-auto min-h-[85vh]">
           {children}
         </Container>
         <Footer />

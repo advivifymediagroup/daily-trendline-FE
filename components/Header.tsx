@@ -12,6 +12,7 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
+import SearchBar from "./SearchBar";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -19,11 +20,9 @@ import Link from "next/link";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  // { label: "Politics", href: "/politics" },
   { label: "Business", href: "/business" },
   { label: "Technology", href: "/technology" },
   { label: "Sports", href: "/sports" },
-  // { label: "Contact", href: "/contact" },
 ];
 
 const Header = () => {
@@ -40,8 +39,12 @@ const Header = () => {
         className="bg-black! text-white! shadow-md border-b border-gray-800"
       >
         <Toolbar className="max-w-7xl mx-auto w-full flex justify-between">
-          {/* Logo */}
-          <Typography className="font-bold text-xl">Daily Trendline</Typography>
+          <Link href="/">
+            {/* Logo */}
+            <Typography className="font-bold text-xl">
+              Daily Trendlines
+            </Typography>
+          </Link>
 
           {/* Desktop Navigation */}
           <Box className="hidden md:flex items-center gap-6">
@@ -54,6 +57,9 @@ const Header = () => {
                 {link.label}
               </Link>
             ))}
+
+            {/* Search Bar */}
+            <SearchBar />
           </Box>
 
           {/* Mobile Hamburger */}
