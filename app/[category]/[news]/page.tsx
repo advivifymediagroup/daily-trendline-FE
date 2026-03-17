@@ -1,12 +1,26 @@
 import React from "react";
-import { Box, Typography, Card, CardMedia, Divider } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Card,
+  CardMedia,
+  Divider,
+  Tooltip,
+} from "@mui/material";
 import Link from "next/link";
 import {
   featuredNews,
   secondaryNews,
   gridNews,
+  latestCategoryNews,
 } from "../../../components/dummyData";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import { Avatar, IconButton } from "@mui/material";
+import ShareIcon from "@mui/icons-material/Share";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import XIcon from "@mui/icons-material/X";
+import EmailIcon from "@mui/icons-material/Email";
+import LinkIcon from "@mui/icons-material/Link";
 
 type Props = {
   params: {
@@ -19,7 +33,12 @@ const Page = async ({ params }: Props) => {
   const { category, news } = await params;
 
   // Combine all news
-  const allNews = [featuredNews, ...secondaryNews, ...gridNews];
+  const allNews = [
+    featuredNews,
+    ...secondaryNews,
+    ...gridNews,
+    ...latestCategoryNews,
+  ];
 
   // Find the news item that matches the headline (case-insensitive)
   const newsItem = allNews.find(
@@ -50,18 +69,70 @@ const Page = async ({ params }: Props) => {
         {newsItem.headline}
       </Typography>
 
-      {/* Date */}
-      <Box className="flex items-center gap-2 text-sm text-gray-500 my-2">
-        <AccessTimeIcon /> {newsItem.date}
+      <Box className="flex items-center justify-between flex-wrap gap-4 mb-6 mt-4">
+        {/* LEFT: Author Info */}
+        <Box className="flex items-center gap-3">
+          <Avatar className="bg-gray-300 text-black">
+            {newsItem.author?.charAt(0)}
+          </Avatar>
+
+          <Box className="flex flex-col">
+            <Typography className="font-semibold! underline">
+              {newsItem.author}
+            </Typography>
+
+            <Box className="flex items-center gap-1 text-sm text-gray-500">
+              <AccessTimeIcon fontSize="small" />
+              {newsItem.date}
+            </Box>
+          </Box>
+        </Box>
+
+        {/* Share Buttons */}
+        <Box className="flex items-center gap-2">
+          <Box className="flex justify-center items-center">
+            <ShareIcon className="text-gray-600 hover:text-black! m-2" />
+            <Typography>Share</Typography>
+          </Box>
+
+          <Tooltip title="Share on Facebook">
+            <IconButton className="text-gray-600 hover:text-blue-600!">
+              <FacebookIcon />
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip title="Share on X">
+            <IconButton className="text-gray-600 hover:text-black!">
+              <XIcon />
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip title="Send via Email">
+            <IconButton className="text-gray-600 hover:text-red-500!">
+              <EmailIcon />
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip title="Copy Link">
+            <IconButton
+            // className="text-gray-600 hover:text-green-600"
+            // onClick={() => {
+            //   navigator.clipboard.writeText(window.location.href);
+            // }}
+            >
+              <LinkIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
       </Box>
 
       {/* Featured Image */}
       <Card className="mb-6 rounded-xl overflow-hidden shadow-lg">
         <CardMedia
           component="img"
-          height="420"
           image={newsItem.imgUrl}
           alt={newsItem.headline}
+          className="h-150 w-full object-cover!"
         />
       </Card>
 

@@ -38,10 +38,91 @@ export const secondaryNews = [
     date: "Mar 15, 2026",
   },
 ];
+export const featuredRight = [secondaryNews[0], secondaryNews[1]];
+
+export const latestCategoryNews = [
+  {
+    imgUrl: "https://images.unsplash.com/photo-1517649763962-0c623066013b",
+    height: 250,
+    headline: "India prepares for upcoming T20 World Cup",
+    category: "Sports",
+    description:
+      "Team India begins intense training sessions ahead of the T20 World Cup with focus on fitness and strategy.",
+    content:
+      "The Indian cricket team has started its preparations for the upcoming T20 World Cup with rigorous training camps. Coaches are focusing on improving match fitness and experimenting with new strategies to strengthen the squad.",
+    author: "Rohit Mehta",
+    date: "Mar 17, 2026",
+  },
+  {
+    imgUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Olympic_rings_without_rims.svg/1280px-Olympic_rings_without_rims.svg.png",
+    height: 250,
+    headline: "Olympics 2028 preparations gain momentum",
+    category: "Sports",
+    description:
+      "Host cities are ramping up infrastructure and athlete programs for the upcoming Olympic Games.",
+    content:
+      "Preparations for the 2028 Olympics are underway as host cities invest heavily in infrastructure, stadiums, and athlete training programs. Officials promise a technologically advanced and sustainable event.",
+    author: "Sneha Iyer",
+    date: "Mar 16, 2026",
+  },
+  {
+    imgUrl: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b",
+    height: 250,
+    headline: "Football transfer market sees record-breaking deals",
+    category: "Sports",
+    description:
+      "Top European clubs are spending record amounts in the transfer window to secure star players.",
+    content:
+      "The latest football transfer window has seen unprecedented spending, with clubs breaking previous records to sign top talent. Analysts believe this trend reflects growing commercial revenues in football.",
+    author: "Arjun Kapoor",
+    date: "Mar 16, 2026",
+  },
+
+  // TECHNOLOGY
+
+  {
+    imgUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
+    height: 250,
+    headline: "Tech giants invest heavily in artificial intelligence",
+    category: "Technology",
+    description:
+      "Major technology companies are increasing investments in AI to stay competitive in the global market.",
+    content:
+      "Leading tech companies are pouring billions into artificial intelligence research and development. From generative AI to automation, the race to dominate AI innovation is accelerating rapidly.",
+    author: "Karan Malhotra",
+    date: "Mar 17, 2026",
+  },
+  {
+    imgUrl: "https://images.unsplash.com/photo-1535223289827-42f1e9919769",
+    height: 250,
+    headline: "Cybersecurity threats increase in 2026",
+    category: "Technology",
+    description:
+      "Experts warn of rising cyberattacks targeting businesses and individuals worldwide.",
+    content:
+      "Cybersecurity experts have reported a sharp increase in cyberattacks in 2026. Organizations are investing more in security infrastructure to protect sensitive data from breaches and ransomware attacks.",
+    author: "Neeraj Singh",
+    date: "Mar 16, 2026",
+  },
+  {
+    imgUrl: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
+    height: 250,
+    headline: "Developers embrace new web frameworks in 2026",
+    category: "Technology",
+    description:
+      "Modern web frameworks are helping developers build faster and more scalable applications.",
+    content:
+      "The developer community is rapidly adopting new frameworks that improve performance and scalability. These tools are enabling faster development cycles and better user experiences across web applications.",
+    author: "Aditi Sharma",
+    date: "Mar 15, 2026",
+  },
+];
 
 export const gridNews = [
   {
-    imgUrl: "https://c.files.bbci.co.uk/c27e/live/c3a39390-66d1-11ef-a065-11da863b60a9.jpg",
+    imgUrl:
+      "https://c.files.bbci.co.uk/c27e/live/c3a39390-66d1-11ef-a065-11da863b60a9.jpg",
     height: 250,
     headline: "Champions League quarter-finals begin",
     category: "Sports",
@@ -81,6 +162,19 @@ export const gridNews = [
     height: 250,
     headline: "Startups attract record investments in 2026",
     category: "Startup",
+    description:
+      "Venture capital investments in startups have reached new heights, signaling strong investor confidence.",
+    content:
+      "Innovative startups across industries are securing unprecedented funding rounds in 2026. Investors are particularly interested in technology-driven businesses that promise high growth and scalability.",
+    author: "Neha Gupta",
+    date: "Mar 15, 2026",
+  },
+  {
+    imgUrl: "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d",
+    height: 250,
+    headline:
+      "Startups attract record investments in 2026 Startups attract record investments in 2026 ",
+    category: "Technology",
     description:
       "Venture capital investments in startups have reached new heights, signaling strong investor confidence.",
     content:

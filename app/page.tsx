@@ -3,10 +3,13 @@ import { Box, Typography } from "@mui/material";
 import {
   breakingNews,
   featuredNews,
+  featuredRight,
   gridNews,
+  latestCategoryNews,
   secondaryNews,
 } from "../components/dummyData";
 import BreakingNewsTicker from "@/components/BreakingNewsTicker";
+import CategoryNewsCard from "@/components/CategoryNewsCard";
 
 export default function Home() {
   return (
@@ -18,12 +21,24 @@ export default function Home() {
           Featured News
         </Typography>
 
-        <NewsCard {...featuredNews} />
+        <Box className="grid md:grid-cols-3 gap-3">
+          {/* LEFT BIG CARD */}
+          <Box className="md:col-span-2">
+            <NewsCard {...featuredNews} height={493} />
+          </Box>
+
+          {/* RIGHT SIDE */}
+          <Box className="flex flex-col gap-3">
+            {featuredRight.map((item, index) => (
+              <NewsCard key={index} {...item} height={240} />
+            ))}
+          </Box>
+        </Box>
       </Box>
 
       {/* Top Stories */}
       <Box className="flex flex-col gap-4">
-        <Typography variant="h5" className="font-bold">
+        <Typography variant="h5" className="font-bold!">
           Top Stories
         </Typography>
 
@@ -35,7 +50,7 @@ export default function Home() {
       </Box>
 
       {/* Latest News */}
-      <Box className="flex flex-col gap-4">
+      {/* <Box className="flex flex-col gap-4">
         <Typography variant="h5" className="font-bold">
           Latest News
         </Typography>
@@ -44,6 +59,53 @@ export default function Home() {
           {gridNews.map((news, index) => (
             <NewsCard key={index} {...news} />
           ))}
+        </Box>
+      </Box> */}
+
+      {/* LATEST SECTION */}
+      <Box className="flex flex-col gap-6 mt-2">
+        <Box className="grid md:grid-cols-2 gap-6">Latest in Technology</Box>
+        <Box className="grid md:grid-cols-2 gap-6">Latest in Sports</Box>
+      </Box>
+
+      {/* LATEST SECTION */}
+      <Box className="flex flex-col gap-6 mt-2">
+        {/* <Typography variant="h5" className="font-bold">
+          Latest News
+        </Typography> */}
+
+        <Box className="grid md:grid-cols-2 gap-6">
+          {/* Tech Section */}
+          <Box className="bg-white rounded-xl flex flex-col gap-4">
+            <Typography variant="h5" className="font-bold! pb-2">
+              Latest in Technology
+            </Typography>
+
+            <Box className="flex flex-col gap-3">
+              {latestCategoryNews
+                .filter((item) => item.category === "Technology")
+                .slice(0, 4)
+                .map((item, index) => (
+                  <CategoryNewsCard key={index} {...item} />
+                ))}
+            </Box>
+          </Box>
+
+          {/* Sports Section */}
+          <Box className="bg-white rounded-xl flex flex-col gap-4">
+            <Typography variant="h5" className="font-bold! text-lg pb-2">
+              Latest in Sports
+            </Typography>
+
+            <Box className="flex flex-col gap-3">
+              {latestCategoryNews
+                .filter((item) => item.category === "Sports")
+                .slice(0, 4)
+                .map((item, index) => (
+                  <CategoryNewsCard key={index} {...item} />
+                ))}
+            </Box>
+          </Box>
         </Box>
       </Box>
     </Box>

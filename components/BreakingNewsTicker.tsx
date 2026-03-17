@@ -14,7 +14,7 @@ interface BreakingNewsTickerProps {
 
 const BreakingNewsTicker: React.FC<BreakingNewsTickerProps> = ({ news }) => {
   return (
-    <Box className="w-full flex items-center bg-white text-black rounded-md overflow-hidden">
+    <Box className="w-full flex items-center bg-white text-black rounded-md overflow-hidden border-1">
       {/* Label */}
       <Box className="bg-red px-4 py-2 shrink-0 bg-red-600 text-white">
         <Typography

@@ -3,7 +3,16 @@
 import React from "react";
 import { Box, Typography, Chip } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { NewsCardProps } from "@/types/NewsCard";
+interface NewsCardProps {
+  imgUrl: string;
+  width?: string | number;
+  height?: string | number;
+  headline: string;
+  category: string;
+  description?: string;
+  author: string;
+  date: string;
+}
 
 const NewsCard: React.FC<NewsCardProps> = ({
   imgUrl,
@@ -39,15 +48,14 @@ const NewsCard: React.FC<NewsCardProps> = ({
 
       {/* Gradient Overlay */}
       <Box className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+      <Chip
+        label={category}
+        size="small"
+        className="w-fit top-3 left-3 relative bg-red-600! text-white!"
+      />
 
       {/* Content */}
       <Box className="absolute bottom-0 p-5 text-white flex flex-col gap-2">
-        <Chip
-          label={category}
-          size="small"
-          className="w-fit !bg-red-600 !text-white"
-        />
-
         <Typography variant="h6" className="font-bold leading-snug">
           {headline}
         </Typography>

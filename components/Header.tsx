@@ -34,7 +34,7 @@ const Header = () => {
   };
 
   return (
-    <>
+    <Box>
       <AppBar
         position="sticky"
         className="bg-black! text-white! shadow-md border-b border-gray-800"
@@ -43,12 +43,12 @@ const Header = () => {
           <Link href="/">
             {/* Logo */}
             <Typography className="font-bold text-xl">
-              Daily Trendlines
+              Daily Trendline
             </Typography>
           </Link>
 
           {/* Desktop Navigation */}
-          <Box className="hidden md:flex items-center gap-6">
+          <Box className="hidden md:flex items-center gap-4">
             {navLinks.map((link) => {
               const isActive =
                 pathname === link.href || pathname.startsWith(link.href + "/");
@@ -125,7 +125,7 @@ const Header = () => {
           </List>
         </Box>
       </Drawer>
-    </>
+    </Box>
   );
 };
 
