@@ -71,7 +71,7 @@ const Page = async ({ params }: Props) => {
 
       <Box className="flex items-center justify-between flex-wrap gap-4 mb-6 mt-4">
         {/* LEFT: Author Info */}
-        <Box className="flex items-center gap-3">
+        <Box className="flex items-center gap-4">
           <Avatar className="bg-gray-300 text-black">
             {newsItem.author?.charAt(0)}
           </Avatar>
@@ -81,8 +81,8 @@ const Page = async ({ params }: Props) => {
               {newsItem.author}
             </Typography>
 
-            <Box className="flex items-center gap-1 text-sm text-gray-500">
-              <AccessTimeIcon fontSize="small" />
+            <Box className="flex items-center gap-1 mt-2 text-sm text-gray-500">
+              {/* <AccessTimeIcon fontSize="small" /> */}
               {newsItem.date}
             </Box>
           </Box>
@@ -91,7 +91,7 @@ const Page = async ({ params }: Props) => {
         {/* Share Buttons */}
         <Box className="flex items-center gap-2">
           <Box className="flex justify-center items-center">
-            <ShareIcon className="text-gray-600 hover:text-black! m-2" />
+            <ShareIcon className="text-black m-2" />
             <Typography>Share</Typography>
           </Box>
 

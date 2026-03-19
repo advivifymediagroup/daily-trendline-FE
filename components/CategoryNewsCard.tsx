@@ -6,17 +6,21 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 interface CategoryNewsCardProps {
+  width?: string;
   imgUrl: string;
   headline: string;
   category: string;
   date?: string;
+  description?: string;
 }
 
 const CategoryNewsCard: React.FC<CategoryNewsCardProps> = ({
+  width = "w-full",
   imgUrl,
   headline,
   category,
   date,
+  description,
 }) => {
   const router = useRouter();
 
@@ -32,7 +36,7 @@ const CategoryNewsCard: React.FC<CategoryNewsCardProps> = ({
   return (
     <Box
       onClick={handleClick}
-      className="flex gap-4 cursor-pointer rounded-lg hover:bg-gray-100 transition group mb-4"
+      className={`flex gap-4 ${width} cursor-pointer rounded-lg hover:bg-gray-100 transition group mb-4`}
     >
       {/* Left Image */}
       <Box className="min-w-[100px] h-[80px] relative">
@@ -55,6 +59,7 @@ const CategoryNewsCard: React.FC<CategoryNewsCardProps> = ({
             {headline}
           </Typography>
         </Tooltip>
+        {/* <Typography>{description}</Typography> */}
 
         {/* Category */}
         <Typography className="text-sm font-medium mt-1">{category}</Typography>

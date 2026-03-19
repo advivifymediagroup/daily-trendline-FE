@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
       "images.unsplash.com",
       "c.files.bbci.co.uk",
       "upload.wikimedia.org",
+      "www.grantthornton.in"
     ],
   },
 };

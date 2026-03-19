@@ -24,7 +24,7 @@ export default function Home() {
         <Box className="grid md:grid-cols-3 gap-3">
           {/* LEFT BIG CARD */}
           <Box className="md:col-span-2">
-            <NewsCard {...featuredNews} height={493} />
+            <NewsCard {...featuredNews} height={492} />
           </Box>
 
           {/* RIGHT SIDE */}
@@ -61,12 +61,6 @@ export default function Home() {
           ))}
         </Box>
       </Box> */}
-
-      {/* LATEST SECTION */}
-      <Box className="flex flex-col gap-6 mt-2">
-        <Box className="grid md:grid-cols-2 gap-6">Latest in Technology</Box>
-        <Box className="grid md:grid-cols-2 gap-6">Latest in Sports</Box>
-      </Box>
 
       {/* LATEST SECTION */}
       <Box className="flex flex-col gap-6 mt-2">
