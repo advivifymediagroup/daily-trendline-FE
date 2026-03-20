@@ -18,7 +18,7 @@ const SearchBar = ({
   width = "w-full",
   placeholder = "Search news...",
   initialQuery = "",
-  clearOnSearch = false,
+  clearOnSearch = true,
   variant = "light",
   onSearch,
 }: SearchBarProps) => {
@@ -30,9 +30,9 @@ const SearchBar = ({
 
     if (onSearch) {
       onSearch(query);
-    } else {
-      router.push(`/search?q=${encodeURIComponent(query)}`);
     }
+
+    router.push(`/search?q=${encodeURIComponent(query)}`);
 
     if (clearOnSearch) setQuery("");
   };
@@ -46,7 +46,7 @@ const SearchBar = ({
         e.preventDefault();
         handleSearch();
       }}
-      className={`flex items-center rounded-md px-2 py-1 border 
+      className={`flex items-center rounded-md px-2 py-1 border transition-all duration-200
         ${width}
         ${
           isDark

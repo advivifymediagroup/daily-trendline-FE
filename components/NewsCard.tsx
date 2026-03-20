@@ -51,7 +51,7 @@ const NewsCard: React.FC<NewsCardProps> = ({
       <Chip
         label={category}
         size="small"
-        className="w-fit top-3 left-3 relative bg-red-600! text-white!"
+        className="w-fit top-3 left-3 relative bg-[#333333]! text-white!"
       />
 
       {/* Content */}

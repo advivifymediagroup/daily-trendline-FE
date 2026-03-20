@@ -1,15 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Box,
-  Typography,
-  Chip,
-  IconButton,
-  Tooltip,
-  Menu,
-  MenuItem,
-} from "@mui/material";
+import { Box, Typography, Chip, Menu, MenuItem } from "@mui/material";
 import Image from "next/image";
 import ShareIcon from "@mui/icons-material/Share";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -63,7 +55,7 @@ const SearchCard: React.FC<SearchCardProps> = ({
   return (
     <Box
       onClick={handleNavigate}
-      className="flex gap-4 p-4 rounded-xl border border-gray-200 hover:shadow-md transition cursor-pointer bg-white"
+      className="flex gap-4 p-4 rounded border border-gray-200 hover:shadow-md transition cursor-pointer bg-white"
     >
       {/* LEFT IMAGE */}
       <Box className="relative min-w-[180px] h-[150px]">
@@ -78,7 +70,7 @@ const SearchCard: React.FC<SearchCardProps> = ({
         <Chip
           label={category}
           size="small"
-          className="!absolute top-2 left-2 !bg-black/70 text-white text-xs"
+          className="absolute! top-2 left-2  bg-[#333333]! text-white! text-xs"
         />
       </Box>
 
@@ -101,11 +93,9 @@ const SearchCard: React.FC<SearchCardProps> = ({
 
         {/* SHARE */}
         <Box className="flex justify-end mt-2">
-          <Tooltip title="Share">
-            <IconButton size="small" onClick={handleShareClick}>
-              <ShareIcon fontSize="small" /> Share
-            </IconButton>
-          </Tooltip>
+          <Box onClick={handleShareClick} className="flex items-center gap-2">
+            <ShareIcon fontSize="small" /> <Typography>Share</Typography>
+          </Box>
 
           {/* SHARE MENU */}
           <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>

@@ -15,8 +15,10 @@ import {
 import SearchBar from "./SearchBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -27,24 +29,24 @@ const navLinks = [
 
 const Header = () => {
   const [open, setOpen] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
   const pathname = usePathname();
-
-  const toggleDrawer = (state: boolean) => {
-    setOpen(state);
-  };
 
   return (
     <Box>
       <AppBar
         position="sticky"
-        className="bg-black! text-white! shadow-md border-b border-gray-800"
+        className="bg-[#faf902]! text-black! shadow-sm!"
       >
         <Toolbar className="max-w-7xl mx-auto w-full flex justify-between">
           <Link href="/">
             {/* Logo */}
-            <Typography className="font-bold text-xl">
-              Daily Trendline
-            </Typography>
+            <Image
+              src="/daily-trendline-logo.jpg"
+              alt="daily-trendline-logo"
+              width={80}
+              height={100}
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -57,71 +59,76 @@ const Header = () => {
                 <Link
                   key={link.label}
                   href={link.href}
-                  className={`px-3 py-1 rounded transition-colors
-      ${
-        isActive
-          ? "border-2 border-white text-white"
-          : "text-gray-300 hover:text-white"
-      }`}
+                  className={`px-3 py-1 rounded transition-colors ${
+                    isActive
+                      ? "border-2 border-black text-black"
+                      : "text-black hover:text-black"
+                  }`}
                 >
                   {link.label}
                 </Link>
               );
             })}
-            {/* Search Bar */}
-            <SearchBar />
+
+            {/* SEARCH TOGGLE */}
+            {!showSearch ? (
+              <IconButton
+                onClick={() => setShowSearch(true)}
+                className="text-black!"
+              >
+                <SearchIcon />
+              </IconButton>
+            ) : (
+              <Box className="flex items-center gap-2">
+                <SearchBar
+                  width="w-48"
+                  variant="light"
+                  clearOnSearch
+                  onSearch={() => setShowSearch(false)}
+                />
+
+                <IconButton
+                  onClick={() => setShowSearch(false)}
+                  className="text-black!"
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+            )}
           </Box>
 
           {/* Mobile Hamburger */}
-
-          <Box className="md:hidden flex items-center">
-            <IconButton
-              className="text-white!"
-              onClick={() => toggleDrawer(true)}
-            >
-              <MenuIcon />
+          <Box className="md:hidden">
+            <IconButton className="text-white!" onClick={() => setOpen(true)}>
+              <MenuIcon className="text-white!" />
             </IconButton>
           </Box>
         </Toolbar>
       </AppBar>
 
       {/* Mobile Drawer */}
-      <Drawer anchor="top" open={open} onClose={() => toggleDrawer(false)}>
-        <Box className=" h-full bg-black text-white p-4">
+      <Drawer anchor="top" open={open} onClose={() => setOpen(false)}>
+        <Box className="h-full bg-black text-white p-4">
           {/* Drawer Header */}
-          <Box className="flex justify-between items-center mb-6">
-            <Typography className="font-bold text-lg">Menu</Typography>
-
-            <IconButton
-              className="text-white!"
-              onClick={() => toggleDrawer(false)}
-            >
-              <CloseIcon />
+          <Box className="flex justify-between mb-6">
+            <Typography>Menu</Typography>
+            <IconButton onClick={() => setOpen(false)}>
+              <CloseIcon className="text-white!" />
             </IconButton>
           </Box>
 
           {/* Navigation Links */}
           <List>
-            {navLinks.map((link) => {
-              const isActive =
-                pathname === link.href || pathname.startsWith(link.href + "/");
-
-              return (
-                <ListItem
-                  key={link.label}
-                  component={Link}
-                  href={link.href}
-                  onClick={() => toggleDrawer(false)}
-                  className={`rounded ${
-                    isActive
-                      ? "border-2 border-white bg-gray-900"
-                      : "hover:bg-gray-900"
-                  }`}
-                >
-                  <ListItemText primary={link.label} />
-                </ListItem>
-              );
-            })}
+            {navLinks.map((link) => (
+              <ListItem
+                key={link.label}
+                component={Link}
+                href={link.href}
+                onClick={() => setOpen(false)}
+              >
+                <ListItemText primary={link.label} />
+              </ListItem>
+            ))}
           </List>
         </Box>
       </Drawer>

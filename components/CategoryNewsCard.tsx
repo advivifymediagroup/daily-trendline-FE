@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Box, Typography, Chip, Tooltip } from "@mui/material";
+import { Box, Typography, Tooltip } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 

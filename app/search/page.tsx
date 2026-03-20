@@ -6,9 +6,9 @@ import {
   gridNews,
   latestCategoryNews,
 } from "@/components/dummyData";
-import NewsCard from "@/components/NewsCard";
 import SearchBar from "@/components/SearchBar";
 import SearchCard from "@/components/SearchCard";
+import CategoryNewsCard from "@/components/CategoryNewsCard";
 
 type Props = {
   searchParams: Promise<{
@@ -49,14 +49,14 @@ const page = async ({ searchParams }: Props) => {
 
           <Box className="flex flex-col gap-2">
             {trendingNews.map((item, index) => (
-              <NewsCard key={index} {...item} />
+              <CategoryNewsCard key={index} {...item} />
             ))}
           </Box>
         </Box>
 
         {/* CENTER: SEARCH SECTION */}
         <Box>
-          <Box className="bg-gray-50  p-6 flex flex-col gap-6">
+          <Box className="bg-gray-50 p-6 flex flex-col gap-6">
             {/* Title */}
             <Box>
               <Typography variant="h5" className="font-bold">

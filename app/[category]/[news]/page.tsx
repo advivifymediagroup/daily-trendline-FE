@@ -14,7 +14,6 @@ import {
   gridNews,
   latestCategoryNews,
 } from "../../../components/dummyData";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Avatar, IconButton } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -65,7 +64,7 @@ const Page = async ({ params }: Props) => {
       </Box>
 
       {/* Headline */}
-      <Typography variant="h3" className="font-bold mb-4">
+      <Typography variant="h3" className="font-bold mb-4 text-[#333333]">
         {newsItem.headline}
       </Typography>
 
@@ -96,19 +95,19 @@ const Page = async ({ params }: Props) => {
           </Box>
 
           <Tooltip title="Share on Facebook">
-            <IconButton className="text-gray-600 hover:text-blue-600!">
+            <IconButton className="text-black! hover:text-blue-600!">
               <FacebookIcon />
             </IconButton>
           </Tooltip>
 
           <Tooltip title="Share on X">
-            <IconButton className="text-gray-600 hover:text-black!">
+            <IconButton className="text-black! hover:text-black!">
               <XIcon />
             </IconButton>
           </Tooltip>
 
           <Tooltip title="Send via Email">
-            <IconButton className="text-gray-600 hover:text-red-500!">
+            <IconButton className="text-black! hover:text-red-500!">
               <EmailIcon />
             </IconButton>
           </Tooltip>
@@ -120,7 +119,7 @@ const Page = async ({ params }: Props) => {
             //   navigator.clipboard.writeText(window.location.href);
             // }}
             >
-              <LinkIcon />
+              <LinkIcon className="text-black!" />
             </IconButton>
           </Tooltip>
         </Box>
@@ -137,19 +136,19 @@ const Page = async ({ params }: Props) => {
       </Card>
 
       {/* Description / Content */}
-      <Typography className="text-gray-700 leading-relaxed mb-6">
+      <Typography className="text-[#111111] leading-relaxed mb-6">
         {newsItem.content ||
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim. Nulla facilisi. Pellentesque vel dolor at quam efficitur dapibus. Suspendisse potenti."}
       </Typography>
 
       {/* Additional Paragraphs */}
-      <Typography className="text-gray-700 leading-relaxed my-4!">
+      <Typography className="text-[#111111] leading-relaxed my-4!">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit
         amet accumsan arcu. Donec euismod orci sed lectus tincidunt, nec lacinia
         metus fringilla.
       </Typography>
 
-      <Typography className="text-gray-700 leading-relaxed my-4!">
+      <Typography className="text-[#111111] leading-relaxed my-4!">
         Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere
         cubilia curae; Cras hendrerit, eros vel malesuada faucibus, augue massa
         consectetur libero, in venenatis eros lorem ut purus.

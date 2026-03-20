@@ -7,6 +7,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import XIcon from "@mui/icons-material/X";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+
 const footerLinks = [
   {
     title: "News",
@@ -45,15 +46,15 @@ const socialLinks = [
 
 const Footer: React.FC = () => {
   return (
-    <footer className="w-full bg-black text-gray-200 mt-4">
+    <footer className="w-full bg-[#faf902] text-black">
       <Box className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid md:grid-cols-4 gap-8">
         {/* Logo + Description */}
         <Box className="space-y-4">
-          <Typography variant="h6" className="text-white font-bold text-xl">
+          <Typography variant="h6" className="text-black font-bold text-xl">
             Daily Trendline
           </Typography>
 
-          <Typography variant="body2" className="text-gray-400">
+          <Typography variant="body2" className="text-gray-800">
             Daily Trendline brings you the latest news, breaking stories, and
             trending updates from around the world in very few words - covering
             politics, technology, business, entertainment and more.
@@ -67,7 +68,7 @@ const Footer: React.FC = () => {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400! hover:text-white! transition-colors!"
+                className="text-black! hover:text-gray-700! transition-colors!"
               >
                 {social.icon}
               </IconButton>
@@ -78,7 +79,7 @@ const Footer: React.FC = () => {
         {/* Footer Links */}
         {footerLinks.map((section) => (
           <Box key={section.title}>
-            <Typography className="font-semibold text-white mb-4">
+            <Typography className="font-semibold text-black mb-4">
               {section.title}
             </Typography>
 
@@ -87,7 +88,7 @@ const Footer: React.FC = () => {
                 <Link
                   key={link.label}
                   href={link.href}
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-800 hover:text-black transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -98,7 +99,7 @@ const Footer: React.FC = () => {
       </Box>
 
       {/* Copyright */}
-      <Box className="border-t border-gray-700 py-4 text-center text-gray-500 text-sm">
+      <Box className="border-t border-black/30 py-4 text-center text-gray-800 text-sm">
         © {new Date().getFullYear()} Daily Trendline. All rights reserved.
       </Box>
     </footer>

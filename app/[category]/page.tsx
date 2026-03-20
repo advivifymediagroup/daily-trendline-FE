@@ -11,6 +11,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { featuredNews, secondaryNews, gridNews } from "@/components/dummyData";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import SearchCard from "@/components/SearchCard";
 type Props = {
   params: Promise<{ category: string }>;
 };
@@ -78,7 +79,7 @@ const Page = async ({ params }: Props) => {
           )}
 
           {/* News Grid */}
-          <Box className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+          {/* <Box className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {restNews.map((item, index) => (
               <Link
                 key={index}
@@ -106,6 +107,16 @@ const Page = async ({ params }: Props) => {
                 </Card>
               </Link>
             ))}
+          </Box> */}
+          <Box className="">
+            <Typography className="font-semibold mb-6!" variant="h4">
+              Latest in Sports
+            </Typography>
+            <Box className="grid gap-6">
+              {filteredNews.map((item, index) => (
+                <SearchCard key={index} {...item} />
+              ))}
+            </Box>
           </Box>
 
           {filteredNews.length === 0 && (
@@ -116,7 +127,7 @@ const Page = async ({ params }: Props) => {
         </Box>
 
         {/* Sidebar */}
-        <Box className="hidden lg:flex flex-col gap-6">
+        <Box className="hidden lg:flex flex-col gap-6 bg-white px-2 py-4 rounded max-h-[80vh]">
           <Typography variant="h5" className="font-bold">
             Trending
           </Typography>
@@ -135,7 +146,7 @@ const Page = async ({ params }: Props) => {
                 className="w-20 h-16 object-cover rounded"
               />
 
-              <Typography className="text-sm font-medium line-clamp-2">
+              <Typography className="text-sm font-medium line-clamp-3 leading-snug h-18 overflow-hidden">
                 {item.headline}
               </Typography>
             </Link>
