@@ -16,6 +16,7 @@ interface SearchCardProps {
   category: string;
   description?: string;
   date: string;
+  chipColor?: string;
 }
 
 const SearchCard: React.FC<SearchCardProps> = ({
@@ -24,6 +25,7 @@ const SearchCard: React.FC<SearchCardProps> = ({
   category,
   description,
   date,
+  chipColor,
 }) => {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -52,6 +54,8 @@ const SearchCard: React.FC<SearchCardProps> = ({
     handleClose();
   };
 
+  console.log("ADSFDS::", chipColor);
+
   return (
     <Box
       onClick={handleNavigate}
@@ -70,7 +74,10 @@ const SearchCard: React.FC<SearchCardProps> = ({
         <Chip
           label={category}
           size="small"
-          className="absolute! top-2 left-2  bg-[#333333]! text-white! text-xs"
+          sx={{
+            bgcolor: chipColor,
+          }}
+          className="absolute! top-2 left-2 text-white! text-xs"
         />
       </Box>
 
@@ -100,21 +107,24 @@ const SearchCard: React.FC<SearchCardProps> = ({
           {/* SHARE MENU */}
           <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
             <MenuItem onClick={handleClose}>
-              <FacebookIcon fontSize="small" className="mr-2" />
+              <FacebookIcon fontSize="small" className="mr-2 text-blue-600!" />
               Facebook
             </MenuItem>
 
             <MenuItem onClick={handleClose}>
-              <XIcon fontSize="small" className="mr-2" />X
+              <XIcon fontSize="small" className="mr-2 text-black" />X
             </MenuItem>
 
             <MenuItem onClick={handleClose}>
-              <EmailIcon fontSize="small" className="mr-2" />
+              <EmailIcon fontSize="small" className="mr-2 text-red-500" />
               Email
             </MenuItem>
 
             <MenuItem onClick={handleCopy}>
-              <ContentCopyIcon fontSize="small" className="mr-2" />
+              <ContentCopyIcon
+                fontSize="small"
+                className="mr-2 text-green-600"
+              />
               Copy Link
             </MenuItem>
           </Menu>

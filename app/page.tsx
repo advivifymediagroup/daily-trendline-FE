@@ -69,8 +69,23 @@ export default function Home() {
         </Typography> */}
 
         <Box className="grid md:grid-cols-2 gap-6">
+          {/* Business Section */}
+          <Box className="bg-white rounded-sm flex flex-col gap-4 p-4">
+            <Typography variant="h5" className="font-bold! text-lg pb-2">
+              Latest in Business
+            </Typography>
+
+            <Box className="flex flex-col gap-3">
+              {latestCategoryNews
+                .filter((item) => item.category === "Business")
+                .slice(0, 4)
+                .map((item, index) => (
+                  <CategoryNewsCard key={index} {...item} />
+                ))}
+            </Box>
+          </Box>
           {/* Tech Section */}
-          <Box className="bg-white rounded-xl flex flex-col gap-4">
+          <Box className="bg-white rounded-sm flex flex-col gap-4 p-4">
             <Typography variant="h5" className="font-bold! pb-2">
               Latest in Technology
             </Typography>
@@ -86,7 +101,7 @@ export default function Home() {
           </Box>
 
           {/* Sports Section */}
-          <Box className="bg-white rounded-xl flex flex-col gap-4">
+          <Box className="bg-white rounded-sm flex flex-col gap-4 p-4">
             <Typography variant="h5" className="font-bold! text-lg pb-2">
               Latest in Sports
             </Typography>
@@ -94,6 +109,22 @@ export default function Home() {
             <Box className="flex flex-col gap-3">
               {latestCategoryNews
                 .filter((item) => item.category === "Sports")
+                .slice(0, 4)
+                .map((item, index) => (
+                  <CategoryNewsCard key={index} {...item} />
+                ))}
+            </Box>
+          </Box>
+
+          {/* Entertainment Section */}
+          <Box className="bg-white rounded-sm flex flex-col gap-4 p-4">
+            <Typography variant="h5" className="font-bold! text-lg pb-2">
+              Latest in Entertainment
+            </Typography>
+
+            <Box className="flex flex-col gap-3">
+              {latestCategoryNews
+                .filter((item) => item.category === "Entertainment")
                 .slice(0, 4)
                 .map((item, index) => (
                   <CategoryNewsCard key={index} {...item} />

@@ -109,8 +109,8 @@ const Page = async ({ params }: Props) => {
             ))}
           </Box> */}
           <Box className="">
-            <Typography className="font-semibold mb-6!" variant="h4">
-              Latest in Sports
+            <Typography className="font-semibold mb-6! capitalize" variant="h4">
+              Latest in {category}
             </Typography>
             <Box className="grid gap-6">
               {filteredNews.map((item, index) => (

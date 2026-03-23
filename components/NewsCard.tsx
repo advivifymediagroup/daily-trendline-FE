@@ -12,6 +12,7 @@ interface NewsCardProps {
   description?: string;
   author: string;
   date: string;
+  chipColor?: string;
 }
 
 const NewsCard: React.FC<NewsCardProps> = ({
@@ -23,6 +24,7 @@ const NewsCard: React.FC<NewsCardProps> = ({
   description,
   author,
   date,
+  chipColor,
 }) => {
   const router = useRouter();
 
@@ -51,7 +53,10 @@ const NewsCard: React.FC<NewsCardProps> = ({
       <Chip
         label={category}
         size="small"
-        className="w-fit top-3 left-3 relative bg-[#333333]! text-white!"
+        sx={{
+          bgcolor: chipColor,
+        }}
+        className="w-fit top-3 left-3 relative text-white!"
       />
 
       {/* Content */}

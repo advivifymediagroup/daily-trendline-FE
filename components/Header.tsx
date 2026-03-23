@@ -99,8 +99,8 @@ const Header = () => {
 
           {/* Mobile Hamburger */}
           <Box className="md:hidden">
-            <IconButton className="text-white!" onClick={() => setOpen(true)}>
-              <MenuIcon className="text-white!" />
+            <IconButton className="text-black!" onClick={() => setOpen(true)}>
+              <MenuIcon className="text-black!" />
             </IconButton>
           </Box>
         </Toolbar>
