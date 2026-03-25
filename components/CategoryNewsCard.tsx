@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 interface CategoryNewsCardProps {
   width?: string;
-  imgUrl: string;
+  featuredImage: string;
   headline: string;
   category: string;
   date?: string;
@@ -16,7 +16,7 @@ interface CategoryNewsCardProps {
 
 const CategoryNewsCard: React.FC<CategoryNewsCardProps> = ({
   width = "w-full",
-  imgUrl,
+  featuredImage,
   headline,
   category,
   date,
@@ -41,7 +41,7 @@ const CategoryNewsCard: React.FC<CategoryNewsCardProps> = ({
       {/* Left Image */}
       <Box className="min-w-[100px] h-[80px] relative">
         <Image
-          src={imgUrl}
+          src={featuredImage}
           alt={headline}
           fill
           className="object-cover rounded"

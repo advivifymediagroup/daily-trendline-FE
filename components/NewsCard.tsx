@@ -4,7 +4,7 @@ import React from "react";
 import { Box, Typography, Chip } from "@mui/material";
 import { useRouter } from "next/navigation";
 interface NewsCardProps {
-  imgUrl: string;
+  featuredImage: string;
   width?: string | number;
   height?: string | number;
   headline: string;
@@ -16,7 +16,7 @@ interface NewsCardProps {
 }
 
 const NewsCard: React.FC<NewsCardProps> = ({
-  imgUrl,
+  featuredImage,
   width = "100%",
   height = 400,
   headline,
@@ -44,7 +44,7 @@ const NewsCard: React.FC<NewsCardProps> = ({
       <Box
         className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
         sx={{
-          backgroundImage: `url(${imgUrl})`,
+          backgroundImage: `url(${featuredImage})`,
         }}
       />
 

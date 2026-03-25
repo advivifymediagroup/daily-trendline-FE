@@ -1,5 +1,5 @@
 export const featuredNews = {
-  imgUrl: "https://images.unsplash.com/photo-1504711434969-e33886168f5c",
+  featuredImage: "https://images.unsplash.com/photo-1504711434969-e33886168f5c",
   height: 500,
   headline: "India launches new space mission for deep space research",
   category: "Technology",
@@ -14,7 +14,7 @@ export const featuredNews = {
 
 export const secondaryNews = [
   {
-    imgUrl:
+    featuredImage:
       "https://www.grantthornton.in/globalassets/1.-member-firms/india/assets/images/hero-banner/1440x658-ai-healthcare.jpg",
     height: 350,
     headline: "AI is transforming the future of healthcare",
@@ -28,7 +28,7 @@ export const secondaryNews = [
     chipColor: "#1E3A8A",
   },
   {
-    imgUrl: "https://images.unsplash.com/photo-1559526324-593bc073d938",
+    featuredImage: "https://images.unsplash.com/photo-1559526324-593bc073d938",
     height: 350,
     headline: "Global markets react to new economic policy",
     category: "Business",
@@ -45,7 +45,7 @@ export const featuredRight = [secondaryNews[0], secondaryNews[1]];
 
 export const latestCategoryNews = [
   {
-    imgUrl: "https://images.unsplash.com/photo-1517649763962-0c623066013b",
+    featuredImage: "https://images.unsplash.com/photo-1517649763962-0c623066013b",
     height: 250,
     headline: "India prepares for upcoming T20 World Cup",
     category: "Sports",
@@ -58,7 +58,7 @@ export const latestCategoryNews = [
     chipColor: "#166534",
   },
   {
-    imgUrl:
+    featuredImage:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Olympic_rings_without_rims.svg/1280px-Olympic_rings_without_rims.svg.png",
     height: 250,
     headline: "Olympics 2028 preparations gain momentum",
@@ -72,7 +72,7 @@ export const latestCategoryNews = [
     chipColor: "#166534",
   },
   {
-    imgUrl: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b",
+    featuredImage: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b",
     height: 250,
     headline: "Football transfer market sees record-breaking deals",
     category: "Sports",
@@ -88,7 +88,7 @@ export const latestCategoryNews = [
   // TECHNOLOGY
 
   {
-    imgUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
+    featuredImage: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
     height: 250,
     headline: "Tech giants invest heavily in artificial intelligence",
     category: "Technology",
@@ -101,7 +101,7 @@ export const latestCategoryNews = [
     chipColor: "#1E3A8A",
   },
   {
-    imgUrl: "https://images.unsplash.com/photo-1535223289827-42f1e9919769",
+    featuredImage: "https://images.unsplash.com/photo-1535223289827-42f1e9919769",
     height: 250,
     headline: "Cybersecurity threats increase in 2026",
     category: "Technology",
@@ -114,7 +114,7 @@ export const latestCategoryNews = [
     chipColor: "#1E3A8A",
   },
   {
-    imgUrl: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
+    featuredImage: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
     height: 250,
     headline: "Developers embrace new web frameworks in 2026",
     category: "Technology",
@@ -128,7 +128,7 @@ export const latestCategoryNews = [
   },
   // BUSINESS
   {
-    imgUrl: "https://images.unsplash.com/photo-1559526324-593bc073d938",
+    featuredImage: "https://images.unsplash.com/photo-1559526324-593bc073d938",
     height: 250,
     headline: "Indian startups see surge in global investments",
     category: "Business",
@@ -141,7 +141,7 @@ export const latestCategoryNews = [
     chipColor: "#4C1D95",
   },
   {
-    imgUrl: "https://images.unsplash.com/photo-1444653614773-995cb1ef9efa",
+    featuredImage: "https://images.unsplash.com/photo-1444653614773-995cb1ef9efa",
     height: 250,
     headline: "Stock markets hit new highs amid economic optimism",
     category: "Business",
@@ -154,7 +154,7 @@ export const latestCategoryNews = [
     chipColor: "#4C1D95",
   },
   {
-    imgUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f",
+    featuredImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f",
     height: 250,
     headline: "E-commerce sector expands rapidly in tier-2 cities",
     category: "Business",
@@ -168,7 +168,7 @@ export const latestCategoryNews = [
   },
   // ENTERTAINMENT
   {
-    imgUrl: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c",
+    featuredImage: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c",
     height: 250,
     headline: "Bollywood gears up for a blockbuster summer",
     category: "Entertainment",
@@ -181,7 +181,7 @@ export const latestCategoryNews = [
     chipColor: "#7F1D1D",
   },
   {
-    imgUrl: "https://images.unsplash.com/photo-1497032205916-ac775f0649ae",
+    featuredImage: "https://images.unsplash.com/photo-1497032205916-ac775f0649ae",
     height: 250,
     headline: "Streaming platforms compete with exclusive content",
     category: "Entertainment",
@@ -194,7 +194,7 @@ export const latestCategoryNews = [
     chipColor: "#7F1D1D",
   },
   {
-    imgUrl: "https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2",
+    featuredImage: "https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2",
     height: 250,
     headline: "Music industry sees rise of independent artists",
     category: "Entertainment",
@@ -210,7 +210,7 @@ export const latestCategoryNews = [
 
 export const gridNews = [
   {
-    imgUrl:
+    featuredImage:
       "https://c.files.bbci.co.uk/c27e/live/c3a39390-66d1-11ef-a065-11da863b60a9.jpg",
     height: 250,
     headline: "Champions League quarter-finals begin",
@@ -224,7 +224,7 @@ export const gridNews = [
     chipColor: "#166534",
   },
   {
-    imgUrl: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308",
+    featuredImage: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308",
     height: 250,
     headline: "Streaming services dominate entertainment",
     category: "Entertainment",
@@ -237,7 +237,7 @@ export const gridNews = [
     chipColor: "#7F1D1D",
   },
   {
-    imgUrl: "https://images.unsplash.com/photo-1492724441997-5dc865305da7",
+    featuredImage: "https://images.unsplash.com/photo-1492724441997-5dc865305da7",
     height: 250,
     headline: "New climate policies announced worldwide",
     category: "Environment",
@@ -249,7 +249,7 @@ export const gridNews = [
     date: "Mar 15, 2026",
   },
   {
-    imgUrl: "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d",
+    featuredImage: "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d",
     height: 250,
     headline: "Startups attract record investments in 2026",
     category: "Startup",
@@ -261,7 +261,7 @@ export const gridNews = [
     date: "Mar 15, 2026",
   },
   {
-    imgUrl: "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d",
+    featuredImage: "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d",
     height: 250,
     headline:
       "Startups attract record investments in 2026 Startups attract record investments in 2026 ",

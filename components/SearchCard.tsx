@@ -11,7 +11,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useRouter } from "next/navigation";
 
 interface SearchCardProps {
-  imgUrl: string;
+  featuredImage: string;
   headline: string;
   category: string;
   description?: string;
@@ -20,7 +20,7 @@ interface SearchCardProps {
 }
 
 const SearchCard: React.FC<SearchCardProps> = ({
-  imgUrl,
+  featuredImage,
   headline,
   category,
   description,
@@ -54,8 +54,6 @@ const SearchCard: React.FC<SearchCardProps> = ({
     handleClose();
   };
 
-  console.log("ADSFDS::", chipColor);
-
   return (
     <Box
       onClick={handleNavigate}
@@ -64,7 +62,7 @@ const SearchCard: React.FC<SearchCardProps> = ({
       {/* LEFT IMAGE */}
       <Box className="relative min-w-[180px] h-[150px]">
         <Image
-          src={imgUrl}
+          src={featuredImage}
           alt={headline}
           fill
           className="object-cover rounded-lg"

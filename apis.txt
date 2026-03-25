@@ -1,0 +1,18 @@
+GET: 
+get all the footer details: http://localhost:1337/api/global?populate=footerSections.links&populate=socialLinks
+
+async function getFooterData() {
+  const res = await fetch(
+    `${process.env.STRAPI_URL}/api/global?populate=footerSections.links&populate=socialLinks&populate=footerLogo`,
+    { next: { revalidate: 60 } }
+  );
+
+  return res.json();
+}
+
+
+GET:
+get all articles: http://localhost:1337/api/articles?populate=*
+
+GET:
+get all navbar options: http://localhost:1337/api/categories?filters[showInNavbar][$eq]=true

@@ -53,7 +53,7 @@ const Page = async ({ params }: Props) => {
             <Card className="mb-10 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
               <CardMedia
                 component="img"
-                image={featured.imgUrl}
+                image={featured.featuredImage}
                 alt={featured.headline}
                 className="h-100 w-full object-cover!"
               />
@@ -89,7 +89,7 @@ const Page = async ({ params }: Props) => {
                 <Card className="rounded-xl shadow-md hover:shadow-xl transition-shadow cursor-pointer">
                   <CardMedia
                     component="img"
-                    image={item.imgUrl}
+                    image={item.featuredImage}
                     alt={item.headline}
                     className="h-50 w-full object-cover!"
                   />
@@ -139,7 +139,7 @@ const Page = async ({ params }: Props) => {
               className="flex gap-3 cursor-pointer hover:bg-gray-100 p-2 rounded-md no-underline"
             >
               <Image
-                src={item.imgUrl}
+                src={item.featuredImage}
                 alt={item.headline}
                 width={400}
                 height={300}

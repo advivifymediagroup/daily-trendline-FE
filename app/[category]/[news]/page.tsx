@@ -129,7 +129,7 @@ const Page = async ({ params }: Props) => {
       <Card className="mb-6 rounded-xl overflow-hidden shadow-lg">
         <CardMedia
           component="img"
-          image={newsItem.imgUrl}
+          image={newsItem.featuredImage}
           alt={newsItem.headline}
           className="h-150 w-full object-cover!"
         />

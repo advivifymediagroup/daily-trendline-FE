@@ -1,3 +1,4 @@
+"use client";
 import NewsCard from "@/components/NewsCard";
 import { Box, Typography } from "@mui/material";
 import {
@@ -10,8 +11,27 @@ import {
 } from "../components/dummyData";
 import BreakingNewsTicker from "@/components/BreakingNewsTicker";
 import CategoryNewsCard from "@/components/CategoryNewsCard";
+import { useEffect, useState } from "react";
+import { getAllNews } from "./api/news";
 
 export default function Home() {
+  const [news, setNews] = useState(null);
+  const [metadata, setMetadata] = useState(null);
+
+  useEffect(() => {
+    const fetchAllNews = async () => {
+      try {
+        const response = await getAllNews();
+        setNews(response.data);
+        setMetadata(response.meta);
+        console.log("NEWS RESPONSE::", response);
+      } catch (error) {
+        console.error("ERROR FETCHING ALL NEWS::", error);
+      }
+    };
+    fetchAllNews();
+  }, []);
+
   return (
     <Box className="homepage max-w-7xl mx-auto px-4 py-6 flex flex-col gap-10">
       <BreakingNewsTicker news={breakingNews} />
