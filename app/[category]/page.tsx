@@ -1,133 +1,160 @@
 import React from "react";
-import { Box, Typography, Card, CardContent, CardMedia } from "@mui/material";
-import { FaClock } from "react-icons/fa";
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  CardMedia,
+  Divider,
+} from "@mui/material";
 import Link from "next/link";
-
-const news = [
-  {
-    id: 1,
-    category: "technology",
-    title: "Apple announces next generation AI chip",
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475",
-    time: "2 hours ago",
-  },
-  {
-    id: 2,
-    category: "sports",
-    title: "India wins thrilling cricket match",
-    image: "https://images.unsplash.com/photo-1505842465776-3bfd1889e7e0",
-    time: "4 hours ago",
-  },
-  {
-    id: 3,
-    category: "technology",
-    title: "New electric cars dominate 2026 market",
-    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70",
-    time: "6 hours ago",
-  },
-  {
-    id: 4,
-    category: "entertainment",
-    title: "Streaming platforms releasing big movies",
-    image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba",
-    time: "8 hours ago",
-  },
-];
-
+import Image from "next/image";
+import { featuredNews, secondaryNews, gridNews } from "@/components/dummyData";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import SearchCard from "@/components/SearchCard";
 type Props = {
-  params: Promise<{
-    category: string;
-  }>;
+  params: Promise<{ category: string }>;
 };
 
-
-const page = async ({ params }: Props) => {
+const Page = async ({ params }: Props) => {
   const { category } = await params;
 
-  console.log("PARAMS::", category);
+  // Combine all news into one array
+  const allNews = [featuredNews, ...secondaryNews, ...gridNews];
 
-  // Filter news by category
-  const filteredNews = news.filter((item) => item.category === category);
+  // Filter by category (case-insensitive)
+  const filteredNews = allNews.filter(
+    (item) => item.category.toLowerCase() === category.toLowerCase(),
+  );
+
+  const featured = filteredNews[0];
+  const restNews = filteredNews.slice(1);
 
   return (
-    <Box className="max-w-7xl mx-auto px-4 py-8">
-      {/* Category Title */}
+    <Box className="max-w-7xl mx-auto px-4 py-10">
+      {/* Category Header */}
       <Box className="mb-10">
-        <Typography
-          variant="h4"
-          className="font-bold capitalize text-gray-900 dark:text-white"
-        >
+        <Typography variant="h4" className="font-bold capitalize">
           {category} News
         </Typography>
 
-        <Typography className="text-gray-600 dark:text-gray-400 mt-2">
-          Latest updates and breaking news in {category}.
+        <Typography className="text-gray-600 mt-2">
+          Latest updates and breaking stories from {category}.
         </Typography>
+
+        <Divider className="mt-4!" />
       </Box>
 
-      {/* Featured Article */}
-      {filteredNews.length > 0 && (
-        <Box className="mb-12">
-          <Card className="rounded-xl overflow-hidden shadow-lg dark:bg-gray-900">
-            <CardMedia
-              component="img"
-              height="400"
-              image={filteredNews[0].image}
-              alt={filteredNews[0].title}
-            />
-
-            <CardContent>
-              <Typography
-                variant="h5"
-                className="font-bold text-gray-900 dark:text-white"
-              >
-                {filteredNews[0].title}
-              </Typography>
-
-              <Box className="flex items-center gap-2 mt-4 text-sm text-gray-500 dark:text-gray-400">
-                <FaClock />
-                {filteredNews[0].time}
-              </Box>
-            </CardContent>
-          </Card>
-        </Box>
-      )}
-
-      {/* News Grid */}
-      <Box className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {filteredNews.map((item) => (
-          <Link key={item.id} href={`/news/${item.id}`}>
-            <Card className="rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 dark:bg-gray-900 cursor-pointer">
+      <Box className="grid lg:grid-cols-4 gap-10">
+        {/* Main Content */}
+        <Box className="lg:col-span-3">
+          {/* Featured Article */}
+          {featured && (
+            <Card className="mb-10 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
               <CardMedia
                 component="img"
-                height="200"
-                image={item.image}
-                alt={item.title}
+                image={featured.imgUrl}
+                alt={featured.headline}
+                className="h-100 w-full object-cover!"
               />
 
               <CardContent>
-                <Typography className="font-semibold text-gray-900 dark:text-white line-clamp-2">
-                  {item.title}
+                <Typography variant="h5" className="font-bold">
+                  {featured.headline}
                 </Typography>
 
-                <Box className="flex items-center gap-2 mt-3 text-sm text-gray-500 dark:text-gray-400">
-                  <FaClock />
-                  {item.time}
+                {featured?.description && (
+                  <Typography className="text-gray-600 mt-2">
+                    {featured.description}
+                  </Typography>
+                )}
+
+                <Box className="flex items-center gap-2 mt-4 text-sm text-gray-500">
+                  <AccessTimeIcon />
+
+                  {featured.date}
                 </Box>
               </CardContent>
             </Card>
-          </Link>
-        ))}
-      </Box>
+          )}
 
-      {/* Empty State */}
-      {filteredNews.length === 0 && (
-        <Typography className="text-gray-500 dark:text-gray-400 mt-10 text-center">
-          No news available for this category.
-        </Typography>
-      )}
+          {/* News Grid */}
+          {/* <Box className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            {restNews.map((item, index) => (
+              <Link
+                key={index}
+                href={`/${category}/${item?.headline.toLowerCase().replace(/\s+/g, "-")}`}
+                className="no-underline"
+              >
+                <Card className="rounded-xl shadow-md hover:shadow-xl transition-shadow cursor-pointer">
+                  <CardMedia
+                    component="img"
+                    image={item.imgUrl}
+                    alt={item.headline}
+                    className="h-50 w-full object-cover!"
+                  />
+
+                  <CardContent>
+                    <Typography className="font-semibold line-clamp-2">
+                      {item.headline}
+                    </Typography>
+
+                    <Box className="flex items-center gap-2 mt-3 text-sm text-gray-500">
+                      <AccessTimeIcon />
+                      {item.date}
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </Box> */}
+          <Box className="">
+            <Typography className="font-semibold mb-6! capitalize" variant="h4">
+              Latest in {category}
+            </Typography>
+            <Box className="grid gap-6">
+              {filteredNews.map((item, index) => (
+                <SearchCard key={index} {...item} />
+              ))}
+            </Box>
+          </Box>
+
+          {filteredNews.length === 0 && (
+            <Typography className="text-gray-500 mt-10 text-center">
+              No news available for this category.
+            </Typography>
+          )}
+        </Box>
+
+        {/* Sidebar */}
+        <Box className="hidden lg:flex flex-col gap-6 bg-white px-2 py-4 rounded max-h-[80vh]">
+          <Typography variant="h5" className="font-bold">
+            Trending
+          </Typography>
+
+          {gridNews.slice(0, 4).map((item, index) => (
+            <Link
+              key={index}
+              href={`/${item.category.toLowerCase()}/${item.headline.toLowerCase().replace(/\s+/g, "-")}`}
+              className="flex gap-3 cursor-pointer hover:bg-gray-100 p-2 rounded-md no-underline"
+            >
+              <Image
+                src={item.imgUrl}
+                alt={item.headline}
+                width={400}
+                height={300}
+                className="w-20 h-16 object-cover rounded"
+              />
+
+              <Typography className="text-sm font-medium line-clamp-3 leading-snug h-18 overflow-hidden">
+                {item.headline}
+              </Typography>
+            </Link>
+          ))}
+        </Box>
+      </Box>
     </Box>
   );
 };
 
-export default page;
+export default Page;

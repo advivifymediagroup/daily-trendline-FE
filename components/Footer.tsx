@@ -1,24 +1,20 @@
-// components/shared/Footer.tsx
 "use client";
 
 import React from "react";
 import { Box, Typography, IconButton } from "@mui/material";
-import {
-  FaFacebookF,
-  FaTwitter,
-  FaLinkedinIn,
-  FaInstagram,
-} from "react-icons/fa";
 import Link from "next/link";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import XIcon from "@mui/icons-material/X";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 const footerLinks = [
   {
     title: "News",
     links: [
-      { label: "Latest News", href: "/latest" },
-      { label: "Politics", href: "/politics" },
       { label: "Business", href: "/business" },
       { label: "Technology", href: "/technology" },
+      { label: "Sports", href: "/sports" },
     ],
   },
   {
@@ -42,26 +38,26 @@ const footerLinks = [
 ];
 
 const socialLinks = [
-  { icon: <FaFacebookF />, href: "https://facebook.com" },
-  { icon: <FaTwitter />, href: "https://twitter.com" },
-  { icon: <FaLinkedinIn />, href: "https://linkedin.com" },
-  { icon: <FaInstagram />, href: "https://instagram.com" },
+  { icon: <FacebookIcon />, href: "https://facebook.com" },
+  { icon: <XIcon />, href: "https://x.com" },
+  { icon: <LinkedInIcon />, href: "https://linkedin.com" },
+  { icon: <InstagramIcon />, href: "https://instagram.com" },
 ];
 
 const Footer: React.FC = () => {
   return (
-    <footer className="w-full bg-black text-gray-200">
+    <footer className="w-full bg-[#faf902] text-black">
       <Box className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid md:grid-cols-4 gap-8">
         {/* Logo + Description */}
         <Box className="space-y-4">
-          <Typography variant="h6" className="text-white font-bold text-xl">
+          <Typography variant="h6" className="text-black font-bold text-xl">
             Daily Trendline
           </Typography>
 
-          <Typography variant="body2" className="text-gray-400">
-            Daily Trendline brings you the latest news, breaking stories,
-            in-depth analysis, and trending updates from around the world
-            covering politics, technology, business, entertainment and more.
+          <Typography variant="body2" className="text-gray-800">
+            Daily Trendline brings you the latest news, breaking stories, and
+            trending updates from around the world in very few words - covering
+            politics, technology, business, entertainment and more.
           </Typography>
 
           <Box className="flex space-x-3 mt-2">
@@ -72,7 +68,7 @@ const Footer: React.FC = () => {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-black! hover:text-gray-700! transition-colors!"
               >
                 {social.icon}
               </IconButton>
@@ -83,7 +79,7 @@ const Footer: React.FC = () => {
         {/* Footer Links */}
         {footerLinks.map((section) => (
           <Box key={section.title}>
-            <Typography className="font-semibold text-white mb-4">
+            <Typography className="font-semibold text-black mb-4">
               {section.title}
             </Typography>
 
@@ -92,7 +88,7 @@ const Footer: React.FC = () => {
                 <Link
                   key={link.label}
                   href={link.href}
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-800 hover:text-black transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -103,7 +99,7 @@ const Footer: React.FC = () => {
       </Box>
 
       {/* Copyright */}
-      <Box className="border-t border-gray-700 py-4 text-center text-gray-500 text-sm">
+      <Box className="border-t border-black/30 py-4 text-center text-gray-800 text-sm">
         © {new Date().getFullYear()} Daily Trendline. All rights reserved.
       </Box>
     </footer>

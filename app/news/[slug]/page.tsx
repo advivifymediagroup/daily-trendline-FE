@@ -1,7 +1,8 @@
+import { Box } from "@mui/material";
 import React from "react";
 
 const page = () => {
-  return <div>News page</div>;
+  return <Box>News page</Box>;
 };
 
 export default page;
