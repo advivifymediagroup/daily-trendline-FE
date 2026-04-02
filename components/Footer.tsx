@@ -37,14 +37,17 @@ const footerLinks = [
   },
 ];
 
-const socialLinks = [
-  { icon: <FacebookIcon />, href: "https://facebook.com" },
-  { icon: <XIcon />, href: "https://x.com" },
-  { icon: <LinkedInIcon />, href: "https://linkedin.com" },
-  { icon: <InstagramIcon />, href: "https://instagram.com" },
-];
+const iconMap: Record<string, React.ReactNode> = {
+  Facebook: <FacebookIcon />,
+  X: <XIcon />,
+  Twitter: <XIcon />,
+  LinkedIn: <LinkedInIcon />,
+  Instagram: <InstagramIcon />,
+};
 
-const Footer: React.FC = () => {
+const Footer: React.FC = (data: any) => {
+  const { socialLink, logoText, footerText } = data.data;
+
   return (
     <footer className="w-full bg-[#faf902] text-black">
       <Box className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid md:grid-cols-4 gap-8">
@@ -55,24 +58,28 @@ const Footer: React.FC = () => {
           </Typography>
 
           <Typography variant="body2" className="text-gray-800">
-            Daily Trendline brings you the latest news, breaking stories, and
-            trending updates from around the world in very few words - covering
-            politics, technology, business, entertainment and more.
+            {footerText}
           </Typography>
 
           <Box className="flex space-x-3 mt-2">
-            {socialLinks.map((social, idx) => (
-              <IconButton
-                key={idx}
-                component="a"
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-black! hover:text-gray-700! transition-colors!"
-              >
-                {social.icon}
-              </IconButton>
-            ))}
+            {socialLink?.map((social: any) => {
+              const icon = iconMap[social.text] || null;
+
+              if (!icon) return null;
+
+              return (
+                <IconButton
+                  key={social.id}
+                  component="a"
+                  href={social.url}
+                  target={social.isExternal ? "_blank" : "_self"}
+                  rel="noopener noreferrer"
+                  className="text-black! hover:text-gray-700! transition-colors!"
+                >
+                  {icon}
+                </IconButton>
+              );
+            })}
           </Box>
         </Box>
 

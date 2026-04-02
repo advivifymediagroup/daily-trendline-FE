@@ -4,6 +4,7 @@ import React from "react";
 import { Box, Typography, Tooltip } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { StrapiImage } from "./StrapiImage";
 
 interface CategoryNewsCardProps {
   width?: string;
@@ -39,11 +40,12 @@ const CategoryNewsCard: React.FC<CategoryNewsCardProps> = ({
       className={`flex gap-4 ${width} cursor-pointer rounded-lg hover:bg-gray-100 transition group mb-4`}
     >
       {/* Left Image */}
-      <Box className="min-w-[100px] h-[80px] relative">
-        <Image
+      <Box className="min-w-[100px] h-[80px] relative overflow-hidden">
+        <StrapiImage
           src={featuredImage}
           alt={headline}
-          fill
+          width={100}
+          height={80}
           className="object-cover rounded"
         />
       </Box>

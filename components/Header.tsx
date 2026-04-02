@@ -20,17 +20,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 
-const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "Business", href: "/business" },
-  { label: "Technology", href: "/technology" },
-  { label: "Sports", href: "/sports" },
-];
-
-const Header = () => {
+const Header = (data: any) => {
   const [open, setOpen] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const pathname = usePathname();
+
+  const { navLink, logoText } = data.data;
 
   return (
     <Box>
@@ -51,21 +46,21 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <Box className="hidden md:flex items-center gap-4">
-            {navLinks.map((link) => {
+            {navLink.map((link) => {
               const isActive =
-                pathname === link.href || pathname.startsWith(link.href + "/");
+                pathname === link.url || pathname.startsWith(link.url + "/");
 
               return (
                 <Link
-                  key={link.label}
-                  href={link.href}
+                  key={link.text}
+                  href={link.url}
                   className={`px-3 py-1 rounded transition-colors ${
                     isActive
                       ? "border-2 border-black text-black"
                       : "text-black hover:text-black"
                   }`}
                 >
-                  {link.label}
+                  {link.text}
                 </Link>
               );
             })}
@@ -119,11 +114,11 @@ const Header = () => {
 
           {/* Navigation Links */}
           <List>
-            {navLinks.map((link) => (
+            {navLink.map((link) => (
               <ListItem
-                key={link.label}
+                key={link.text}
                 component={Link}
-                href={link.href}
+                href={link.url}
                 onClick={() => setOpen(false)}
               >
                 <ListItemText primary={link.label} />

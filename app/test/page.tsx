@@ -9,15 +9,11 @@ const Page = () => {
   useEffect(() => {
     const loadArticles = async () => {
       const data = await fetchAPI("/articles");
-      console.log("DATA::", data.data);
-      console.log(typeof data)
       setArticles(data);
     };
 
     loadArticles();
   }, []);
-
-  
 
   return <Box></Box>;
 };
