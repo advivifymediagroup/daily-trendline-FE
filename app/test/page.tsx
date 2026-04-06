@@ -1,21 +1,11 @@
-"use client";
-import { fetchAPI } from "@/utils/fetchApi";
-import { Box } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Box, Typography } from "@mui/material";
 
 const Page = () => {
-  const [articles, setArticles] = useState(null);
-
-  useEffect(() => {
-    const loadArticles = async () => {
-      const data = await fetchAPI("/articles");
-      setArticles(data);
-    };
-
-    loadArticles();
-  }, []);
-
-  return <Box></Box>;
+  return (
+    <Box>
+      <Typography>Test page</Typography>
+    </Box>
+  );
 };
 
 export default Page;

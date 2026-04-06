@@ -26,15 +26,15 @@ const footerLinks = [
       { label: "Contact", href: "/contact" },
     ],
   },
-  {
-    title: "Resources",
-    links: [
-      { label: "Editorial Policy", href: "/editorial-policy" },
-      { label: "Privacy Policy", href: "/privacy" },
-      { label: "Terms of Service", href: "/terms" },
-      { label: "RSS Feed", href: "/rss" },
-    ],
-  },
+  // {
+  //   title: "Resources",
+  //   links: [
+  //     { label: "Editorial Policy", href: "/editorial-policy" },
+  //     { label: "Privacy Policy", href: "/privacy" },
+  //     { label: "Terms of Service", href: "/terms" },
+  //     { label: "RSS Feed", href: "/rss" },
+  //   ],
+  // },
 ];
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -46,7 +46,15 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 const Footer: React.FC = (data: any) => {
-  const { socialLink, logoText, footerText } = data.data;
+  const { socialLink, logoText, footerText, footerSection } = data.data;
+
+  const footerLinks = footerSection?.map((section: any) => ({
+    title: section.title,
+    links: section.footerLink.map((link: any) => ({
+      label: link.text,
+      href: link.url,
+    })),
+  }));
 
   return (
     <footer className="w-full bg-[#faf902] text-black">
@@ -54,11 +62,15 @@ const Footer: React.FC = (data: any) => {
         {/* Logo + Description */}
         <Box className="space-y-4">
           <Typography variant="h6" className="text-black font-bold text-xl">
-            Daily Trendline
+            {typeof logoText === "string"
+              ? logoText
+              : logoText?.text || "Daily Trendline"}
           </Typography>
 
           <Typography variant="body2" className="text-gray-800">
-            {footerText}
+            {typeof footerText === "string"
+              ? footerText
+              : footerText?.text || ""}
           </Typography>
 
           <Box className="flex space-x-3 mt-2">
@@ -84,14 +96,14 @@ const Footer: React.FC = (data: any) => {
         </Box>
 
         {/* Footer Links */}
-        {footerLinks.map((section) => (
+        {footerLinks?.map((section: any) => (
           <Box key={section.title}>
             <Typography className="font-semibold text-black mb-4">
               {section.title}
             </Typography>
 
             <Box className="flex flex-col space-y-2">
-              {section.links.map((link) => (
+              {section.links.map((link: any) => (
                 <Link
                   key={link.label}
                   href={link.href}

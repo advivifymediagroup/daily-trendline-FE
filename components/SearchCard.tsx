@@ -11,7 +11,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useRouter } from "next/navigation";
 
 interface SearchCardProps {
-  featuredImage: string;
+  featuredImage: any;
   headline: string;
   category: string;
   description?: string;
@@ -66,6 +66,7 @@ const SearchCard: React.FC<SearchCardProps> = ({
           alt={headline}
           fill
           className="object-cover rounded-lg"
+          unoptimized
         />
 
         {/* CATEGORY CHIP */}

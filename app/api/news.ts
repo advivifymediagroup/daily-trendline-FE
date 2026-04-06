@@ -1,4 +1,4 @@
-import { fetchAPI, fetchData } from "@/utils/fetchApi";
+import { fetchData } from "@/utils/fetchApi";
 const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
 import qs from "qs";
 import { unstable_noStore as noStore } from "next/cache";
@@ -128,12 +128,26 @@ export async function getGlobalPageData() {
   const url = new URL("/api/global", baseUrl);
 
   url.search = qs.stringify({
-    populate: [
-      "header.logoText",
-      "header.navLink",
-      "footer.logoText",
-      "footer.socialLink",
-    ],
+    populate: {
+      header: {
+        populate: {
+          logoText: true,
+          navLink: true,
+          logo: {
+            fields: ["url", "alternativeText", "width", "height"],
+          },
+        },
+      },
+      footer: {
+        populate: {
+          logoText: true,
+          socialLink: true,
+          footerSection: {
+            populate: ["footerLink"],
+          },
+        },
+      },
+    },
   });
 
   return await fetchData(url.href);

@@ -33,10 +33,7 @@ import { mapStrapiToNewsCard } from "@/utils/newsCard";
 // }
 
 export default async function Home() {
-  const strapiData = await getHomePageData();
   const featuredArticles = await getFeaturedNews();
-
-  const { blocks } = strapiData || {};
 
   const topStories = await getTopStories();
 

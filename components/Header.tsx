@@ -19,13 +19,14 @@ import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { getStrapiMedia } from "./StrapiImage";
 
 const Header = (data: any) => {
   const [open, setOpen] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const pathname = usePathname();
 
-  const { navLink, logoText } = data.data;
+  const { navLink, logoText, logo } = data.data;
 
   return (
     <Box>
@@ -37,10 +38,11 @@ const Header = (data: any) => {
           <Link href="/">
             {/* Logo */}
             <Image
-              src="/daily-trendline-logo.jpg"
+              src={getStrapiMedia(logo.url)}
               alt="daily-trendline-logo"
               width={80}
               height={100}
+              unoptimized
             />
           </Link>
 

@@ -9,9 +9,10 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";
-import { featuredNews, secondaryNews, gridNews } from "@/components/dummyData";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import SearchCard from "@/components/SearchCard";
+import { getNewsByCategory } from "../api/news";
+import { getStrapiMediaURL } from "@/utils/strapiUtils";
 type Props = {
   params: Promise<{ category: string }>;
 };
@@ -19,16 +20,25 @@ type Props = {
 const Page = async ({ params }: Props) => {
   const { category } = await params;
 
-  // Combine all news into one array
-  const allNews = [featuredNews, ...secondaryNews, ...gridNews];
+  const categoryNews = await getNewsByCategory(category);
 
-  // Filter by category (case-insensitive)
-  const filteredNews = allNews.filter(
-    (item) => item.category.toLowerCase() === category.toLowerCase(),
-  );
+  const { data, meta } = categoryNews;
 
-  const featured = filteredNews[0];
-  const restNews = filteredNews.slice(1);
+  const normalizedNews = data.map((item: any) => ({
+    headline: item.title,
+    description: item.description,
+    featuredImage:
+      getStrapiMediaURL(item.featuredImage?.url) || "/fallback.jpg",
+    date: new Date(item.publishedAt).toLocaleDateString(),
+    category: item.category?.name || "",
+    slug: item.slug,
+    isFeatured: item.isFeatured,
+    isTrending: item.isTrending,
+  }));
+  const featured =
+    normalizedNews.find((item: any) => item.isFeatured) || normalizedNews[0];
+
+  const trendingNews = normalizedNews.filter((item: any) => item.isTrending);
 
   return (
     <Box className="max-w-7xl mx-auto px-4 py-10">
@@ -113,13 +123,13 @@ const Page = async ({ params }: Props) => {
               Latest in {category}
             </Typography>
             <Box className="grid gap-6">
-              {filteredNews.map((item, index) => (
+              {normalizedNews.map((item, index) => (
                 <SearchCard key={index} {...item} />
               ))}
             </Box>
           </Box>
 
-          {filteredNews.length === 0 && (
+          {normalizedNews.length === 0 && (
             <Typography className="text-gray-500 mt-10 text-center">
               No news available for this category.
             </Typography>
@@ -132,18 +142,19 @@ const Page = async ({ params }: Props) => {
             Trending
           </Typography>
 
-          {gridNews.slice(0, 4).map((item, index) => (
+          {trendingNews.map((item, index) => (
             <Link
               key={index}
-              href={`/${item.category.toLowerCase()}/${item.headline.toLowerCase().replace(/\s+/g, "-")}`}
+              href={`/${item.category.toLowerCase()}/${item.slug}`}
               className="flex gap-3 cursor-pointer hover:bg-gray-100 p-2 rounded-md no-underline"
             >
               <Image
-                src={item.featuredImage}
+                src={item.featuredImage || "/fallback.jpg"}
                 alt={item.headline}
                 width={400}
                 height={300}
                 className="w-20 h-16 object-cover rounded"
+                unoptimized
               />
 
               <Typography className="text-sm font-medium line-clamp-3 leading-snug h-18 overflow-hidden">
