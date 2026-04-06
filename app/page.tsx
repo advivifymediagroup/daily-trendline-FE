@@ -15,6 +15,7 @@ import {
   getFeaturedNews,
   getHomePageData,
   getNewsByCategory,
+  getTickerNews,
   getTopStories,
 } from "./api/news";
 import { mapStrapiToNewsCard } from "@/utils/newsCard";
@@ -41,10 +42,11 @@ export default async function Home() {
   const techNews = await getNewsByCategory("technology");
   const sportsNews = await getNewsByCategory("sports");
   const entertainmentNews = await getNewsByCategory("entertainment");
+  const tickerNews = await getTickerNews();
 
   return (
     <Box className="homepage max-w-7xl mx-auto px-4 py-6 flex flex-col gap-10">
-      <BreakingNewsTicker news={breakingNews} />
+      <BreakingNewsTicker news={tickerNews?.data} />
       {/* Featured Section */}
       <Box className="flex flex-col gap-4">
         <Typography variant="h4" className="font-bold">

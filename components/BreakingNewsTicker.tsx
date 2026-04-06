@@ -2,17 +2,7 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 
-interface BreakingNewsItem {
-  id: number;
-  title: string;
-  link?: string;
-}
-
-interface BreakingNewsTickerProps {
-  news: BreakingNewsItem[];
-}
-
-const BreakingNewsTicker: React.FC<BreakingNewsTickerProps> = ({ news }) => {
+const BreakingNewsTicker: React.FC<any> = ({ news }) => {
   return (
     <Box className="w-full flex items-center bg-white text-black rounded-md overflow-hidden border-1">
       {/* Label */}
@@ -31,7 +21,7 @@ const BreakingNewsTicker: React.FC<BreakingNewsTickerProps> = ({ news }) => {
           {news.concat(news).map((item, index) => (
             <Link
               key={index}
-              href={item.link || "#"}
+              href={item?.category.slug + "/" + item?.slug || "#"}
               className="hover:underline text-sm"
             >
               {item.title}

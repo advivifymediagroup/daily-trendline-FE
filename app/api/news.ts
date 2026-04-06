@@ -3,6 +3,32 @@ const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
 import qs from "qs";
 import { unstable_noStore as noStore } from "next/cache";
 
+export async function getTickerNews() {
+  const url = new URL("/api/articles", baseUrl);
+
+  url.search = qs.stringify({
+    filters: {
+      isTickerNews: {
+        $eq: true,
+      },
+    },
+    populate: {
+      category: {
+        fields: ["name", "slug"],
+      },
+      featuredImage: {
+        fields: ["url", "alternativeText"],
+      },
+    },
+    sort: ["publishedAt:desc"],
+    pagination: {
+      limit: 4,
+    },
+  });
+
+  return await fetchData(url.href);
+}
+
 export async function getHomePageData() {
   const url = new URL("/api/home-page", baseUrl);
 
