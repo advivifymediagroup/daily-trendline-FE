@@ -17,6 +17,9 @@ interface SearchCardProps {
   description?: string;
   date: string;
   chipColor?: string;
+  slug?: string;
+  documentId?: string;
+  id?: string | number;
 }
 
 const SearchCard: React.FC<SearchCardProps> = ({
@@ -26,6 +29,9 @@ const SearchCard: React.FC<SearchCardProps> = ({
   description,
   date,
   chipColor,
+  slug,
+  documentId,
+  id,
 }) => {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -33,13 +39,28 @@ const SearchCard: React.FC<SearchCardProps> = ({
   const open = Boolean(anchorEl);
 
   // slug for routing
-  const slug = headline
+  const fallbackSlug = headline
     .toLowerCase()
     .replace(/[^\w\s]/gi, "")
     .replace(/\s+/g, "-");
 
   const handleNavigate = () => {
-    router.push(`/${category.toLowerCase()}/${slug}`);
+    const queryParams = new URLSearchParams();
+
+    if (documentId) {
+      queryParams.set("documentId", documentId);
+    }
+
+    if (id !== undefined) {
+      queryParams.set("id", String(id));
+    }
+
+    const articleSlug = slug || fallbackSlug;
+    const queryString = queryParams.toString();
+
+    router.push(
+      `/${category.toLowerCase()}/${articleSlug}${queryString ? `?${queryString}` : ""}`,
+    );
   };
 
   const handleShareClick = (event: React.MouseEvent<HTMLElement>) => {

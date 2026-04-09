@@ -13,6 +13,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import SearchCard from "@/components/SearchCard";
 import { getNewsByCategory } from "../api/news";
 import { getStrapiMediaURL } from "@/utils/strapiUtils";
+
 type Props = {
   params: Promise<{ category: string }>;
 };
@@ -34,7 +35,10 @@ const Page = async ({ params }: Props) => {
     slug: item.slug,
     isFeatured: item.isFeatured,
     isTrending: item.isTrending,
+    documentId: item.documentId,
+    id: item.id,
   }));
+  
   const featured =
     normalizedNews.find((item: any) => item.isFeatured) || normalizedNews[0];
 
@@ -60,32 +64,43 @@ const Page = async ({ params }: Props) => {
         <Box className="lg:col-span-3">
           {/* Featured Article */}
           {featured && (
-            <Card className="mb-10 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-              <CardMedia
-                component="img"
-                image={featured.featuredImage}
-                alt={featured.headline}
-                className="h-100 w-full object-cover!"
-              />
+            <Link
+              href={{
+                pathname: `/${featured.category.toLowerCase()}/${featured.slug}`,
+                query: {
+                  documentId: featured.documentId,
+                  id: String(featured.id),
+                },
+              }}
+              className="no-underline block"
+            >
+              <Card className="mb-10 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
+                <CardMedia
+                  component="img"
+                  image={featured.featuredImage}
+                  alt={featured.headline}
+                  className="h-100 w-full object-cover!"
+                />
 
-              <CardContent>
-                <Typography variant="h5" className="font-bold">
-                  {featured.headline}
-                </Typography>
-
-                {featured?.description && (
-                  <Typography className="text-gray-600 mt-2">
-                    {featured.description}
+                <CardContent>
+                  <Typography variant="h5" className="font-bold">
+                    {featured.headline}
                   </Typography>
-                )}
 
-                <Box className="flex items-center gap-2 mt-4 text-sm text-gray-500">
-                  <AccessTimeIcon />
+                  {featured?.description && (
+                    <Typography className="text-gray-600 mt-2">
+                      {featured.description}
+                    </Typography>
+                  )}
 
-                  {featured.date}
-                </Box>
-              </CardContent>
-            </Card>
+                  <Box className="flex items-center gap-2 mt-4 text-sm text-gray-500">
+                    <AccessTimeIcon />
+
+                    {featured.date}
+                  </Box>
+                </CardContent>
+              </Card>
+            </Link>
           )}
 
           {/* News Grid */}
@@ -123,7 +138,7 @@ const Page = async ({ params }: Props) => {
               Latest in {category}
             </Typography>
             <Box className="grid gap-6">
-              {normalizedNews.map((item, index) => (
+              {normalizedNews.map((item: any, index: number) => (
                 <SearchCard key={index} {...item} />
               ))}
             </Box>
@@ -142,10 +157,16 @@ const Page = async ({ params }: Props) => {
             Trending
           </Typography>
 
-          {trendingNews.map((item, index) => (
+          {trendingNews.map((item: any, index: number) => (
             <Link
               key={index}
-              href={`/${item.category.toLowerCase()}/${item.slug}`}
+              href={{
+                pathname: `/${item.category.toLowerCase()}/${item.slug}`,
+                query: {
+                  documentId: item.documentId,
+                  id: String(item.id),
+                },
+              }}
               className="flex gap-3 cursor-pointer hover:bg-gray-100 p-2 rounded-md no-underline"
             >
               <Image
