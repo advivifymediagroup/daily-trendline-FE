@@ -2,12 +2,9 @@ import { getStrapiMediaURL } from "./strapiUtils";
 
 export const mapStrapiToNewsCard = (item: any) => {
   const imageUrl =
-    item.featuredImage?.url || // if already flattened
-    item.featuredImage?.data?.attributes?.url; // Strapi default
-
+    item.featuredImage?.url || item.featuredImage?.data?.attributes?.url;
   const categoryName =
-    item.category?.name ||
-    item.category?.data?.attributes?.name;
+    item.category?.name || item.category?.data?.attributes?.name;
 
   return {
     featuredImage:
@@ -28,6 +25,8 @@ export const mapStrapiToNewsCard = (item: any) => {
       : "",
 
     chipColor: getCategoryColor(categoryName),
+    documentId: item.documentId,
+    id: item.id,
   };
 };
 

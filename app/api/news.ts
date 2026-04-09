@@ -91,6 +91,46 @@ export async function getFeaturedNews() {
   return await fetchData(url.href);
 }
 
+export async function getArticleById(documentId: string, id: string | number) {
+  const url = new URL("/api/articles", baseUrl);
+
+  url.search = qs.stringify({
+    filters: {
+      $or: [
+        {
+          id: {
+            $eq: id,
+          },
+        },
+        {
+          documentId: {
+            $eq: documentId,
+          },
+        },
+      ],
+    },
+    populate: {
+      category: {
+        fields: ["name", "slug"],
+      },
+      featuredImage: {
+        fields: ["url", "alternativeText"],
+      },
+      author: {
+        fields: ["name"],
+        populate: {
+          avatar: {
+            fields: ["url", "alternativeText"],
+          },
+        },
+      },
+    },
+  });
+
+  const data = await fetchData(url.href);
+  return data?.data?.[0] || null;
+}
+
 export async function getTopStories() {
   const url = new URL("/api/articles", baseUrl);
 

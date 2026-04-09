@@ -1,19 +1,10 @@
 // "use client";
 import NewsCard from "@/components/NewsCard";
 import { Box, Typography } from "@mui/material";
-import {
-  breakingNews,
-  featuredNews,
-  featuredRight,
-  gridNews,
-  latestCategoryNews,
-  secondaryNews,
-} from "../components/dummyData";
 import BreakingNewsTicker from "@/components/BreakingNewsTicker";
 import CategoryNewsCard from "@/components/CategoryNewsCard";
 import {
   getFeaturedNews,
-  getHomePageData,
   getNewsByCategory,
   getTickerNews,
   getTopStories,
@@ -37,7 +28,6 @@ export default async function Home() {
   const featuredArticles = await getFeaturedNews();
 
   const topStories = await getTopStories();
-
   const businessNews = await getNewsByCategory("business");
   const techNews = await getNewsByCategory("technology");
   const sportsNews = await getNewsByCategory("sports");

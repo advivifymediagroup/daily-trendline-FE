@@ -1,88 +1,96 @@
 import React from "react";
 import {
+  Avatar,
   Box,
-  Typography,
   Card,
   CardMedia,
-  Divider,
+  IconButton,
   Tooltip,
+  Typography,
 } from "@mui/material";
-import Link from "next/link";
-import {
-  featuredNews,
-  secondaryNews,
-  gridNews,
-  latestCategoryNews,
-} from "../../../components/dummyData";
-import { Avatar, IconButton } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import XIcon from "@mui/icons-material/X";
 import EmailIcon from "@mui/icons-material/Email";
 import LinkIcon from "@mui/icons-material/Link";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { getArticleById } from "@/app/api/news";
+import { getStrapiMediaURL } from "@/utils/strapiUtils";
 
 type Props = {
-  params: {
+  params: Promise<{
     category: string;
     news: string;
-  };
+  }>;
+  searchParams: Promise<{
+    documentId?: string;
+    id?: string;
+  }>;
 };
 
-const Page = async ({ params }: Props) => {
-  const { category, news } = await params;
+const Page = async ({ params, searchParams }: Props) => {
+  const { category } = await params;
+  const { documentId, id } = await searchParams;
 
-  // Combine all news
-  const allNews = [
-    featuredNews,
-    ...secondaryNews,
-    ...gridNews,
-    ...latestCategoryNews,
-  ];
-
-  // Find the news item that matches the headline (case-insensitive)
-  const newsItem = allNews.find(
-    (item) =>
-      item.headline?.toLowerCase().replace(/\s+/g, "-") === news?.toLowerCase(),
-  );
-
-  if (!newsItem) {
-    return (
-      <Box className="max-w-4xl mx-auto px-4 py-10 text-center text-gray-500">
-        News article not found.
-      </Box>
-    );
+  if (!documentId && !id) {
+    notFound();
   }
+
+  const article = await getArticleById(documentId ?? "", id ?? "");
+
+  if (!article) {
+    notFound();
+  }
+
+  const publishedDate = article.publishedAt
+    ? new Date(article.publishedAt).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    : "";
+
+  const articleImage =
+    getStrapiMediaURL(article.featuredImage?.url) || "/fallback.jpg";
+  const articleTitle = article.title || "Untitled article";
+  const articleAuthor = article.author?.name || "Admin";
+  const articleContent =
+    article.content || article.description || article.excerpt || "";
+  const articleCategory = article.category?.name || category;
 
   return (
     <Box className="mx-auto px-4 py-10 max-w-[1310px]!">
       {/* Breadcrumb */}
       <Box className="mb-4 text-sm text-gray-500">
-        <Link href={`/${category}`} className="hover:underline capitalize">
-          {category} News
+        <Link
+          href={`/${articleCategory.toLowerCase()}`}
+          className="hover:underline capitalize"
+        >
+          {articleCategory} News
         </Link>{" "}
-        / <span className="capitalize">{newsItem.headline}</span>
+        / <span className="capitalize">{articleTitle}</span>
       </Box>
 
       {/* Headline */}
       <Typography variant="h3" className="font-bold mb-4 text-[#333333]">
-        {newsItem.headline}
+        {articleTitle}
       </Typography>
 
       <Box className="flex items-center justify-between flex-wrap gap-4 mb-6 mt-4">
         {/* LEFT: Author Info */}
         <Box className="flex items-center gap-4">
           <Avatar className="bg-gray-300 text-black">
-            {newsItem.author?.charAt(0)}
+            {articleAuthor.charAt(0)}
           </Avatar>
 
           <Box className="flex flex-col">
             <Typography className="font-semibold! underline">
-              {newsItem.author}
+              {articleAuthor}
             </Typography>
 
             <Box className="flex items-center gap-1 mt-2 text-sm text-gray-500">
-              {/* <AccessTimeIcon fontSize="small" /> */}
-              {newsItem.date}
+              {publishedDate}
             </Box>
           </Box>
         </Box>
@@ -129,40 +137,16 @@ const Page = async ({ params }: Props) => {
       <Card className="mb-6 rounded-xl overflow-hidden shadow-lg">
         <CardMedia
           component="img"
-          image={newsItem.featuredImage}
-          alt={newsItem.headline}
+          image={articleImage}
+          alt={articleTitle}
           className="h-150 w-full object-cover!"
         />
       </Card>
 
       {/* Description / Content */}
-      <Typography className="text-[#111111] leading-relaxed mb-6">
-        {newsItem.content ||
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim. Nulla facilisi. Pellentesque vel dolor at quam efficitur dapibus. Suspendisse potenti."}
+      <Typography className="text-[#111111] leading-relaxed whitespace-pre-line">
+        {articleContent || "No content available for this article yet."}
       </Typography>
-
-      {/* Additional Paragraphs */}
-      <Typography className="text-[#111111] leading-relaxed my-4!">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit
-        amet accumsan arcu. Donec euismod orci sed lectus tincidunt, nec lacinia
-        metus fringilla.
-      </Typography>
-
-      <Typography className="text-[#111111] leading-relaxed my-4!">
-        Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere
-        cubilia curae; Cras hendrerit, eros vel malesuada faucibus, augue massa
-        consectetur libero, in venenatis eros lorem ut purus.
-      </Typography>
-
-      {/* <Divider className="my-6" /> */}
-
-      {/* Back Button */}
-      {/* <Link
-        href={`/${category}`}
-        className="inline-block bg-black text-white px-6 py-2 rounded"
-      >
-        ← Back to {category} News
-      </Link> */}
     </Box>
   );
 };

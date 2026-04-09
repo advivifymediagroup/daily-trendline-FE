@@ -15,6 +15,8 @@ interface NewsCardProps {
   author: string;
   date: string;
   chipColor?: string;
+  documentId?: string;
+  id: string | number;
 }
 
 const NewsCard: React.FC<NewsCardProps> = ({
@@ -27,12 +29,22 @@ const NewsCard: React.FC<NewsCardProps> = ({
   description,
   author,
   date,
+  documentId,
+  id,
   chipColor,
 }) => {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/${category.toLowerCase()}/${slug}`);
+    const queryParams = new URLSearchParams();
+
+    if (documentId) {
+      queryParams.set("documentId", documentId);
+    }
+
+    queryParams.set("id", String(id));
+
+    router.push(`/${category.toLowerCase()}/${slug}?${queryParams.toString()}`);
   };
 
   return (
