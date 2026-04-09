@@ -189,6 +189,59 @@ export async function getNewsByCategory(categorySlug: string, limit = 4) {
   return await fetchData(url.href);
 }
 
+export async function getSearchedArticles(query: string, limit = 20) {
+  const trimmedQuery = query.trim();
+
+  if (!trimmedQuery) {
+    return { data: [] };
+  }
+
+  const url = new URL("/api/articles", baseUrl);
+
+  url.search = qs.stringify({
+    filters: {
+      $or: [
+        {
+          title: {
+            $containsi: trimmedQuery,
+          },
+        },
+        {
+          description: {
+            $containsi: trimmedQuery,
+          },
+        },
+        {
+          excerpt: {
+            $containsi: trimmedQuery,
+          },
+        },
+        {
+          category: {
+            name: {
+              $containsi: trimmedQuery,
+            },
+          },
+        },
+      ],
+    },
+    populate: {
+      category: {
+        fields: ["name", "slug"],
+      },
+      featuredImage: {
+        fields: ["url", "alternativeText"],
+      },
+    },
+    sort: ["publishedAt:desc"],
+    pagination: {
+      limit,
+    },
+  });
+
+  return await fetchData(url.href);
+}
+
 export async function getGlobalPageData() {
   noStore();
   const url = new URL("/api/global", baseUrl);

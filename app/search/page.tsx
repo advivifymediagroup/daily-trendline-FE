@@ -1,14 +1,10 @@
 import React from "react";
-import { Box, Typography, Divider } from "@mui/material";
-import {
-  featuredNews,
-  secondaryNews,
-  gridNews,
-  latestCategoryNews,
-} from "@/components/dummyData";
+import { Box, Divider, Typography } from "@mui/material";
 import SearchBar from "@/components/SearchBar";
 import SearchCard from "@/components/SearchCard";
 import CategoryNewsCard from "@/components/CategoryNewsCard";
+import { getSearchedArticles, getTickerNews } from "../api/news";
+import { getStrapiMediaURL } from "@/utils/strapiUtils";
 
 type Props = {
   searchParams: Promise<{
@@ -18,23 +14,48 @@ type Props = {
 
 const page = async ({ searchParams }: Props) => {
   const params = await searchParams;
-  const query = params.q?.toLowerCase().trim() || "";
+  const query = params.q?.trim() || "";
 
-  const allNews = [
-    featuredNews,
-    ...secondaryNews,
-    ...gridNews,
-    ...latestCategoryNews,
-  ];
+  const [searchResponse, trendingResponse] = await Promise.all([
+    query ? getSearchedArticles(query) : Promise.resolve({ data: [] }),
+    getTickerNews(),
+  ]);
 
-  const results = allNews.filter((item) => {
-    return (
-      item.headline.toLowerCase().includes(query) ||
-      item.description?.toLowerCase().includes(query)
-    );
-  });
+  const results = (searchResponse?.data || []).map((item: any) => ({
+    featuredImage:
+      getStrapiMediaURL(item.featuredImage?.url) || "/fallback.jpg",
+    headline: item.title,
+    category: item.category?.name || "General",
+    description: item.description || item.excerpt || "",
+    date: item.publishedAt
+      ? new Date(item.publishedAt).toLocaleDateString("en-IN", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+      : "",
+    slug: item.slug,
+    documentId: item.documentId,
+    id: item.id,
+  }));
 
-  const trendingNews = allNews.slice(0, 6);
+  const trendingNews = (trendingResponse?.data || []).map((item: any) => ({
+    featuredImage:
+      getStrapiMediaURL(item.featuredImage?.url) || "/fallback.jpg",
+    headline: item.title,
+    category: item.category?.name || "General",
+    date: item.publishedAt
+      ? new Date(item.publishedAt).toLocaleDateString("en-IN", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+      : "",
+    description: item.description || item.excerpt || "",
+    slug: item.slug,
+    documentId: item.documentId,
+    id: item.id,
+  }));
 
   return (
     <Box className="max-w-7xl mx-auto px-4 py-8">
@@ -48,7 +69,7 @@ const page = async ({ searchParams }: Props) => {
           <Divider />
 
           <Box className="flex flex-col gap-2">
-            {trendingNews.map((item, index) => (
+            {trendingNews.map((item: any, index: number) => (
               <CategoryNewsCard key={index} {...item} />
             ))}
           </Box>
@@ -76,7 +97,6 @@ const page = async ({ searchParams }: Props) => {
             </Box>
 
             <Divider />
-
             {/* RESULTS */}
             {!query && (
               <Typography className="text-gray-400">
@@ -86,7 +106,7 @@ const page = async ({ searchParams }: Props) => {
 
             {query && results.length > 0 && (
               <Box className="grid gap-6">
-                {results.map((item, index) => (
+                {results.map((item: any, index: number) => (
                   <SearchCard key={index} {...item} />
                 ))}
               </Box>

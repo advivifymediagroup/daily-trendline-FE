@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Box, Typography, Tooltip } from "@mui/material";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { StrapiImage } from "./StrapiImage";
 
@@ -13,6 +12,9 @@ interface CategoryNewsCardProps {
   category: string;
   date?: string;
   description?: string;
+  slug?: string;
+  documentId?: string;
+  id?: string | number;
 }
 
 const CategoryNewsCard: React.FC<CategoryNewsCardProps> = ({
@@ -22,16 +24,34 @@ const CategoryNewsCard: React.FC<CategoryNewsCardProps> = ({
   category,
   date,
   description,
+  slug,
+  documentId,
+  id,
 }) => {
   const router = useRouter();
 
-  const slug = headline
+  const fallbackSlug = headline
     .toLowerCase()
     .replace(/[^\w\s]/gi, "")
     .replace(/\s+/g, "-");
 
   const handleClick = () => {
-    router.push(`/${category.toLowerCase()}/${slug}`);
+    const queryParams = new URLSearchParams();
+
+    if (documentId) {
+      queryParams.set("documentId", documentId);
+    }
+
+    if (id !== undefined) {
+      queryParams.set("id", String(id));
+    }
+
+    const articleSlug = slug || fallbackSlug;
+    const queryString = queryParams.toString();
+
+    router.push(
+      `/${category.toLowerCase()}/${articleSlug}${queryString ? `?${queryString}` : ""}`,
+    );
   };
 
   return (

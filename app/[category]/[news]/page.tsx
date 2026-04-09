@@ -80,13 +80,13 @@ const Page = async ({ params, searchParams }: Props) => {
       <Box className="flex items-center justify-between flex-wrap gap-4 mb-6 mt-4">
         {/* LEFT: Author Info */}
         <Box className="flex items-center gap-4">
-          <Avatar className="bg-gray-300 text-black">
+          <Avatar className="bg-gray-300 text-black capitalize">
             {articleAuthor.charAt(0)}
           </Avatar>
 
           <Box className="flex flex-col">
-            <Typography className="font-semibold! underline">
-              {articleAuthor}
+            <Typography className="font-semibold! underline capitalize!">
+              {articleAuthor || "Admin"}
             </Typography>
 
             <Box className="flex items-center gap-1 mt-2 text-sm text-gray-500">

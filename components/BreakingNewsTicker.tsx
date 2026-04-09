@@ -3,6 +3,8 @@ import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 
 const BreakingNewsTicker: React.FC<any> = ({ news }) => {
+  console.log("NEWS::", news);
+
   return (
     <Box className="w-full flex items-center bg-white text-black rounded-md overflow-hidden border-1">
       {/* Label */}
@@ -18,10 +20,16 @@ const BreakingNewsTicker: React.FC<any> = ({ news }) => {
       {/* Scrolling Text */}
       <Box className="relative overflow-hidden w-full">
         <Box className="ticker-track flex gap-8 px-4 py-2 whitespace-nowrap">
-          {news.concat(news).map((item, index) => (
+          {news.concat(news).map((item: any, index: number) => (
             <Link
               key={index}
-              href={item?.category.slug + "/" + item?.slug || "#"}
+              href={{
+                pathname: `/${item?.category?.name?.toLowerCase()}/${item.slug}`,
+                query: {
+                  documentId: item.documentId,
+                  id: String(item.id),
+                },
+              }}
               className="hover:underline text-sm"
             >
               {item.title}
