@@ -81,6 +81,14 @@ export async function getFeaturedNews() {
       featuredImage: {
         fields: ["url", "alternativeText"],
       },
+      author: {
+        fields: ["name"],
+        populate: {
+          avatar: {
+            fields: ["url", "alternativeText"],
+          },
+        },
+      },
     },
     sort: ["publishedAt:desc"],
     pagination: {
@@ -149,6 +157,14 @@ export async function getTopStories() {
       },
       featuredImage: {
         fields: ["url", "alternativeText"],
+      },
+      author: {
+        fields: ["name"],
+        populate: {
+          avatar: {
+            fields: ["url", "alternativeText"],
+          },
+        },
       },
     },
     sort: ["publishedAt:desc"],
@@ -240,6 +256,26 @@ export async function getSearchedArticles(query: string, limit = 20) {
   });
 
   return await fetchData(url.href);
+}
+
+export async function getPageData(slug: string) {
+  const url = new URL(`/api/pages`, baseUrl);
+
+  url.search = qs.stringify({
+    filters: {
+      slug: {
+        $eq: slug,
+      },
+    },
+    populate: {
+      blocks: {
+        populate: "*",
+      },
+    },
+  });
+
+  const data = await fetchData(url.href);
+  return data?.data?.[0];
 }
 
 export async function getGlobalPageData() {

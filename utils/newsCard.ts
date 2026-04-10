@@ -14,7 +14,7 @@ export const mapStrapiToNewsCard = (item: any) => {
     category: categoryName || "General",
     slug: item.slug,
     description: item.excerpt || item.description || "",
-    author: "Admin",
+    author: item.author?.name || "Admin",
 
     date: item.publishedAt
       ? new Date(item.publishedAt).toLocaleDateString("en-IN", {

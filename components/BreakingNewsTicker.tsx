@@ -3,8 +3,6 @@ import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 
 const BreakingNewsTicker: React.FC<any> = ({ news }) => {
-  console.log("NEWS::", news);
-
   return (
     <Box className="w-full flex items-center bg-white text-black rounded-md overflow-hidden border-1">
       {/* Label */}

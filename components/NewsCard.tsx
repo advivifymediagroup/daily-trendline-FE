@@ -80,7 +80,7 @@ const NewsCard: React.FC<NewsCardProps> = ({
           </Typography>
         )}
 
-        <Typography variant="caption" className="text-gray-300">
+        <Typography variant="caption" className="text-gray-300 capitalize">
           {author} • {date}
         </Typography>
       </Box>
