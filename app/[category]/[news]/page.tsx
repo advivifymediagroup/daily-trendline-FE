@@ -1,21 +1,10 @@
 import React from "react";
-import {
-  Avatar,
-  Box,
-  Card,
-  CardMedia,
-  IconButton,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import ShareIcon from "@mui/icons-material/Share";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import XIcon from "@mui/icons-material/X";
-import EmailIcon from "@mui/icons-material/Email";
-import LinkIcon from "@mui/icons-material/Link";
+import type { Metadata } from "next";
+import { Avatar, Box, Card, CardMedia, Typography } from "@mui/material";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getArticleById } from "@/app/api/news";
+import ArticleShareActions from "@/components/ArticleShareActions";
 import { getStrapiMediaURL } from "@/utils/strapiUtils";
 
 type Props = {
@@ -28,6 +17,30 @@ type Props = {
     id?: string;
   }>;
 };
+
+export async function generateMetadata({
+  searchParams,
+}: Props): Promise<Metadata> {
+  const { documentId, id } = await searchParams;
+
+  if (!documentId && !id) {
+    return {
+      title: "Page Not Found",
+    };
+  }
+
+  const article = await getArticleById(documentId ?? "", id ?? "");
+
+  if (!article) {
+    return {
+      title: "Page Not Found",
+    };
+  }
+
+  return {
+    title: article.title || "Article",
+  };
+}
 
 const Page = async ({ params, searchParams }: Props) => {
   const { category } = await params;
@@ -95,42 +108,7 @@ const Page = async ({ params, searchParams }: Props) => {
           </Box>
         </Box>
 
-        {/* Share Buttons */}
-        <Box className="flex items-center gap-2">
-          <Box className="flex justify-center items-center">
-            <ShareIcon className="text-black m-2" />
-            <Typography>Share</Typography>
-          </Box>
-
-          <Tooltip title="Share on Facebook">
-            <IconButton className="text-black! hover:text-blue-600!">
-              <FacebookIcon />
-            </IconButton>
-          </Tooltip>
-
-          <Tooltip title="Share on X">
-            <IconButton className="text-black! hover:text-black!">
-              <XIcon />
-            </IconButton>
-          </Tooltip>
-
-          <Tooltip title="Send via Email">
-            <IconButton className="text-black! hover:text-red-500!">
-              <EmailIcon />
-            </IconButton>
-          </Tooltip>
-
-          <Tooltip title="Copy Link">
-            <IconButton
-            // className="text-gray-600 hover:text-green-600"
-            // onClick={() => {
-            //   navigator.clipboard.writeText(window.location.href);
-            // }}
-            >
-              <LinkIcon className="text-black!" />
-            </IconButton>
-          </Tooltip>
-        </Box>
+        <ArticleShareActions title={articleTitle} />
       </Box>
 
       {/* Featured Image */}

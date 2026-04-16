@@ -3,6 +3,7 @@ import NewsCard from "@/components/NewsCard";
 import { Box, Typography } from "@mui/material";
 import BreakingNewsTicker from "@/components/BreakingNewsTicker";
 import CategoryNewsCard from "@/components/CategoryNewsCard";
+import type { Metadata } from "next";
 import {
   getFeaturedNews,
   getNewsByCategory,
@@ -10,6 +11,10 @@ import {
   getTopStories,
 } from "./api/news";
 import { mapStrapiToNewsCard } from "@/utils/newsCard";
+
+export const metadata: Metadata = {
+  title: "Home | DailyTrendline",
+};
 
 // function blockRenderer(block: TBlocks, index: number) {
 //   switch (block.__component) {

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Box, Typography, Chip, Menu, MenuItem } from "@mui/material";
+import { Alert, Box, Chip, Menu, MenuItem, Snackbar, Typography } from "@mui/material";
 import Image from "next/image";
 import ShareIcon from "@mui/icons-material/Share";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -35,6 +35,7 @@ const SearchCard: React.FC<SearchCardProps> = ({
 }) => {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [feedback, setFeedback] = useState<string | null>(null);
 
   const open = Boolean(anchorEl);
 
@@ -44,23 +45,26 @@ const SearchCard: React.FC<SearchCardProps> = ({
     .replace(/[^\w\s]/gi, "")
     .replace(/\s+/g, "-");
 
+  const queryParams = new URLSearchParams();
+
+  if (documentId) {
+    queryParams.set("documentId", documentId);
+  }
+
+  if (id !== undefined) {
+    queryParams.set("id", String(id));
+  }
+
+  const articleSlug = slug || fallbackSlug;
+  const queryString = queryParams.toString();
+  const articlePath = `/${category.toLowerCase()}/${articleSlug}${queryString ? `?${queryString}` : ""}`;
+
   const handleNavigate = () => {
-    const queryParams = new URLSearchParams();
-
-    if (documentId) {
-      queryParams.set("documentId", documentId);
+    if (open) {
+      return;
     }
 
-    if (id !== undefined) {
-      queryParams.set("id", String(id));
-    }
-
-    const articleSlug = slug || fallbackSlug;
-    const queryString = queryParams.toString();
-
-    router.push(
-      `/${category.toLowerCase()}/${articleSlug}${queryString ? `?${queryString}` : ""}`,
-    );
+    router.push(articlePath);
   };
 
   const handleShareClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -68,10 +72,56 @@ const SearchCard: React.FC<SearchCardProps> = ({
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => setAnchorEl(null);
+  const getArticleUrl = () => {
+    if (typeof window === "undefined") {
+      return articlePath;
+    }
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(window.location.href);
+    return new URL(articlePath, window.location.origin).toString();
+  };
+
+  const openShareUrl = (shareUrl: string) => {
+    window.open(shareUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const handleClose = (event?: React.SyntheticEvent | Event) => {
+    event?.stopPropagation?.();
+    setAnchorEl(null);
+  };
+
+  const handleFacebookShare = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    const url = encodeURIComponent(getArticleUrl());
+    openShareUrl(`https://www.facebook.com/sharer/sharer.php?u=${url}`);
+    handleClose();
+  };
+
+  const handleXShare = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    const url = encodeURIComponent(getArticleUrl());
+    const text = encodeURIComponent(headline);
+    openShareUrl(`https://twitter.com/intent/tweet?url=${url}&text=${text}`);
+    handleClose();
+  };
+
+  const handleEmailShare = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    const subject = encodeURIComponent(headline);
+    const body = encodeURIComponent(`Check out this article: ${getArticleUrl()}`);
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    handleClose();
+  };
+
+  const handleCopy = async (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+
+    try {
+      await navigator.clipboard.writeText(getArticleUrl());
+      setFeedback("Link copied to clipboard");
+    } catch {
+      setFeedback("Could not copy the link");
+    }
+
     handleClose();
   };
 
@@ -120,22 +170,37 @@ const SearchCard: React.FC<SearchCardProps> = ({
 
         {/* SHARE */}
         <Box className="flex justify-end mt-2">
-          <Box onClick={handleShareClick} className="flex items-center gap-2">
+          <Box
+            onClick={handleShareClick}
+            onMouseDown={(event) => event.stopPropagation()}
+            className="flex items-center gap-2"
+          >
             <ShareIcon fontSize="small" /> <Typography>Share</Typography>
           </Box>
 
           {/* SHARE MENU */}
-          <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-            <MenuItem onClick={handleClose}>
+          <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            onClick={(event) => event.stopPropagation()}
+            slotProps={{
+              paper: {
+                onClick: (event) => event.stopPropagation(),
+                onMouseDown: (event) => event.stopPropagation(),
+              },
+            }}
+          >
+            <MenuItem onClick={handleFacebookShare}>
               <FacebookIcon fontSize="small" className="mr-2 text-blue-600!" />
               Facebook
             </MenuItem>
 
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleXShare}>
               <XIcon fontSize="small" className="mr-2 text-black" />X
             </MenuItem>
 
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleEmailShare}>
               <EmailIcon fontSize="small" className="mr-2 text-red-500" />
               Email
             </MenuItem>
@@ -150,6 +215,22 @@ const SearchCard: React.FC<SearchCardProps> = ({
           </Menu>
         </Box>
       </Box>
+
+      <Snackbar
+        open={Boolean(feedback)}
+        autoHideDuration={2500}
+        onClose={() => setFeedback(null)}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={() => setFeedback(null)}
+          severity={feedback === "Link copied to clipboard" ? "success" : "error"}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {feedback}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

@@ -1,4 +1,5 @@
 import React from "react";
+import type { Metadata } from "next";
 import { Box, Divider, Typography } from "@mui/material";
 import SearchBar from "@/components/SearchBar";
 import SearchCard from "@/components/SearchCard";
@@ -11,6 +12,17 @@ type Props = {
     q?: string;
   }>;
 };
+
+export async function generateMetadata({
+  searchParams,
+}: Props): Promise<Metadata> {
+  const params = await searchParams;
+  const query = params.q?.trim();
+
+  return {
+    title: query ? `Search: ${query}` : "Search",
+  };
+}
 
 const page = async ({ searchParams }: Props) => {
   const params = await searchParams;

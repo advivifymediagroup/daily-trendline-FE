@@ -205,6 +205,25 @@ export async function getNewsByCategory(categorySlug: string, limit = 4) {
   return await fetchData(url.href);
 }
 
+export async function getCategoryBySlug(categorySlug: string) {
+  const url = new URL("/api/categories", baseUrl);
+
+  url.search = qs.stringify({
+    filters: {
+      slug: {
+        $eq: categorySlug,
+      },
+    },
+    fields: ["name", "slug"],
+    pagination: {
+      limit: 1,
+    },
+  });
+
+  const data = await fetchData(url.href);
+  return data?.data?.[0] || null;
+}
+
 export async function getSearchedArticles(query: string, limit = 20) {
   const trimmedQuery = query.trim();
 

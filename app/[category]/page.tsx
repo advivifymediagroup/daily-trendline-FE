@@ -1,4 +1,5 @@
 import React from "react";
+import type { Metadata } from "next";
 import {
   Box,
   Typography,
@@ -9,17 +10,38 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import SearchCard from "@/components/SearchCard";
-import { getNewsByCategory } from "../api/news";
+import { getCategoryBySlug, getNewsByCategory } from "../api/news";
 import { getStrapiMediaURL } from "@/utils/strapiUtils";
 
 type Props = {
   params: Promise<{ category: string }>;
 };
 
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { category } = await params;
+  const categoryData = await getCategoryBySlug(category);
+
+  if (!categoryData) {
+    return {
+      title: "Page Not Found",
+    };
+  }
+
+  return {
+    title: `${categoryData.name} News`,
+  };
+}
+
 const Page = async ({ params }: Props) => {
   const { category } = await params;
+  const categoryData = await getCategoryBySlug(category);
+
+  if (!categoryData) {
+    notFound();
+  }
 
   const categoryNews = await getNewsByCategory(category);
 
@@ -49,11 +71,11 @@ const Page = async ({ params }: Props) => {
       {/* Category Header */}
       <Box className="mb-10">
         <Typography variant="h4" className="font-bold capitalize">
-          {category} News
+          {categoryData.name} News
         </Typography>
 
         <Typography className="text-gray-600 mt-2">
-          Latest updates and breaking stories from {category}.
+          Latest updates and breaking stories from {categoryData.name}.
         </Typography>
 
         <Divider className="mt-4!" />
@@ -135,7 +157,7 @@ const Page = async ({ params }: Props) => {
           </Box> */}
           <Box className="">
             <Typography className="font-semibold mb-6! capitalize" variant="h4">
-              Latest in {category}
+              Latest in {categoryData.name}
             </Typography>
             <Box className="grid gap-6">
               {normalizedNews.map((item: any, index: number) => (

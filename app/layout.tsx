@@ -20,7 +20,10 @@ export async function generateMetadata(): Promise<Metadata> {
   const metadata = await getGlobalPageMetadata();
 
   return {
-    title: metadata?.title || "DailyTrendline | News in short",
+    title: {
+      default: metadata?.title || "DailyTrendline",
+      template: "%s | DailyTrendline",
+    },
     description:
       metadata?.description || "Latest news in short and concise format.",
   };
