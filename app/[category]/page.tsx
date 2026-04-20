@@ -7,13 +7,18 @@ import {
   CardContent,
   CardMedia,
   Divider,
+  Chip,
 } from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import SearchCard from "@/components/SearchCard";
-import { getCategoryBySlug, getNewsByCategory } from "../api/news";
+import {
+  getCategoryBySlug,
+  getNewsByCategory,
+  getPopularTags,
+} from "../api/news";
 import { getStrapiMediaURL } from "@/utils/strapiUtils";
 
 type Props = {
@@ -38,6 +43,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const Page = async ({ params }: Props) => {
   const { category } = await params;
   const categoryData = await getCategoryBySlug(category);
+  const popularTags = await getPopularTags();
+
+  console.log("POPULAR TAGS::", popularTags);
 
   if (!categoryData) {
     notFound();
@@ -60,21 +68,21 @@ const Page = async ({ params }: Props) => {
     documentId: item.documentId,
     id: item.id,
   }));
-  
+
   const featured =
     normalizedNews.find((item: any) => item.isFeatured) || normalizedNews[0];
 
   const trendingNews = normalizedNews.filter((item: any) => item.isTrending);
 
   return (
-    <Box className="max-w-7xl mx-auto px-4 py-10">
+    <Box className="max-w-7xl mx-auto px-4 py-10 text-slate-900 dark:text-slate-100">
       {/* Category Header */}
       <Box className="mb-10">
         <Typography variant="h4" className="font-bold capitalize">
           {categoryData.name} News
         </Typography>
 
-        <Typography className="text-gray-600 mt-2">
+        <Typography className="text-gray-600 mt-2 dark:text-slate-400">
           Latest updates and breaking stories from {categoryData.name}.
         </Typography>
 
@@ -104,18 +112,21 @@ const Page = async ({ params }: Props) => {
                   className="h-100 w-full object-cover!"
                 />
 
-                <CardContent>
-                  <Typography variant="h5" className="font-bold">
+                <CardContent className="bg-white dark:bg-slate-900">
+                  <Typography
+                    variant="h5"
+                    className="font-bold dark:text-slate-100"
+                  >
                     {featured.headline}
                   </Typography>
 
                   {featured?.description && (
-                    <Typography className="text-gray-600 mt-2">
+                    <Typography className="text-gray-600 mt-2 dark:text-slate-400">
                       {featured.description}
                     </Typography>
                   )}
 
-                  <Box className="flex items-center gap-2 mt-4 text-sm text-gray-500">
+                  <Box className="flex items-center gap-2 mt-4 text-sm text-gray-500 dark:text-slate-500">
                     <AccessTimeIcon />
 
                     {featured.date}
@@ -167,44 +178,65 @@ const Page = async ({ params }: Props) => {
           </Box>
 
           {normalizedNews.length === 0 && (
-            <Typography className="text-gray-500 mt-10 text-center">
+            <Typography className="text-gray-500 mt-10 text-center dark:text-slate-500">
               No news available for this category.
             </Typography>
           )}
         </Box>
 
         {/* Sidebar */}
-        <Box className="hidden lg:flex flex-col gap-6 bg-white px-2 py-4 rounded max-h-[80vh]">
-          <Typography variant="h5" className="font-bold">
-            Trending
-          </Typography>
+        <Box className="hidden lg:flex flex-col gap-6">
+          <Box className="bg-white px-2 py-4 rounded max-h-[73vh] dark:bg-slate-900 dark:ring-1 dark:ring-slate-800">
+            <Typography variant="h5" className="font-bold mb-4">
+              Trending
+            </Typography>
 
-          {trendingNews.map((item: any, index: number) => (
-            <Link
-              key={index}
-              href={{
-                pathname: `/${item.category.toLowerCase()}/${item.slug}`,
-                query: {
-                  documentId: item.documentId,
-                  id: String(item.id),
-                },
-              }}
-              className="flex gap-3 cursor-pointer hover:bg-gray-100 p-2 rounded-md no-underline"
-            >
-              <Image
-                src={item.featuredImage || "/fallback.jpg"}
-                alt={item.headline}
-                width={400}
-                height={300}
-                className="w-20 h-16 object-cover rounded"
-                unoptimized
-              />
+            <Box className="flex flex-col gap-3">
+              {trendingNews.map((item: any, index: number) => (
+                <Link
+                  key={index}
+                  href={{
+                    pathname: `/${item.category.toLowerCase()}/${item.slug}`,
+                    query: {
+                      documentId: item.documentId,
+                      id: String(item.id),
+                    },
+                  }}
+                  className="flex gap-3 cursor-pointer rounded-md p-2 no-underline hover:bg-gray-100 dark:hover:bg-slate-800"
+                >
+                  <Image
+                    src={item.featuredImage || "/fallback.jpg"}
+                    alt={item.headline}
+                    width={400}
+                    height={300}
+                    className="w-20 h-16 object-cover rounded"
+                    unoptimized
+                  />
 
-              <Typography className="text-sm font-medium line-clamp-3 leading-snug h-18 overflow-hidden">
-                {item.headline}
-              </Typography>
-            </Link>
-          ))}
+                  <Typography className="h-18 overflow-hidden text-sm font-medium leading-snug line-clamp-3 dark:text-slate-200">
+                    {item.headline}
+                  </Typography>
+                </Link>
+              ))}
+            </Box>
+          </Box>
+
+          <Box className="bg-white px-4 py-4 rounded dark:bg-slate-900 dark:ring-1 dark:ring-slate-800">
+            <Typography variant="h5" className="font-bold mb-4">
+              Popular Tags
+            </Typography>
+
+            <Box className="flex flex-wrap gap-2 mt-4">
+              {popularTags.map((tag: any) => (
+                <Chip
+                  key={tag.slug}
+                  label={tag.name}
+                  clickable
+                  className="!bg-gray-100 !text-gray-800 hover:!bg-gray-200 dark:!bg-slate-800 dark:!text-slate-200 dark:hover:!bg-slate-700 transition-colors"
+                />
+              ))}
+            </Box>
+          </Box>
         </Box>
       </Box>
     </Box>

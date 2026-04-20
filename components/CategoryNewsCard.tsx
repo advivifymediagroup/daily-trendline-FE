@@ -57,7 +57,7 @@ const CategoryNewsCard: React.FC<CategoryNewsCardProps> = ({
   return (
     <Box
       onClick={handleClick}
-      className={`flex gap-4 ${width} cursor-pointer rounded-lg hover:bg-gray-100 transition group mb-4`}
+      className={`flex gap-4 ${width} cursor-pointer rounded-lg hover:bg-gray-100 transition group mb-4 dark:hover:bg-slate-900`}
     >
       {/* Left Image */}
       <Box className="min-w-[100px] h-[80px] relative overflow-hidden">
@@ -75,7 +75,7 @@ const CategoryNewsCard: React.FC<CategoryNewsCardProps> = ({
         {/* Headline with Tooltip */}
         <Tooltip title={headline} arrow>
           <Typography
-            className="font-semibold text-gray-800 group-hover:text-blue-800 group-hover:underline transition 
+            className="font-semibold text-gray-800 group-hover:text-blue-800 group-hover:underline transition dark:text-slate-100 dark:group-hover:text-yellow-300
             line-clamp-2 overflow-hidden text-ellipsis mb-2!"
           >
             {headline}
@@ -84,7 +84,7 @@ const CategoryNewsCard: React.FC<CategoryNewsCardProps> = ({
         {/* <Typography>{description}</Typography> */}
 
         {/* Category */}
-        <Typography className="text-sm font-medium mt-1">{category}</Typography>
+        <Typography className="text-sm font-medium mt-1 dark:text-slate-400">{category}</Typography>
       </Box>
     </Box>
   );

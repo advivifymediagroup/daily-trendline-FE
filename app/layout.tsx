@@ -37,9 +37,28 @@ export default async function RootLayout({
   const globalData = await getGlobalPageData();
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function () {
+                try {
+                  var key = 'dailytrendline-theme';
+                  var saved = localStorage.getItem(key);
+                  var theme = saved === 'light' || saved === 'dark'
+                    ? saved
+                    : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                  document.documentElement.classList.toggle('dark', theme === 'dark');
+                  document.documentElement.style.colorScheme = theme;
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#f5f5f5]`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-stone-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100`}
       >
         <Header data={globalData?.header} />
         <Container className="max-w-[1310px]! m-auto min-h-[85vh]">

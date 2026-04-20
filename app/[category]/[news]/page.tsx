@@ -73,9 +73,9 @@ const Page = async ({ params, searchParams }: Props) => {
   const articleCategory = article.category?.name || category;
 
   return (
-    <Box className="mx-auto px-4 py-10 max-w-[1310px]!">
+    <Box className="mx-auto px-4 py-10 max-w-[1310px]! text-slate-900 dark:text-slate-100">
       {/* Breadcrumb */}
-      <Box className="mb-4 text-sm text-gray-500">
+      <Box className="mb-4 text-sm text-gray-500 dark:text-slate-400">
         <Link
           href={`/${articleCategory.toLowerCase()}`}
           className="hover:underline capitalize"
@@ -86,7 +86,7 @@ const Page = async ({ params, searchParams }: Props) => {
       </Box>
 
       {/* Headline */}
-      <Typography variant="h3" className="font-bold mb-4 text-[#333333]">
+      <Typography variant="h3" className="font-bold mb-4 text-[#333333] dark:text-slate-100">
         {articleTitle}
       </Typography>
 
@@ -102,7 +102,7 @@ const Page = async ({ params, searchParams }: Props) => {
               {articleAuthor || "Admin"}
             </Typography>
 
-            <Box className="flex items-center gap-1 mt-2 text-sm text-gray-500">
+            <Box className="flex items-center gap-1 mt-2 text-sm text-gray-500 dark:text-slate-400">
               {publishedDate}
             </Box>
           </Box>
@@ -112,7 +112,7 @@ const Page = async ({ params, searchParams }: Props) => {
       </Box>
 
       {/* Featured Image */}
-      <Card className="mb-6 rounded-xl overflow-hidden shadow-lg">
+      <Card className="mb-6 rounded-xl overflow-hidden shadow-lg dark:bg-slate-900! dark:ring-1 dark:ring-slate-800!">
         <CardMedia
           component="img"
           image={articleImage}
@@ -122,7 +122,7 @@ const Page = async ({ params, searchParams }: Props) => {
       </Card>
 
       {/* Description / Content */}
-      <Typography className="text-[#111111] leading-relaxed whitespace-pre-line">
+      <Typography className="text-[#111111] leading-relaxed whitespace-pre-line dark:text-slate-200">
         {articleContent || "No content available for this article yet."}
       </Typography>
     </Box>

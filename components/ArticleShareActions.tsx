@@ -86,7 +86,7 @@ const ArticleShareActions = ({ title }: ArticleShareActionsProps) => {
           <IconButton
             aria-label="share article"
             onClick={handleNativeShare}
-            className="text-black! hover:text-gray-700!"
+            className="text-black! hover:text-gray-700! dark:text-slate-100! dark:hover:text-white!"
           >
             <ShareIcon />
           </IconButton>
@@ -96,7 +96,7 @@ const ArticleShareActions = ({ title }: ArticleShareActionsProps) => {
           <IconButton
             aria-label="share on facebook"
             onClick={handleFacebookShare}
-            className="text-black! hover:text-blue-600!"
+            className="text-black! hover:text-blue-600! dark:text-slate-100!"
           >
             <FacebookIcon />
           </IconButton>
@@ -106,7 +106,7 @@ const ArticleShareActions = ({ title }: ArticleShareActionsProps) => {
           <IconButton
             aria-label="share on x"
             onClick={handleXShare}
-            className="text-black! hover:text-black!"
+            className="text-black! hover:text-black! dark:text-slate-100! dark:hover:text-white!"
           >
             <XIcon />
           </IconButton>
@@ -116,7 +116,7 @@ const ArticleShareActions = ({ title }: ArticleShareActionsProps) => {
           <IconButton
             aria-label="share by email"
             onClick={handleEmailShare}
-            className="text-black! hover:text-red-500!"
+            className="text-black! hover:text-red-500! dark:text-slate-100!"
           >
             <EmailIcon />
           </IconButton>
@@ -126,9 +126,9 @@ const ArticleShareActions = ({ title }: ArticleShareActionsProps) => {
           <IconButton
             aria-label="copy article link"
             onClick={handleCopyLink}
-            className="text-black! hover:text-green-600!"
+            className="text-black! hover:text-green-600! dark:text-slate-100!"
           >
-            <LinkIcon className="text-black!" />
+            <LinkIcon className="text-black! dark:text-slate-100!" />
           </IconButton>
         </Tooltip>
       </Box>

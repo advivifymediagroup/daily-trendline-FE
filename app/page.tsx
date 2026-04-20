@@ -40,7 +40,7 @@ export default async function Home() {
   const tickerNews = await getTickerNews();
 
   return (
-    <Box className="homepage max-w-7xl mx-auto px-4 py-6 flex flex-col gap-10">
+    <Box className="homepage max-w-7xl mx-auto px-4 py-6 flex flex-col gap-10 text-slate-900 dark:text-slate-100">
       <BreakingNewsTicker news={tickerNews?.data} />
       {/* Featured Section */}
       <Box className="flex flex-col gap-4">
@@ -106,7 +106,7 @@ export default async function Home() {
 
         <Box className="grid md:grid-cols-2 gap-6">
           {/* Business Section */}
-          <Box className="bg-white rounded-sm flex flex-col gap-4 p-4">
+          <Box className="bg-white rounded-sm flex flex-col gap-4 p-4 dark:bg-slate-900 dark:ring-1 dark:ring-slate-800">
             <Typography variant="h5" className="font-bold! text-lg pb-2">
               Latest in Business
             </Typography>
@@ -118,7 +118,7 @@ export default async function Home() {
             </Box>
           </Box>
           {/* Tech Section */}
-          <Box className="bg-white rounded-sm flex flex-col gap-4 p-4">
+          <Box className="bg-white rounded-sm flex flex-col gap-4 p-4 dark:bg-slate-900 dark:ring-1 dark:ring-slate-800">
             <Typography variant="h5" className="font-bold! pb-2">
               Latest in Technology
             </Typography>
@@ -131,7 +131,7 @@ export default async function Home() {
           </Box>
 
           {/* Sports Section */}
-          <Box className="bg-white rounded-sm flex flex-col gap-4 p-4">
+          <Box className="bg-white rounded-sm flex flex-col gap-4 p-4 dark:bg-slate-900 dark:ring-1 dark:ring-slate-800">
             <Typography variant="h5" className="font-bold! text-lg pb-2">
               Latest in Sports
             </Typography>
@@ -144,7 +144,7 @@ export default async function Home() {
           </Box>
 
           {/* Entertainment Section */}
-          <Box className="bg-white rounded-sm flex flex-col gap-4 p-4">
+          <Box className="bg-white rounded-sm flex flex-col gap-4 p-4 dark:bg-slate-900 dark:ring-1 dark:ring-slate-800">
             <Typography variant="h5" className="font-bold! text-lg pb-2">
               Latest in Entertainment
             </Typography>

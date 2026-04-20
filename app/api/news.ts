@@ -224,6 +224,21 @@ export async function getCategoryBySlug(categorySlug: string) {
   return data?.data?.[0] || null;
 }
 
+export async function getPopularTags(limit = 20) {
+  const url = new URL("/api/tags", baseUrl);
+
+  url.search = qs.stringify({
+    fields: ["name", "slug"],
+    sort: ["name:asc"],
+    pagination: {
+      limit,
+    },
+  });
+
+  const data = await fetchData(url.href);
+  return data?.data || [];
+}
+
 export async function getSearchedArticles(query: string, limit = 20) {
   const trimmedQuery = query.trim();
 

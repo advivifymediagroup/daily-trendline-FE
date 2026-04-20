@@ -9,6 +9,7 @@ import XIcon from "@mui/icons-material/X";
 import EmailIcon from "@mui/icons-material/Email";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useRouter } from "next/navigation";
+import type { SyntheticEvent } from "react";
 
 interface SearchCardProps {
   featuredImage: any;
@@ -84,8 +85,10 @@ const SearchCard: React.FC<SearchCardProps> = ({
     window.open(shareUrl, "_blank", "noopener,noreferrer");
   };
 
-  const handleClose = (event?: React.SyntheticEvent | Event) => {
-    event?.stopPropagation?.();
+  const handleClose = (event?: SyntheticEvent | Event) => {
+    if (event && "stopPropagation" in event) {
+      event.stopPropagation();
+    }
     setAnchorEl(null);
   };
 
@@ -128,7 +131,7 @@ const SearchCard: React.FC<SearchCardProps> = ({
   return (
     <Box
       onClick={handleNavigate}
-      className="flex gap-4 p-4 rounded border border-gray-200 hover:shadow-md transition cursor-pointer bg-white"
+      className="flex gap-4 p-4 rounded border border-gray-200 hover:shadow-md transition cursor-pointer bg-white dark:border-slate-800 dark:bg-slate-900 dark:hover:shadow-black/30"
     >
       {/* LEFT IMAGE */}
       <Box className="relative min-w-[180px] h-[150px]">
@@ -159,17 +162,17 @@ const SearchCard: React.FC<SearchCardProps> = ({
             {headline}
           </Typography>
 
-          <Typography className="font-semibold text-gray-900 line-clamp-2 hover:underline text-sm! my-2!">
+          <Typography className="font-semibold text-gray-900 line-clamp-2 hover:underline text-sm! my-2! dark:text-slate-100">
             {date}
           </Typography>
 
-          <Typography className="text-sm text-gray-600 mt-1 line-clamp-2">
+          <Typography className="text-sm text-gray-600 mt-1 line-clamp-2 dark:text-slate-400">
             {description}
           </Typography>
         </Box>
 
         {/* SHARE */}
-        <Box className="flex justify-end mt-2">
+        <Box className="flex justify-end mt-2 text-slate-700 dark:text-slate-300">
           <Box
             onClick={handleShareClick}
             onMouseDown={(event) => event.stopPropagation()}
@@ -182,12 +185,13 @@ const SearchCard: React.FC<SearchCardProps> = ({
           <Menu
             anchorEl={anchorEl}
             open={open}
-            onClose={handleClose}
+            onClose={() => handleClose()}
             onClick={(event) => event.stopPropagation()}
             slotProps={{
               paper: {
-                onClick: (event) => event.stopPropagation(),
-                onMouseDown: (event) => event.stopPropagation(),
+                onClick: (event: React.MouseEvent<HTMLElement>) => event.stopPropagation(),
+                onMouseDown: (event: React.MouseEvent<HTMLElement>) => event.stopPropagation(),
+                className: "dark:bg-slate-900 dark:text-slate-100 dark:border dark:border-slate-800",
               },
             }}
           >

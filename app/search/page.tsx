@@ -70,7 +70,7 @@ const page = async ({ searchParams }: Props) => {
   }));
 
   return (
-    <Box className="max-w-7xl mx-auto px-4 py-8">
+    <Box className="max-w-7xl mx-auto px-4 py-8 text-slate-900 dark:text-slate-100">
       <Box className="grid lg:grid-cols-[1fr_2fr] gap-8">
         {/* LEFT: TRENDING */}
         <Box className="flex flex-col gap-4 sticky top-24 h-fit">
@@ -89,14 +89,14 @@ const page = async ({ searchParams }: Props) => {
 
         {/* CENTER: SEARCH SECTION */}
         <Box>
-          <Box className="bg-gray-50 p-6 flex flex-col gap-6">
+          <Box className="bg-gray-50 p-6 flex flex-col gap-6 dark:bg-slate-900 dark:ring-1 dark:ring-slate-800">
             {/* Title */}
             <Box>
               <Typography variant="h5" className="font-bold">
                 Search News
               </Typography>
 
-              <Typography className="text-gray-500 text-sm mt-1">
+              <Typography className="text-gray-500 text-sm mt-1 dark:text-slate-400">
                 {query
                   ? `Showing results for "${query}"`
                   : "Find articles across categories"}
@@ -111,7 +111,7 @@ const page = async ({ searchParams }: Props) => {
             <Divider />
             {/* RESULTS */}
             {!query && (
-              <Typography className="text-gray-400">
+              <Typography className="text-gray-400 dark:text-slate-500">
                 Try searching for <b>Technology</b>, <b>Sports</b>, etc.
               </Typography>
             )}
@@ -125,7 +125,7 @@ const page = async ({ searchParams }: Props) => {
             )}
 
             {query && results.length === 0 && (
-              <Typography className="text-gray-500">
+              <Typography className="text-gray-500 dark:text-slate-400">
                 No results found for <b>{query}</b>
               </Typography>
             )}
