@@ -20,6 +20,8 @@ import {
   getPopularTags,
 } from "../api/news";
 import { getStrapiMediaURL } from "@/utils/strapiUtils";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 
 type Props = {
   params: Promise<{ category: string }>;
@@ -44,8 +46,6 @@ const Page = async ({ params }: Props) => {
   const { category } = await params;
   const categoryData = await getCategoryBySlug(category);
   const popularTags = await getPopularTags();
-
-  console.log("POPULAR TAGS::", popularTags);
 
   if (!categoryData) {
     notFound();
@@ -187,9 +187,12 @@ const Page = async ({ params }: Props) => {
         {/* Sidebar */}
         <Box className="hidden lg:flex flex-col gap-6">
           <Box className="bg-white px-2 py-4 rounded max-h-[73vh] dark:bg-slate-900 dark:ring-1 dark:ring-slate-800">
-            <Typography variant="h5" className="font-bold mb-4">
-              Trending
-            </Typography>
+            <Box className="flex items-center gap-2 mb-2">
+              <TrendingUpIcon className="text-slate-900 dark:text-white!" />
+              <Typography variant="h5" className="font-bold mb-4">
+                Trending
+              </Typography>
+            </Box>
 
             <Box className="flex flex-col gap-3">
               {trendingNews.map((item: any, index: number) => (
@@ -222,18 +225,26 @@ const Page = async ({ params }: Props) => {
           </Box>
 
           <Box className="bg-white px-4 py-4 rounded dark:bg-slate-900 dark:ring-1 dark:ring-slate-800">
-            <Typography variant="h5" className="font-bold mb-4">
-              Popular Tags
-            </Typography>
+            <Box className="flex items-center gap-2">
+              <LocalOfferIcon className="text-slate-900 dark:text-white!" />
+              <Typography variant="h5" className="font-bold mb-4">
+                Popular Tags
+              </Typography>
+            </Box>
 
             <Box className="flex flex-wrap gap-2 mt-4">
               {popularTags.map((tag: any) => (
-                <Chip
+                <Link
                   key={tag.slug}
-                  label={tag.name}
-                  clickable
-                  className="!bg-gray-100 !text-gray-800 hover:!bg-gray-200 dark:!bg-slate-800 dark:!text-slate-200 dark:hover:!bg-slate-700 transition-colors"
-                />
+                  href={`/tags/${tag.slug}`}
+                  className="no-underline"
+                >
+                  <Chip
+                    label={tag.name}
+                    clickable
+                    className="!bg-gray-100 !text-gray-800 hover:!bg-gray-200 dark:!bg-slate-800 dark:!text-slate-200 dark:hover:!bg-slate-700 transition-colors"
+                  />
+                </Link>
               ))}
             </Box>
           </Box>

@@ -239,6 +239,56 @@ export async function getPopularTags(limit = 20) {
   return data?.data || [];
 }
 
+export async function getTagBySlug(tagSlug: string) {
+  const url = new URL("/api/tags", baseUrl);
+
+  url.search = qs.stringify({
+    filters: {
+      slug: {
+        $eq: tagSlug,
+      },
+    },
+    fields: ["name", "slug"],
+    pagination: {
+      limit: 1,
+    },
+  });
+
+  const data = await fetchData(url.href);
+  return data?.data?.[0] || null;
+}
+
+export async function getNewsByTag(tagSlug: string, limit = 20) {
+  const url = new URL("/api/articles", baseUrl);
+
+  url.search = qs.stringify({
+    filters: {
+      tags: {
+        slug: {
+          $eq: tagSlug,
+        },
+      },
+    },
+    populate: {
+      category: {
+        fields: ["name", "slug"],
+      },
+      featuredImage: {
+        fields: ["url", "alternativeText"],
+      },
+      tags: {
+        fields: ["name", "slug"],
+      },
+    },
+    sort: ["publishedAt:desc"],
+    pagination: {
+      limit,
+    },
+  });
+
+  return await fetchData(url.href);
+}
+
 export async function getSearchedArticles(query: string, limit = 20) {
   const trimmedQuery = query.trim();
 

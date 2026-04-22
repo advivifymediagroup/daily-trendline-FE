@@ -96,7 +96,7 @@ const Header = ({ data }: HeaderProps) => {
               </Box>
             )}
 
-            {/* <ThemeToggle /> */}
+            <ThemeToggle />
           </Box>
 
           {/* Mobile Hamburger */}
