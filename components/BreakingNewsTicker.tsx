@@ -2,17 +2,7 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 
-interface BreakingNewsItem {
-  id: number;
-  title: string;
-  link?: string;
-}
-
-interface BreakingNewsTickerProps {
-  news: BreakingNewsItem[];
-}
-
-const BreakingNewsTicker: React.FC<BreakingNewsTickerProps> = ({ news }) => {
+const BreakingNewsTicker: React.FC<any> = ({ news }) => {
   return (
     <Box className="w-full flex items-center bg-white text-black rounded-md overflow-hidden border-1">
       {/* Label */}
@@ -28,10 +18,16 @@ const BreakingNewsTicker: React.FC<BreakingNewsTickerProps> = ({ news }) => {
       {/* Scrolling Text */}
       <Box className="relative overflow-hidden w-full">
         <Box className="ticker-track flex gap-8 px-4 py-2 whitespace-nowrap">
-          {news.concat(news).map((item, index) => (
+          {news.concat(news).map((item: any, index: number) => (
             <Link
               key={index}
-              href={item.link || "#"}
+              href={{
+                pathname: `/${item?.category?.name?.toLowerCase()}/${item.slug}`,
+                query: {
+                  documentId: item.documentId,
+                  id: String(item.id),
+                },
+              }}
               className="hover:underline text-sm"
             >
               {item.title}

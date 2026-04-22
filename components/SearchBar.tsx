@@ -50,8 +50,8 @@ const SearchBar = ({
         ${width}
         ${
           isDark
-            ? "bg-gray-800 border-gray-700 text-white"
-            : "bg-white border-gray-300 text-black"
+            ? "bg-gray-800 border-gray-700 text-white!"
+            : "bg-white border-gray-300 text-black dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100"
         }`}
     >
       <InputBase
@@ -59,8 +59,18 @@ const SearchBar = ({
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className={`text-sm px-2 flex-1 ${
-          isDark ? "text-white" : "text-black"
+          isDark ? "text-white" : "text-black dark:text-slate-100"
         }`}
+        sx={{
+          color: '#fff',
+          input: {
+            color: "inherit",
+          },
+          "& input::placeholder": {
+            color: isDark ? "#d1d5db" : "#64748b",
+            opacity: 1,
+          },
+        }}
       />
 
       <IconButton
@@ -69,10 +79,12 @@ const SearchBar = ({
         className={`${
           isDark
             ? "text-gray-300 hover:text-white"
-            : "text-gray-600 hover:text-black"
+            : "text-gray-600 hover:text-black dark:text-slate-400 dark:hover:text-white"
         }`}
       >
-        <SearchIcon fontSize="small" />
+        <SearchIcon sx={{
+          color: "#fff"
+        }} fontSize="small" />
       </IconButton>
     </Box>
   );
