@@ -22,6 +22,9 @@ import {
 import { getStrapiMediaURL } from "@/utils/strapiUtils";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
+import NewspaperRoundedIcon from "@mui/icons-material/NewspaperRounded";
+import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
 
 type Props = {
   params: Promise<{ category: string }>;
@@ -73,11 +76,31 @@ const Page = async ({ params }: Props) => {
     normalizedNews.find((item: any) => item.isFeatured) || normalizedNews[0];
 
   const trendingNews = normalizedNews.filter((item: any) => item.isTrending);
+  const categoryStats = [
+    {
+      label: "Stories loaded",
+      value: meta?.pagination?.total ?? normalizedNews.length,
+      icon: <NewspaperRoundedIcon />,
+      tone: "bg-sky-50 dark:bg-sky-500/10",
+    },
+    {
+      label: "Trending now",
+      value: trendingNews.length,
+      icon: <BoltRoundedIcon />,
+      tone: "bg-amber-50 dark:bg-amber-500/10",
+    },
+    {
+      label: "Featured pick",
+      value: featured ? "1" : "0",
+      icon: <AutoAwesomeRoundedIcon />,
+      tone: "bg-emerald-50 dark:bg-emerald-500/10",
+    },
+  ];
 
   return (
     <Box className="max-w-7xl mx-auto px-4 py-10 text-slate-900 dark:text-slate-100">
       {/* Category Header */}
-      <Box className="mb-10">
+      <Box className="mb-10 rounded-[28px] border border-black/10 bg-gradient-to-br from-white via-stone-50 to-amber-50 px-6 py-8 shadow-sm dark:border-white/10 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
         <Typography variant="h4" className="font-bold capitalize">
           {categoryData.name} News
         </Typography>
@@ -86,7 +109,24 @@ const Page = async ({ params }: Props) => {
           Latest updates and breaking stories from {categoryData.name}.
         </Typography>
 
-        <Divider className="mt-4!" />
+        <Box className="mt-6 grid gap-4 md:grid-cols-3">
+          {categoryStats.map((stat) => (
+            <Box
+              key={stat.label}
+              className={`rounded-2xl border border-black/5 p-4 dark:border-white/10 ${stat.tone}`}
+            >
+              <Box className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                {stat.icon}
+                <Typography className="text-sm">{stat.label}</Typography>
+              </Box>
+              <Typography variant="h5" className="mt-3 font-bold!">
+                {stat.value}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+
+        <Divider className="mt-6!" />
       </Box>
 
       <Box className="grid lg:grid-cols-4 gap-10">
@@ -186,6 +226,32 @@ const Page = async ({ params }: Props) => {
 
         {/* Sidebar */}
         <Box className="hidden lg:flex flex-col gap-6">
+          <Box className="rounded-[24px] border border-black/10 bg-white p-5 dark:border-white/10 dark:bg-slate-900">
+            <Typography variant="h6" className="font-bold!">
+              Explore This Desk
+            </Typography>
+            <Typography className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+              Use the featured story for the big picture, then scan the latest
+              feed and trending list for fast updates.
+            </Typography>
+            <Box className="mt-4 flex flex-wrap gap-2">
+              <Chip
+                label={`${normalizedNews.length} articles shown`}
+                className="dark:!bg-slate-800 dark:!text-slate-100"
+              />
+              <Chip
+                label={`${trendingNews.length} trending`}
+                className="dark:!bg-slate-800 dark:!text-slate-100"
+              />
+              {featured && (
+                <Chip
+                  label="Featured lead"
+                  className="dark:!bg-slate-800 dark:!text-slate-100"
+                />
+              )}
+            </Box>
+          </Box>
+
           <Box className="bg-white px-2 py-4 rounded max-h-[73vh] dark:bg-slate-900 dark:ring-1 dark:ring-slate-800">
             <Box className="flex items-center gap-2 mb-2">
               <TrendingUpIcon className="text-slate-900 dark:text-white!" />

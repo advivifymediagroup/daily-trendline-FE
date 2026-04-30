@@ -1,8 +1,10 @@
 import Hero from "./blocks/Hero";
+import ContactForm from "./blocks/ContactForm";
 import RichText from "./blocks/RichText";
 
 const componentMap: Record<string, any> = {
   "blocks.hero": Hero,
+  "blocks.contact-form": ContactForm,
   "blocks.rich-text": RichText,
 };
 

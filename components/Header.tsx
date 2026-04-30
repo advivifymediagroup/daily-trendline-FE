@@ -75,7 +75,10 @@ const Header = ({ data }: HeaderProps) => {
 
             {/* SEARCH TOGGLE */}
             {!showSearch ? (
-              <IconButton onClick={() => setShowSearch(true)} className="text-black! dark:text-slate-100!">
+              <IconButton
+                onClick={() => setShowSearch(true)}
+                className="text-black! dark:text-slate-100!"
+              >
                 <SearchIcon />
               </IconButton>
             ) : (
@@ -102,7 +105,10 @@ const Header = ({ data }: HeaderProps) => {
           {/* Mobile Hamburger */}
           <Box className="md:hidden flex items-center gap-1">
             <ThemeToggle />
-            <IconButton className="text-black! dark:text-slate-100!" onClick={() => setOpen(true)}>
+            <IconButton
+              className="text-black! dark:text-slate-100!"
+              onClick={() => setOpen(true)}
+            >
               <MenuIcon className="text-black! dark:text-slate-100!" />
             </IconButton>
           </Box>

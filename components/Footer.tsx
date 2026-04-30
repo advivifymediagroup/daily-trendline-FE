@@ -26,7 +26,10 @@ const Footer = ({ data }: FooterProps) => {
     title: section.title,
     links: section.footerLink.map((link: any) => ({
       label: link.text,
-      href: link.url,
+      href:
+        section.title === "Company"
+          ? `/pages/${link.url.replace(/^\/+/, "")}`
+          : link.url,
     })),
   }));
 
@@ -35,13 +38,19 @@ const Footer = ({ data }: FooterProps) => {
       <Box className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid md:grid-cols-5 gap-8">
         {/* Logo + Description */}
         <Box className="space-y-4">
-          <Typography variant="h6" className="text-black font-bold text-xl dark:text-slate-100">
+          <Typography
+            variant="h6"
+            className="text-black font-bold text-xl dark:text-slate-100"
+          >
             {typeof logoText === "string"
               ? logoText
               : logoText?.text || "Daily Trendline"}
           </Typography>
 
-          <Typography variant="body2" className="text-gray-800 dark:text-slate-300">
+          <Typography
+            variant="body2"
+            className="text-gray-800 dark:text-slate-300"
+          >
             {typeof footerText === "string"
               ? footerText
               : footerText?.text || ""}

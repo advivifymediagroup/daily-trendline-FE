@@ -132,6 +132,9 @@ export async function getArticleById(documentId: string, id: string | number) {
           },
         },
       },
+      tags: {
+        fields: ["name", "slug"],
+      },
     },
   });
 
@@ -400,4 +403,42 @@ export async function getGlobalPageMetadata() {
   });
 
   return await fetchData(url.href);
+}
+
+type ContactSubmissionPayload = {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+};
+
+export async function createContactSubmission(
+  payload: ContactSubmissionPayload,
+) {
+  const authToken =
+    process.env.STRAPI_API_TOKEN || process.env.NEXT_PUBLIC_STRAPI_API_TOKEN;
+  const url = new URL("/api/contact-submissions", baseUrl);
+
+  const response = await fetch(url.href, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+    },
+    body: JSON.stringify({
+      data: payload,
+    }),
+    cache: "no-store",
+  });
+
+  const contentType = response.headers.get("content-type") || "";
+  const result = contentType.includes("application/json")
+    ? await response.json()
+    : await response.text();
+
+  return {
+    ok: response.ok,
+    status: response.status,
+    data: result,
+  };
 }
