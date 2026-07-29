@@ -1,6 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { notFound } from "next/navigation";
 import SearchCard from "@/components/SearchCard";
 import { getNewsByTag, getTagBySlug } from "@/app/api/news";
@@ -55,27 +55,29 @@ const Page = async ({ params }: Props) => {
   }));
 
   return (
-    <Box className="max-w-7xl mx-auto px-4 py-10 text-slate-900 dark:text-slate-100">
-      <Box className="mb-10">
-        <Typography variant="h4" className="font-bold">
+    <Box className="py-8 text-slate-900 dark:text-slate-100">
+      <Box className="mb-10 border-b-4 border-slate-900 dark:border-slate-100 pb-6">
+        <Typography className="section-label text-brand-dark!">Tag</Typography>
+        <Typography
+          component="h1"
+          className="font-serif font-black text-5xl! mt-1!"
+        >
           #{tagData.name}
         </Typography>
 
-        <Typography className="mt-2 text-gray-600 dark:text-slate-400">
+        <Typography className="mt-2! text-slate-600 dark:text-slate-400">
           Articles related to the {tagData.name} tag.
         </Typography>
-
-        <Divider className="mt-4!" />
       </Box>
 
       {articles.length > 0 ? (
-        <Box className="grid gap-6">
+        <Box className="grid gap-4 max-w-4xl">
           {articles.map((item: any, index: number) => (
             <SearchCard key={index} {...item} />
           ))}
         </Box>
       ) : (
-        <Typography className="text-center text-gray-500 dark:text-slate-500">
+        <Typography className="text-center text-slate-500 dark:text-slate-500">
           No articles available for this tag yet.
         </Typography>
       )}

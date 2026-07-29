@@ -1,6 +1,15 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --color-brand: #f5e400;
+  --color-brand-dark: #d4c500;
+  --color-ink: #0a0a0a;
+  --color-paper: #f7f6f2;
+  --font-serif: var(--font-source-serif);
+  --font-sans: var(--font-geist-sans);
+}
+
 :root {
   color-scheme: light;
 }
@@ -10,21 +19,114 @@ html.dark {
 }
 
 body {
-  @apply bg-stone-100 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100;
+  @apply bg-paper text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100;
 }
 
-/* @keyframes marquee {
-  0% {
-    transform: translateX(100%);
+/* Editorial design: no rounded corners anywhere, including MUI defaults. */
+*,
+*::before,
+*::after {
+  border-radius: 0 !important;
+}
+
+/* Serif display type for headlines */
+.font-serif {
+  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+}
+
+/* Section header: uppercase kicker with a heavy rule */
+.section-label {
+  @apply uppercase tracking-[0.2em] text-xs font-bold text-slate-900 dark:text-slate-100;
+}
+
+.section-rule {
+  @apply border-t-4 border-slate-900 dark:border-slate-100;
+}
+
+.hairline {
+  @apply border-slate-300 dark:border-slate-800;
+}
+
+/* Reading measure for article body */
+.article-body {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 1.85;
+}
+
+/* ---- Scroll reveal ---- */
+.reveal {
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-hidden,
+  .reveal-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
-  100% {
-    transform: translateX(-100%);
+
+  .ticker-track {
+    animation: none !important;
   }
 }
 
-.animate-marquee {
-  animation: marquee 18s linear infinite;
-} */
+/* ---- Reading progress bar ---- */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  transform-origin: 0 50%;
+  background: var(--color-brand);
+  z-index: 1300;
+  pointer-events: none;
+}
+
+/* ---- Link + card polish ---- */
+.link-underline {
+  background-image: linear-gradient(var(--color-brand), var(--color-brand));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 3px;
+  transition: background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.link-underline:hover {
+  background-size: 100% 3px;
+}
+
+.card-lift {
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 8px 8px 0 0 var(--color-brand);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-lift:hover {
+    transform: none;
+  }
+}
 
 .ticker-track {
   animation: ticker-scroll 25s linear infinite;
@@ -42,28 +144,3 @@ body {
     transform: translateX(-50%);
   }
 }
-
-/* :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-} */

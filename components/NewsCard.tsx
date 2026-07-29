@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Box, Typography, Chip } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 interface NewsCardProps {
@@ -31,7 +31,6 @@ const NewsCard: React.FC<NewsCardProps> = ({
   date,
   documentId,
   id,
-  chipColor,
 }) => {
   const router = useRouter();
 
@@ -51,7 +50,7 @@ const NewsCard: React.FC<NewsCardProps> = ({
     <Box
       sx={{ width, height }}
       onClick={handleClick}
-      className="relative rounded-sm overflow-hidden group cursor-pointer"
+      className="relative overflow-hidden group cursor-pointer border border-slate-900 dark:border-slate-700"
     >
       <Box
         className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
@@ -60,17 +59,17 @@ const NewsCard: React.FC<NewsCardProps> = ({
         }}
       />
 
-      <Box className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+      <Box className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
-      <Chip
-        label={category}
-        size="small"
-        sx={{ bgcolor: chipColor }}
-        className="w-fit top-3 left-3 relative text-white!"
-      />
+      <span className="absolute top-0 left-0 bg-brand px-3 py-1 text-xs font-bold uppercase tracking-widest text-slate-900">
+        {category}
+      </span>
 
       <Box className="absolute bottom-0 p-5 text-white flex flex-col gap-2">
-        <Typography variant="h6" className="font-bold leading-snug">
+        <Typography
+          variant="h6"
+          className="font-serif font-bold! leading-snug group-hover:underline decoration-brand decoration-2 underline-offset-4"
+        >
           {headline}
         </Typography>
 
@@ -80,8 +79,11 @@ const NewsCard: React.FC<NewsCardProps> = ({
           </Typography>
         )}
 
-        <Typography variant="caption" className="text-gray-300 capitalize">
-          {author} • {date}
+        <Typography
+          variant="caption"
+          className="uppercase tracking-widest text-gray-300"
+        >
+          {author} — {date}
         </Typography>
       </Box>
     </Box>

@@ -46,23 +46,21 @@ const SearchBar = ({
         e.preventDefault();
         handleSearch();
       }}
-      className={`flex items-center rounded-md px-2 py-1 border transition-all duration-200
+      className={`flex items-center px-2 py-1 border-2 transition-colors duration-200
         ${width}
         ${
           isDark
-            ? "bg-gray-800 border-gray-700 text-white!"
-            : "bg-white border-gray-300 text-black dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100"
+            ? "bg-slate-900 border-slate-700 text-white"
+            : "bg-white border-slate-900 text-slate-900 dark:bg-slate-950 dark:border-slate-100 dark:text-slate-100"
         }`}
     >
       <InputBase
         placeholder={placeholder}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className={`text-sm px-2 flex-1 ${
-          isDark ? "text-white" : "text-black dark:text-slate-100"
-        }`}
+        className="text-sm px-2 flex-1 text-inherit"
         sx={{
-          color: '#fff',
+          color: "inherit",
           input: {
             color: "inherit",
           },
@@ -76,15 +74,10 @@ const SearchBar = ({
       <IconButton
         type="submit"
         size="small"
-        className={`${
-          isDark
-            ? "text-gray-300 hover:text-white"
-            : "text-gray-600 hover:text-black dark:text-slate-400 dark:hover:text-white"
-        }`}
+        aria-label="Search"
+        className="text-inherit!"
       >
-        <SearchIcon sx={{
-          color: "#fff"
-        }} fontSize="small" />
+        <SearchIcon fontSize="small" className="text-inherit" />
       </IconButton>
     </Box>
   );

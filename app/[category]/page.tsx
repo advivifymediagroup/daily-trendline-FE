@@ -1,27 +1,21 @@
 import React from "react";
 import type { Metadata } from "next";
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  CardMedia,
-  Divider,
-  Chip,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import SearchCard from "@/components/SearchCard";
+import LiveHeadlines from "@/components/LiveHeadlines";
+import Reveal from "@/components/Reveal";
 import {
   getCategoryBySlug,
   getNewsByCategory,
   getPopularTags,
 } from "../api/news";
 import { getStrapiMediaURL } from "@/utils/strapiUtils";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import { toGNewsCategory } from "@/utils/gnews";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 
 type Props = {
   params: Promise<{ category: string }>;
@@ -44,23 +38,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const Page = async ({ params }: Props) => {
   const { category } = await params;
-  const categoryData = await getCategoryBySlug(category);
-  const popularTags = await getPopularTags();
+  const [categoryData, popularTags] = await Promise.all([
+    getCategoryBySlug(category),
+    getPopularTags(),
+  ]);
 
   if (!categoryData) {
     notFound();
   }
 
-  const categoryNews = await getNewsByCategory(category);
-
-  const { data, meta } = categoryNews;
+  const categoryNews = await getNewsByCategory(category, 12);
+  const { data } = categoryNews;
 
   const normalizedNews = data.map((item: any) => ({
     headline: item.title,
     description: item.description,
     featuredImage:
       getStrapiMediaURL(item.featuredImage?.url) || "/fallback.jpg",
-    date: new Date(item.publishedAt).toLocaleDateString(),
+    date: new Date(item.publishedAt).toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }),
     category: item.category?.name || "",
     slug: item.slug,
     isFeatured: item.isFeatured,
@@ -72,27 +71,32 @@ const Page = async ({ params }: Props) => {
   const featured =
     normalizedNews.find((item: any) => item.isFeatured) || normalizedNews[0];
 
+  const restNews = normalizedNews.filter((item: any) => item !== featured);
   const trendingNews = normalizedNews.filter((item: any) => item.isTrending);
+  const gnewsCategory = toGNewsCategory(category);
 
   return (
-    <Box className="max-w-7xl mx-auto px-4 py-10 text-slate-900 dark:text-slate-100">
-      {/* Category Header */}
-      <Box className="mb-10">
-        <Typography variant="h4" className="font-bold capitalize">
-          {categoryData.name} News
+    <Box className="py-8 text-slate-900 dark:text-slate-100">
+      {/* Category masthead */}
+      <Box className="mb-10 border-b-4 border-slate-900 dark:border-slate-100 pb-6">
+        <Typography className="section-label text-brand-dark!">
+          Section
         </Typography>
-
-        <Typography className="text-gray-600 mt-2 dark:text-slate-400">
+        <Typography
+          component="h1"
+          className="font-serif font-black text-5xl! md:text-6xl! capitalize mt-1!"
+        >
+          {categoryData.name}
+        </Typography>
+        <Typography className="text-slate-600 mt-2! dark:text-slate-400">
           Latest updates and breaking stories from {categoryData.name}.
         </Typography>
-
-        <Divider className="mt-4!" />
       </Box>
 
       <Box className="grid lg:grid-cols-4 gap-10">
-        {/* Main Content */}
-        <Box className="lg:col-span-3">
-          {/* Featured Article */}
+        {/* Main column */}
+        <Box className="lg:col-span-3 flex flex-col gap-12">
+          {/* Featured article */}
           {featured && (
             <Link
               href={{
@@ -102,96 +106,85 @@ const Page = async ({ params }: Props) => {
                   id: String(featured.id),
                 },
               }}
-              className="no-underline block"
+              className="no-underline block group"
             >
-              <Card className="mb-10 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
-                <CardMedia
-                  component="img"
-                  image={featured.featuredImage}
-                  alt={featured.headline}
-                  className="h-100 w-full object-cover!"
-                />
+              <Box className="border border-slate-900 dark:border-slate-700 overflow-hidden bg-white dark:bg-slate-900">
+                <Box className="relative h-[400px] overflow-hidden">
+                  <Image
+                    src={featured.featuredImage}
+                    alt={featured.headline}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    unoptimized
+                  />
+                  <span className="absolute top-0 left-0 bg-brand px-3 py-1 text-xs font-bold uppercase tracking-widest text-slate-900">
+                    Featured
+                  </span>
+                </Box>
 
-                <CardContent className="bg-white dark:bg-slate-900">
+                <Box className="p-6">
                   <Typography
                     variant="h5"
-                    className="font-bold dark:text-slate-100"
+                    className="font-serif font-bold! text-slate-900 dark:text-slate-100 group-hover:underline decoration-2 underline-offset-4"
                   >
                     {featured.headline}
                   </Typography>
 
                   {featured?.description && (
-                    <Typography className="text-gray-600 mt-2 dark:text-slate-400">
+                    <Typography className="text-slate-600 mt-2! dark:text-slate-400">
                       {featured.description}
                     </Typography>
                   )}
 
-                  <Box className="flex items-center gap-2 mt-4 text-sm text-gray-500 dark:text-slate-500">
-                    <AccessTimeIcon />
-
+                  <Typography className="text-xs! uppercase tracking-widest text-slate-500 mt-4! dark:text-slate-400">
                     {featured.date}
-                  </Box>
-                </CardContent>
-              </Card>
+                  </Typography>
+                </Box>
+              </Box>
             </Link>
           )}
 
-          {/* News Grid */}
-          {/* <Box className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-            {restNews.map((item, index) => (
-              <Link
-                key={index}
-                href={`/${category}/${item?.headline.toLowerCase().replace(/\s+/g, "-")}`}
-                className="no-underline"
-              >
-                <Card className="rounded-xl shadow-md hover:shadow-xl transition-shadow cursor-pointer">
-                  <CardMedia
-                    component="img"
-                    image={item.featuredImage}
-                    alt={item.headline}
-                    className="h-50 w-full object-cover!"
-                  />
+          {/* Latest list */}
+          <Box>
+            <Box className="section-rule pt-3 mb-5">
+              <Typography component="h2" className="section-label capitalize">
+                Latest in {categoryData.name}
+              </Typography>
+            </Box>
 
-                  <CardContent>
-                    <Typography className="font-semibold line-clamp-2">
-                      {item.headline}
-                    </Typography>
-
-                    <Box className="flex items-center gap-2 mt-3 text-sm text-gray-500">
-                      <AccessTimeIcon />
-                      {item.date}
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </Box> */}
-          <Box className="">
-            <Typography className="font-semibold mb-6! capitalize" variant="h4">
-              Latest in {categoryData.name}
-            </Typography>
-            <Box className="grid gap-6">
-              {normalizedNews.map((item: any, index: number) => (
-                <SearchCard key={index} {...item} />
+            <Box className="grid gap-4">
+              {restNews.map((item: any, index: number) => (
+                <Reveal key={index} delay={Math.min(index, 4) * 70}>
+                  <SearchCard {...item} />
+                </Reveal>
               ))}
             </Box>
+
+            {normalizedNews.length === 0 && (
+              <Typography className="text-slate-500 mt-6 text-center dark:text-slate-500">
+                No news available for this category.
+              </Typography>
+            )}
           </Box>
 
-          {normalizedNews.length === 0 && (
-            <Typography className="text-gray-500 mt-10 text-center dark:text-slate-500">
-              No news available for this category.
-            </Typography>
+          {/* Live external headlines for this category */}
+          {gnewsCategory && (
+            <Reveal>
+              <LiveHeadlines
+                category={gnewsCategory}
+                title={`Live ${categoryData.name} headlines`}
+                max={6}
+              />
+            </Reveal>
           )}
         </Box>
 
         {/* Sidebar */}
         <Box className="hidden lg:flex flex-col gap-6">
-          <Box className="bg-white px-2 py-4 rounded max-h-[73vh] dark:bg-slate-900 dark:ring-1 dark:ring-slate-800">
-            <Box className="flex items-center gap-2 mb-2">
-              <TrendingUpIcon className="text-slate-900 dark:text-white!" />
-              <Typography variant="h5" className="font-bold mb-4">
-                Trending
-              </Typography>
+          <Box className="border hairline bg-white p-5 dark:bg-slate-900">
+            <Box className="flex items-center gap-2 pb-3 border-b-2 border-slate-900 dark:border-slate-100 mb-4">
+              <TrendingUpIcon fontSize="small" />
+              <Typography className="section-label">Trending</Typography>
             </Box>
 
             <Box className="flex flex-col gap-3">
@@ -205,47 +198,53 @@ const Page = async ({ params }: Props) => {
                       id: String(item.id),
                     },
                   }}
-                  className="flex gap-3 cursor-pointer rounded-md p-2 no-underline hover:bg-gray-100 dark:hover:bg-slate-800"
+                  className="flex gap-3 group no-underline border-b hairline pb-3 last:border-b-0"
                 >
                   <Image
                     src={item.featuredImage || "/fallback.jpg"}
                     alt={item.headline}
                     width={400}
                     height={300}
-                    className="w-20 h-16 object-cover rounded"
+                    className="w-20 h-16 object-cover border hairline"
                     unoptimized
                   />
 
-                  <Typography className="h-18 overflow-hidden text-sm font-medium leading-snug line-clamp-3 dark:text-slate-200">
+                  <Typography className="text-sm font-serif font-medium leading-snug line-clamp-3 text-slate-900 group-hover:underline dark:text-slate-200">
                     {item.headline}
                   </Typography>
                 </Link>
               ))}
+
+              {trendingNews.length === 0 && (
+                <Typography className="text-sm text-slate-500">
+                  Nothing trending right now.
+                </Typography>
+              )}
             </Box>
           </Box>
 
-          <Box className="bg-white px-4 py-4 rounded dark:bg-slate-900 dark:ring-1 dark:ring-slate-800">
-            <Box className="flex items-center gap-2">
-              <LocalOfferIcon className="text-slate-900 dark:text-white!" />
-              <Typography variant="h5" className="font-bold mb-4">
-                Popular Tags
-              </Typography>
+          <Box className="border hairline bg-white p-5 dark:bg-slate-900">
+            <Box className="flex items-center gap-2 pb-3 border-b-2 border-slate-900 dark:border-slate-100 mb-4">
+              <LocalOfferIcon fontSize="small" />
+              <Typography className="section-label">Popular Tags</Typography>
             </Box>
 
-            <Box className="flex flex-wrap gap-2 mt-4">
+            <Box className="flex flex-wrap gap-2">
               {popularTags.map((tag: any) => (
                 <Link
                   key={tag.slug}
                   href={`/tags/${tag.slug}`}
-                  className="no-underline"
+                  className="no-underline border hairline px-3 py-1 text-xs uppercase tracking-widest font-bold text-slate-700 hover:bg-slate-900 hover:text-white transition-colors dark:text-slate-300 dark:hover:bg-slate-100 dark:hover:text-slate-900"
                 >
-                  <Chip
-                    label={tag.name}
-                    clickable
-                    className="!bg-gray-100 !text-gray-800 hover:!bg-gray-200 dark:!bg-slate-800 dark:!text-slate-200 dark:hover:!bg-slate-700 transition-colors"
-                  />
+                  {tag.name}
                 </Link>
               ))}
+
+              {popularTags.length === 0 && (
+                <Typography className="text-sm text-slate-500">
+                  No tags yet.
+                </Typography>
+              )}
             </Box>
           </Box>
         </Box>

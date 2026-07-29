@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Alert, Box, Chip, Menu, MenuItem, Snackbar, Typography } from "@mui/material";
+import { Alert, Box, Menu, MenuItem, Snackbar, Typography } from "@mui/material";
 import Image from "next/image";
 import ShareIcon from "@mui/icons-material/Share";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -131,42 +131,36 @@ const SearchCard: React.FC<SearchCardProps> = ({
   return (
     <Box
       onClick={handleNavigate}
-      className="flex gap-4 p-4 rounded border border-gray-200 hover:shadow-md transition cursor-pointer bg-white dark:border-slate-800 dark:bg-slate-900 dark:hover:shadow-black/30"
+      className="flex gap-4 p-4 border hairline hover:border-slate-900 dark:hover:border-slate-400 transition-colors cursor-pointer bg-white dark:bg-slate-900 group"
     >
       {/* LEFT IMAGE */}
-      <Box className="relative min-w-[180px] h-[150px]">
+      <Box className="relative min-w-[180px] h-[150px] overflow-hidden border hairline">
         <Image
           src={featuredImage}
           alt={headline}
           fill
-          className="object-cover rounded-lg"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
           unoptimized
         />
 
-        {/* CATEGORY CHIP */}
-        <Chip
-          label={category}
-          size="small"
-          sx={{
-            bgcolor: chipColor,
-          }}
-          className="absolute! top-2 left-2 text-white! text-xs"
-        />
+        <span className="absolute top-0 left-0 bg-brand px-2 py-0.5 text-[11px] font-bold uppercase tracking-widest text-slate-900">
+          {category}
+        </span>
       </Box>
 
       {/* RIGHT CONTENT */}
       <Box className="flex flex-col flex-1 justify-between">
         {/* TEXT */}
         <Box>
-          <Typography className="font-semibold text-gray-900 line-clamp-2 hover:underline">
+          <Typography className="font-serif font-semibold! text-lg! leading-snug text-slate-900 line-clamp-2 group-hover:underline decoration-2 underline-offset-2 dark:text-slate-100">
             {headline}
           </Typography>
 
-          <Typography className="font-semibold text-gray-900 line-clamp-2 hover:underline text-sm! my-2! dark:text-slate-100">
+          <Typography className="text-xs! uppercase tracking-widest text-slate-500 my-2! dark:text-slate-400">
             {date}
           </Typography>
 
-          <Typography className="text-sm text-gray-600 mt-1 line-clamp-2 dark:text-slate-400">
+          <Typography className="text-sm text-slate-600 mt-1 line-clamp-2 dark:text-slate-400">
             {description}
           </Typography>
         </Box>

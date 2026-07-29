@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Container } from "@mui/material";
+import NewsletterSignup from "@/components/NewsletterSignup";
+import ScrollProgress from "@/components/ScrollProgress";
 import { getGlobalPageData, getGlobalPageMetadata } from "./api/news";
 
 const geistSans = Geist({
@@ -14,6 +15,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const sourceSerif = Source_Serif_4({
+  variable: "--font-source-serif",
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "900"],
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -37,7 +44,11 @@ export default async function RootLayout({
   const globalData = await getGlobalPageData();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} ${sourceSerif.variable}`}
+    >
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -57,13 +68,13 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-stone-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100`}
-      >
+      <body className="antialiased">
+        <ScrollProgress />
         <Header data={globalData?.header} />
-        <Container className="max-w-[1310px]! m-auto min-h-[85vh]">
+        <main className="mx-auto w-full max-w-[1310px] px-4 min-h-[85vh]">
           {children}
-        </Container>
+        </main>
+        <NewsletterSignup />
         <Footer data={globalData?.footer} />
       </body>
     </html>

@@ -139,6 +139,40 @@ export async function getArticleById(documentId: string, id: string | number) {
   return data?.data?.[0] || null;
 }
 
+export async function getArticleBySlug(slug: string) {
+  const url = new URL("/api/articles", baseUrl);
+
+  url.search = qs.stringify({
+    filters: {
+      slug: {
+        $eq: slug,
+      },
+    },
+    populate: {
+      category: {
+        fields: ["name", "slug"],
+      },
+      featuredImage: {
+        fields: ["url", "alternativeText"],
+      },
+      author: {
+        fields: ["name"],
+        populate: {
+          avatar: {
+            fields: ["url", "alternativeText"],
+          },
+        },
+      },
+    },
+    pagination: {
+      limit: 1,
+    },
+  });
+
+  const data = await fetchData(url.href);
+  return data?.data?.[0] || null;
+}
+
 export async function getTopStories() {
   const url = new URL("/api/articles", baseUrl);
 

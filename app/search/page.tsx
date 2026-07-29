@@ -1,6 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import SearchBar from "@/components/SearchBar";
 import SearchCard from "@/components/SearchCard";
 import CategoryNewsCard from "@/components/CategoryNewsCard";
@@ -70,65 +70,61 @@ const page = async ({ searchParams }: Props) => {
   }));
 
   return (
-    <Box className="max-w-7xl mx-auto px-4 py-8 text-slate-900 dark:text-slate-100">
-      <Box className="grid lg:grid-cols-[1fr_2fr] gap-8">
-        {/* LEFT: TRENDING */}
-        <Box className="flex flex-col gap-4 sticky top-24 h-fit">
-          <Typography variant="h6" className="font-bold">
-            Trending News
+    <Box className="py-8 text-slate-900 dark:text-slate-100">
+      {/* Page masthead */}
+      <Box className="mb-10 border-b-4 border-slate-900 dark:border-slate-100 pb-6">
+        <Typography className="section-label text-brand-dark!">
+          Search
+        </Typography>
+        <Typography
+          component="h1"
+          className="font-serif font-black text-5xl! mt-1!"
+        >
+          {query ? `Results for “${query}”` : "Search the archive"}
+        </Typography>
+        <Typography className="text-slate-600 mt-2! dark:text-slate-400">
+          {query
+            ? `${results.length} ${results.length === 1 ? "story" : "stories"} found`
+            : "Find articles across every section."}
+        </Typography>
+      </Box>
+
+      <Box className="grid lg:grid-cols-[2fr_1fr] gap-10">
+        {/* Results */}
+        <Box className="flex flex-col gap-6">
+          <SearchBar initialQuery={query} clearOnSearch={false} />
+
+          {!query && (
+            <Typography className="text-slate-500 dark:text-slate-500">
+              Try searching for <b>Technology</b>, <b>Sports</b>, etc.
+            </Typography>
+          )}
+
+          {query && results.length > 0 && (
+            <Box className="grid gap-4">
+              {results.map((item: any, index: number) => (
+                <SearchCard key={index} {...item} />
+              ))}
+            </Box>
+          )}
+
+          {query && results.length === 0 && (
+            <Typography className="text-slate-500 dark:text-slate-400">
+              No results found for <b>{query}</b>. Try a different keyword.
+            </Typography>
+          )}
+        </Box>
+
+        {/* Trending sidebar */}
+        <Box className="h-fit lg:sticky lg:top-24 border hairline bg-white p-5 dark:bg-slate-900">
+          <Typography className="section-label pb-3 border-b-2 border-slate-900 dark:border-slate-100 mb-4">
+            Trending Now
           </Typography>
 
-          <Divider />
-
-          <Box className="flex flex-col gap-2">
+          <Box className="flex flex-col gap-3">
             {trendingNews.map((item: any, index: number) => (
               <CategoryNewsCard key={index} {...item} />
             ))}
-          </Box>
-        </Box>
-
-        {/* CENTER: SEARCH SECTION */}
-        <Box>
-          <Box className="bg-gray-50 p-6 flex flex-col gap-6 dark:bg-slate-900 dark:ring-1 dark:ring-slate-800">
-            {/* Title */}
-            <Box>
-              <Typography variant="h5" className="font-bold">
-                Search News
-              </Typography>
-
-              <Typography className="text-gray-500 text-sm mt-1 dark:text-slate-400">
-                {query
-                  ? `Showing results for "${query}"`
-                  : "Find articles across categories"}
-              </Typography>
-            </Box>
-
-            {/* Search Bar */}
-            <Box className="">
-              <SearchBar />
-            </Box>
-
-            <Divider />
-            {/* RESULTS */}
-            {!query && (
-              <Typography className="text-gray-400 dark:text-slate-500">
-                Try searching for <b>Technology</b>, <b>Sports</b>, etc.
-              </Typography>
-            )}
-
-            {query && results.length > 0 && (
-              <Box className="grid gap-6">
-                {results.map((item: any, index: number) => (
-                  <SearchCard key={index} {...item} />
-                ))}
-              </Box>
-            )}
-
-            {query && results.length === 0 && (
-              <Typography className="text-gray-500 dark:text-slate-400">
-                No results found for <b>{query}</b>
-              </Typography>
-            )}
           </Box>
         </Box>
       </Box>

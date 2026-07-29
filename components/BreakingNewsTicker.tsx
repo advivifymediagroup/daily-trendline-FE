@@ -3,21 +3,23 @@ import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 
 const BreakingNewsTicker: React.FC<any> = ({ news }) => {
+  if (!news?.length) return null;
+
   return (
-    <Box className="w-full flex items-center bg-white text-black rounded-md overflow-hidden border-1">
+    <Box className="w-full flex items-center bg-slate-950 text-white overflow-hidden border-2 border-slate-950 dark:border-slate-100">
       {/* Label */}
-      <Box className="bg-red px-4 py-2 shrink-0 bg-red-600 text-white">
+      <Box className="bg-brand px-4 py-2 shrink-0">
         <Typography
           variant="body2"
-          className="font-semibold tracking-wide uppercase"
+          className="font-bold! tracking-[0.2em] uppercase text-slate-900"
         >
-          BREAKING NEWS
+          Breaking
         </Typography>
       </Box>
 
-      {/* Scrolling Text */}
+      {/* Scrolling text */}
       <Box className="relative overflow-hidden w-full">
-        <Box className="ticker-track flex gap-8 px-4 py-2 whitespace-nowrap">
+        <Box className="ticker-track flex gap-10 px-4 py-2 whitespace-nowrap">
           {news.concat(news).map((item: any, index: number) => (
             <Link
               key={index}
@@ -28,8 +30,9 @@ const BreakingNewsTicker: React.FC<any> = ({ news }) => {
                   id: String(item.id),
                 },
               }}
-              className="hover:underline text-sm"
+              className="text-sm text-white no-underline hover:text-brand hover:underline decoration-brand"
             >
+              <span className="text-brand mr-2">●</span>
               {item.title}
             </Link>
           ))}

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Box, Typography, Tooltip } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { StrapiImage } from "./StrapiImage";
 
@@ -23,7 +23,6 @@ const CategoryNewsCard: React.FC<CategoryNewsCardProps> = ({
   headline,
   category,
   date,
-  description,
   slug,
   documentId,
   id,
@@ -57,34 +56,29 @@ const CategoryNewsCard: React.FC<CategoryNewsCardProps> = ({
   return (
     <Box
       onClick={handleClick}
-      className={`flex gap-4 ${width} cursor-pointer rounded-lg hover:bg-gray-100 transition group mb-4 dark:hover:bg-slate-900`}
+      className={`flex gap-4 ${width} cursor-pointer group border-b hairline pb-3 last:border-b-0`}
     >
-      {/* Left Image */}
-      <Box className="min-w-[100px] h-[80px] relative overflow-hidden">
+      {/* Thumbnail */}
+      <Box className="min-w-[100px] h-[80px] relative overflow-hidden border hairline">
         <StrapiImage
           src={featuredImage}
           alt={headline}
           width={100}
           height={80}
-          className="object-cover rounded"
+          className="object-cover h-full w-full transition-transform duration-300 group-hover:scale-105"
         />
       </Box>
 
-      {/* Right Content */}
-      <Box className="flex flex-col">
-        {/* Headline with Tooltip */}
-        <Tooltip title={headline} arrow>
-          <Typography
-            className="font-semibold text-gray-800 group-hover:text-blue-800 group-hover:underline transition dark:text-slate-100 dark:group-hover:text-yellow-300
-            line-clamp-2 overflow-hidden text-ellipsis mb-2!"
-          >
-            {headline}
-          </Typography>
-        </Tooltip>
-        {/* <Typography>{description}</Typography> */}
+      {/* Content */}
+      <Box className="flex flex-col justify-between py-0.5">
+        <Typography className="font-serif font-semibold! leading-snug text-slate-900 group-hover:underline decoration-2 underline-offset-2 dark:text-slate-100 line-clamp-2 overflow-hidden">
+          {headline}
+        </Typography>
 
-        {/* Category */}
-        <Typography className="text-sm font-medium mt-1 dark:text-slate-400">{category}</Typography>
+        <Typography className="text-xs! uppercase tracking-widest text-slate-500 dark:text-slate-400">
+          {category}
+          {date ? ` — ${date}` : ""}
+        </Typography>
       </Box>
     </Box>
   );

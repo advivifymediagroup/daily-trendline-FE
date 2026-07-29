@@ -2,15 +2,13 @@
 
 import React, { useState } from "react";
 import {
-  AppBar,
-  Toolbar,
   IconButton,
-  Typography,
   Box,
   Drawer,
   List,
   ListItem,
   ListItemText,
+  Typography,
 } from "@mui/material";
 import SearchBar from "./SearchBar";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -20,7 +18,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { getStrapiMedia } from "./StrapiImage";
-import CalendarMonthOutlined from "@mui/icons-material/CalendarMonthOutlined";
 import ThemeToggle from "./ThemeToggle";
 
 type HeaderProps = {
@@ -32,28 +29,93 @@ const Header = ({ data }: HeaderProps) => {
   const [showSearch, setShowSearch] = useState(false);
   const pathname = usePathname();
 
-  const { navLink, logo } = data;
+  const navLink = data?.navLink ?? [];
+  const logo = data?.logo;
+  const wordmark = data?.logoText?.text || "Daily Trendline";
+
+  const today = new Date().toLocaleDateString("en-IN", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   return (
-    <Box>
-      <AppBar
-        position="sticky"
-        className="bg-[#faf902]! text-black! shadow-sm! dark:bg-slate-900! dark:text-slate-100!"
-      >
-        <Toolbar className="max-w-7xl mx-auto w-full flex justify-between">
-          <Link href="/">
-            {/* Logo */}
+    <header className="bg-white dark:bg-slate-950">
+      {/* Utility bar */}
+      <Box className="border-b hairline">
+        <Box className="mx-auto max-w-[1310px] px-4 py-2 flex items-center justify-between gap-4">
+          <Typography className="text-xs! uppercase tracking-[0.15em] text-slate-600 dark:text-slate-400">
+            {today}
+          </Typography>
+
+          <Box className="flex items-center gap-1">
+            {!showSearch ? (
+              <IconButton
+                size="small"
+                onClick={() => setShowSearch(true)}
+                aria-label="Open search"
+                className="text-slate-900! dark:text-slate-100!"
+              >
+                <SearchIcon fontSize="small" />
+              </IconButton>
+            ) : (
+              <Box className="flex items-center gap-1">
+                <SearchBar
+                  width="w-56"
+                  clearOnSearch
+                  onSearch={() => setShowSearch(false)}
+                />
+                <IconButton
+                  size="small"
+                  onClick={() => setShowSearch(false)}
+                  aria-label="Close search"
+                  className="text-slate-900! dark:text-slate-100!"
+                >
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </Box>
+            )}
+            <ThemeToggle />
+          </Box>
+        </Box>
+      </Box>
+
+      {/* Masthead */}
+      <Box className="mx-auto max-w-[1310px] px-4 py-6 flex items-center justify-center">
+        <Link href="/" className="flex items-center gap-4 no-underline">
+          {logo?.url && (
             <Image
-              src={getStrapiMedia(logo?.url) || "/fallback.jpg"}
-              alt="daily-trendline-logo"
-              width={80}
-              height={100}
+              src={getStrapiMedia(logo.url) || "/fallback.jpg"}
+              alt={`${wordmark} logo`}
+              width={64}
+              height={64}
               unoptimized
             />
-          </Link>
+          )}
+          <span className="font-serif font-black text-4xl md:text-5xl tracking-tight text-slate-900 dark:text-slate-100">
+            {wordmark}
+            <span className="text-brand">.</span>
+          </span>
+        </Link>
+      </Box>
 
-          {/* Desktop Navigation */}
-          <Box className="hidden md:flex items-center gap-4">
+      {/* Nav bar */}
+      <Box className="sticky top-0 z-50 border-y-2 border-slate-900 bg-white dark:border-slate-100 dark:bg-slate-950">
+        <Box className="mx-auto max-w-[1310px] px-4 flex items-center justify-between">
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-stretch">
+            <Link
+              href="/"
+              className={`px-4 py-3 text-sm font-bold uppercase tracking-widest no-underline transition-colors ${
+                pathname === "/"
+                  ? "bg-brand text-slate-900"
+                  : "text-slate-900 hover:bg-brand hover:text-slate-900 dark:text-slate-100"
+              }`}
+            >
+              Home
+            </Link>
+
             {navLink.map((link: any) => {
               const isActive =
                 pathname === link.url || pathname.startsWith(link.url + "/");
@@ -62,95 +124,92 @@ const Header = ({ data }: HeaderProps) => {
                 <Link
                   key={link.text}
                   href={link.url}
-                  className={`px-3 py-1 rounded transition-colors ${
+                  className={`px-4 py-3 text-sm font-bold uppercase tracking-widest no-underline transition-colors ${
                     isActive
-                      ? "border-2 border-black text-black dark:border-slate-100 dark:text-slate-100"
-                      : "text-black hover:text-black dark:text-slate-100 dark:hover:text-white"
+                      ? "bg-brand text-slate-900"
+                      : "text-slate-900 hover:bg-brand hover:text-slate-900 dark:text-slate-100"
                   }`}
                 >
                   {link.text}
                 </Link>
               );
             })}
+          </nav>
 
-            {/* SEARCH TOGGLE */}
-            {!showSearch ? (
-              <IconButton onClick={() => setShowSearch(true)} className="text-black! dark:text-slate-100!">
-                <SearchIcon />
-              </IconButton>
-            ) : (
-              <Box className="flex items-center gap-2">
-                <SearchBar
-                  width="w-48"
-                  variant="light"
-                  clearOnSearch
-                  onSearch={() => setShowSearch(false)}
-                />
+          <Typography className="hidden md:block text-xs! uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+            Your daily briefing
+          </Typography>
 
-                <IconButton
-                  onClick={() => setShowSearch(false)}
-                  className="text-black! dark:text-slate-100!"
-                >
-                  <CloseIcon />
-                </IconButton>
-              </Box>
-            )}
-
-            <ThemeToggle />
-          </Box>
-
-          {/* Mobile Hamburger */}
-          <Box className="md:hidden flex items-center gap-1">
-            <ThemeToggle />
-            <IconButton className="text-black! dark:text-slate-100!" onClick={() => setOpen(true)}>
-              <MenuIcon className="text-black! dark:text-slate-100!" />
+          {/* Mobile hamburger */}
+          <Box className="md:hidden flex w-full items-center justify-between py-1">
+            <Typography className="text-sm! font-bold uppercase tracking-widest">
+              Menu
+            </Typography>
+            <IconButton
+              className="text-slate-900! dark:text-slate-100!"
+              onClick={() => setOpen(true)}
+              aria-label="Open menu"
+            >
+              <MenuIcon />
             </IconButton>
           </Box>
-        </Toolbar>
-        {/* Date Header */}
-        <Box className="bg-yellow-100! text-black dark:bg-slate-800! dark:text-slate-100!">
-          <Box className="max-w-7xl mx-auto w-full px-8 py-2 flex gap-3 items-center">
-            <CalendarMonthOutlined />
-
-            <Typography variant="body2" className="font-medium">
-              {new Date().toLocaleDateString("en-IN", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </Typography>
-          </Box>
         </Box>
-      </AppBar>
+      </Box>
 
-      {/* Mobile Drawer */}
+      {/* Mobile drawer */}
       <Drawer anchor="top" open={open} onClose={() => setOpen(false)}>
-        <Box className="h-full bg-black text-white p-4 dark:bg-slate-950 dark:text-slate-100">
-          {/* Drawer Header */}
-          <Box className="flex justify-between mb-6">
-            <Typography>Menu</Typography>
-            <IconButton onClick={() => setOpen(false)}>
+        <Box className="bg-slate-950 text-white p-4">
+          <Box className="flex justify-between items-center mb-4">
+            <span className="font-serif font-black text-2xl">
+              {wordmark}
+              <span className="text-brand">.</span>
+            </span>
+            <IconButton onClick={() => setOpen(false)} aria-label="Close menu">
               <CloseIcon className="text-white!" />
             </IconButton>
           </Box>
 
-          {/* Navigation Links */}
           <List>
+            <ListItem
+              component={Link}
+              href="/"
+              onClick={() => setOpen(false)}
+              className="border-b border-slate-800"
+            >
+              <ListItemText
+                primary="Home"
+                slotProps={{
+                  primary: {
+                    className:
+                      "uppercase tracking-widest font-bold text-white",
+                  },
+                }}
+              />
+            </ListItem>
+
             {navLink.map((link: any) => (
               <ListItem
                 key={link.text}
                 component={Link}
                 href={link.url}
                 onClick={() => setOpen(false)}
+                className="border-b border-slate-800"
               >
-                <ListItemText primary={link.text} />
+                <ListItemText
+                  primary={link.text}
+                  slotProps={{
+                    primary: {
+                      className:
+                        "uppercase tracking-widest font-bold text-white",
+                    },
+                  }}
+                />
               </ListItem>
             ))}
           </List>
         </Box>
       </Drawer>
-    </Box>
+    </header>
   );
 };
 
