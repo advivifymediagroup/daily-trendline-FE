@@ -136,10 +136,10 @@ export default async function Home() {
         </Box>
       </Box>
 
-      {/* Live external headlines (GNews) */}
+      {/* Live external headlines (Guardian, full text) */}
       <Reveal>
         <LiveHeadlines
-          category="general"
+          section="news"
           title="Live from around the web"
           max={6}
         />

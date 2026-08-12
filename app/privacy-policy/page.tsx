@@ -42,9 +42,9 @@ export default function PrivacyPolicyPage() {
       <p>
         Live headline sections link to external publications. When you follow
         those links you leave this site and the destination&apos;s own privacy
-        policy applies. Live headlines are provided by the GNews service; your
-        browser does not contact GNews directly — the feed is fetched by our
-        servers.
+        policy applies. Live stories are provided by the Guardian Open
+        Platform and are shown here with attribution; your browser does not
+        contact the Guardian directly — the feed is fetched by our servers.
       </p>
 
       <h2>Unsubscribing and deletion</h2>

@@ -13,7 +13,7 @@ import {
   getPopularTags,
 } from "../api/news";
 import { getStrapiMediaURL } from "@/utils/strapiUtils";
-import { toGNewsCategory } from "@/utils/gnews";
+import { toGuardianSection } from "@/utils/guardian";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 
@@ -73,7 +73,7 @@ const Page = async ({ params }: Props) => {
 
   const restNews = normalizedNews.filter((item: any) => item !== featured);
   const trendingNews = normalizedNews.filter((item: any) => item.isTrending);
-  const gnewsCategory = toGNewsCategory(category);
+  const guardianSection = toGuardianSection(category);
 
   return (
     <Box className="py-8 text-slate-900 dark:text-slate-100">
@@ -168,10 +168,10 @@ const Page = async ({ params }: Props) => {
           </Box>
 
           {/* Live external headlines for this category */}
-          {gnewsCategory && (
+          {guardianSection && (
             <Reveal>
               <LiveHeadlines
-                category={gnewsCategory}
+                section={guardianSection}
                 title={`Live ${categoryData.name} headlines`}
                 max={6}
               />
