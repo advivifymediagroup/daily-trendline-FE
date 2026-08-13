@@ -6,6 +6,11 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import XIcon from "@mui/icons-material/X";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import {
+  DEFAULT_FOOTER_SECTIONS,
+  DEFAULT_SOCIAL,
+  withFallback,
+} from "@/utils/siteNav";
 
 const iconMap: Record<string, React.ReactNode> = {
   Facebook: <FacebookIcon />,
@@ -25,7 +30,11 @@ const Footer = ({ data }: FooterProps) => {
   const wordmark =
     typeof logoText === "string" ? logoText : logoText?.text || "Daily Trendline";
 
-  const footerLinks = footerSection?.map((section: any) => ({
+  // Fall back to the built-in sections when Strapi has nothing to give.
+  const sections = withFallback(footerSection, DEFAULT_FOOTER_SECTIONS);
+  const socials = withFallback(socialLink, DEFAULT_SOCIAL);
+
+  const footerLinks = sections.map((section: any) => ({
     title: section.title,
     links: (section.footerLink || []).map((link: any) => ({
       label: link.text,
@@ -51,7 +60,7 @@ const Footer = ({ data }: FooterProps) => {
           </Typography>
 
           <Box className="flex gap-1">
-            {socialLink?.map((social: any) => {
+            {socials.map((social: any) => {
               const icon = iconMap[social.text] || null;
               if (!icon) return null;
 

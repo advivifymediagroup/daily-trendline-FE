@@ -21,18 +21,24 @@ type Props = {
   params: Promise<{ category: string }>;
 };
 
+/** "business" -> "Business" — used when the CMS has no record for the slug. */
+function titleFromSlug(slug: string): string {
+  return slug.charAt(0).toUpperCase() + slug.slice(1).toLowerCase();
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category } = await params;
   const categoryData = await getCategoryBySlug(category);
+  const name = categoryData?.name ?? titleFromSlug(category);
 
-  if (!categoryData) {
+  if (!categoryData && !toGuardianSection(category)) {
     return {
       title: "Page Not Found",
     };
   }
 
   return {
-    title: `${categoryData.name} News`,
+    title: `${name} News`,
   };
 }
 
@@ -43,9 +49,15 @@ const Page = async ({ params }: Props) => {
     getPopularTags(),
   ]);
 
-  if (!categoryData) {
+  const guardianSection = toGuardianSection(category);
+
+  // A section is valid if the CMS knows it OR it maps to a Guardian section,
+  // so the standard sections still work when Strapi is unavailable.
+  if (!categoryData && !guardianSection) {
     notFound();
   }
+
+  const categoryName = categoryData?.name ?? titleFromSlug(category);
 
   const categoryNews = await getNewsByCategory(category, 12);
   const data = categoryNews?.data ?? [];
@@ -73,7 +85,7 @@ const Page = async ({ params }: Props) => {
 
   const restNews = normalizedNews.filter((item: any) => item !== featured);
   const trendingNews = normalizedNews.filter((item: any) => item.isTrending);
-  const guardianSection = toGuardianSection(category);
+  const hasCmsContent = normalizedNews.length > 0;
 
   return (
     <Box className="py-8 text-slate-900 dark:text-slate-100">
@@ -86,16 +98,16 @@ const Page = async ({ params }: Props) => {
           component="h1"
           className="font-serif font-black text-5xl! md:text-6xl! capitalize mt-1!"
         >
-          {categoryData.name}
+          {categoryName}
         </Typography>
         <Typography className="text-slate-600 mt-2! dark:text-slate-400">
-          Latest updates and breaking stories from {categoryData.name}.
+          Latest updates and breaking stories from {categoryName}.
         </Typography>
       </Box>
 
       <Box className="grid lg:grid-cols-4 gap-10">
         {/* Main column */}
-        <Box className="lg:col-span-3 flex flex-col gap-12">
+        <Box className={`${hasCmsContent ? "lg:col-span-3" : "lg:col-span-4"} flex flex-col gap-12`}>
           {/* Featured article */}
           {featured && (
             <Link
@@ -144,11 +156,12 @@ const Page = async ({ params }: Props) => {
             </Link>
           )}
 
-          {/* Latest list */}
+          {/* Latest list — CMS content only */}
+          {hasCmsContent && (
           <Box>
             <Box className="section-rule pt-3 mb-5">
               <Typography component="h2" className="section-label capitalize">
-                Latest in {categoryData.name}
+                Latest in {categoryName}
               </Typography>
             </Box>
 
@@ -160,26 +173,23 @@ const Page = async ({ params }: Props) => {
               ))}
             </Box>
 
-            {normalizedNews.length === 0 && (
-              <Typography className="text-slate-500 mt-6 text-center dark:text-slate-500">
-                No news available for this category.
-              </Typography>
-            )}
           </Box>
+          )}
 
           {/* Live external headlines for this category */}
           {guardianSection && (
             <Reveal>
               <LiveHeadlines
                 section={guardianSection}
-                title={`Live ${categoryData.name} headlines`}
+                title={`Live ${categoryName} headlines`}
                 max={6}
               />
             </Reveal>
           )}
         </Box>
 
-        {/* Sidebar */}
+        {/* Sidebar — CMS content only */}
+        {hasCmsContent && (
         <Box className="hidden lg:flex flex-col gap-6">
           <Box className="border hairline bg-white p-5 dark:bg-slate-900">
             <Box className="flex items-center gap-2 pb-3 border-b-2 border-slate-900 dark:border-slate-100 mb-4">
@@ -248,6 +258,7 @@ const Page = async ({ params }: Props) => {
             </Box>
           </Box>
         </Box>
+        )}
       </Box>
     </Box>
   );

@@ -19,6 +19,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { getStrapiMedia } from "./StrapiImage";
 import ThemeToggle from "./ThemeToggle";
+import { DEFAULT_NAV, withFallback } from "@/utils/siteNav";
 
 type HeaderProps = {
   data: any;
@@ -29,7 +30,8 @@ const Header = ({ data }: HeaderProps) => {
   const [showSearch, setShowSearch] = useState(false);
   const pathname = usePathname();
 
-  const navLink = data?.navLink ?? [];
+  // Falls back to the built-in sections when Strapi has no links to give.
+  const navLink = withFallback(data?.navLink, DEFAULT_NAV);
   const logo = data?.logo;
   const wordmark = data?.logoText?.text || "Daily Trendline";
 
