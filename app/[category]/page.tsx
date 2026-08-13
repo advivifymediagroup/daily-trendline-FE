@@ -48,7 +48,7 @@ const Page = async ({ params }: Props) => {
   }
 
   const categoryNews = await getNewsByCategory(category, 12);
-  const { data } = categoryNews;
+  const data = categoryNews?.data ?? [];
 
   const normalizedNews = data.map((item: any) => ({
     headline: item.title,

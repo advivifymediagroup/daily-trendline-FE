@@ -1,12 +1,32 @@
 import { fetchData } from "@/utils/fetchApi";
-const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
 import qs from "qs";
 import { unstable_noStore as noStore } from "next/cache";
 
-export async function getTickerNews() {
-  const url = new URL("/api/articles", baseUrl);
+const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
 
-  url.search = qs.stringify({
+/** Shape callers expect from Strapi list endpoints when there is no data. */
+const EMPTY_LIST = { data: [] as any[] };
+
+/**
+ * Builds a Strapi URL, or returns null when NEXT_PUBLIC_STRAPI_URL is unset
+ * or malformed. Without this guard `new URL(path, undefined)` throws
+ * "Invalid URL", which in the root layout breaks every page on the site.
+ */
+function strapiUrl(path: string, query?: unknown): string | null {
+  if (!baseUrl) return null;
+
+  try {
+    const url = new URL(path, baseUrl);
+    if (query) url.search = qs.stringify(query);
+    return url.href;
+  } catch {
+    console.error(`[strapi] invalid NEXT_PUBLIC_STRAPI_URL: ${baseUrl}`);
+    return null;
+  }
+}
+
+export async function getTickerNews() {
+  const href = strapiUrl("/api/articles", {
     filters: {
       isTickerNews: {
         $eq: true,
@@ -26,13 +46,12 @@ export async function getTickerNews() {
     },
   });
 
-  return await fetchData(url.href);
+  if (!href) return EMPTY_LIST;
+  return (await fetchData(href)) ?? EMPTY_LIST;
 }
 
 export async function getHomePageData() {
-  const url = new URL("/api/home-page", baseUrl);
-
-  url.search = qs.stringify({
+  const href = strapiUrl("/api/home-page", {
     populate: {
       blocks: {
         on: {
@@ -63,12 +82,11 @@ export async function getHomePageData() {
     },
   });
 
-  return await fetchData(url.href);
+  if (!href) return EMPTY_LIST;
+  return (await fetchData(href)) ?? EMPTY_LIST;
 }
 export async function getFeaturedNews() {
-  const url = new URL("/api/articles", baseUrl);
-
-  url.search = qs.stringify({
+  const href = strapiUrl("/api/articles", {
     filters: {
       isFeatured: {
         $eq: true,
@@ -96,13 +114,12 @@ export async function getFeaturedNews() {
     },
   });
 
-  return await fetchData(url.href);
+  if (!href) return EMPTY_LIST;
+  return (await fetchData(href)) ?? EMPTY_LIST;
 }
 
 export async function getArticleById(documentId: string, id: string | number) {
-  const url = new URL("/api/articles", baseUrl);
-
-  url.search = qs.stringify({
+  const href = strapiUrl("/api/articles", {
     filters: {
       $or: [
         {
@@ -135,14 +152,12 @@ export async function getArticleById(documentId: string, id: string | number) {
     },
   });
 
-  const data = await fetchData(url.href);
+  const data = href ? await fetchData(href) : null;
   return data?.data?.[0] || null;
 }
 
 export async function getArticleBySlug(slug: string) {
-  const url = new URL("/api/articles", baseUrl);
-
-  url.search = qs.stringify({
+  const href = strapiUrl("/api/articles", {
     filters: {
       slug: {
         $eq: slug,
@@ -169,14 +184,12 @@ export async function getArticleBySlug(slug: string) {
     },
   });
 
-  const data = await fetchData(url.href);
+  const data = href ? await fetchData(href) : null;
   return data?.data?.[0] || null;
 }
 
 export async function getTopStories() {
-  const url = new URL("/api/articles", baseUrl);
-
-  url.search = qs.stringify({
+  const href = strapiUrl("/api/articles", {
     filters: {
       isFeatured: {
         $eq: false,
@@ -208,13 +221,12 @@ export async function getTopStories() {
     },
   });
 
-  return await fetchData(url.href);
+  if (!href) return EMPTY_LIST;
+  return (await fetchData(href)) ?? EMPTY_LIST;
 }
 
 export async function getNewsByCategory(categorySlug: string, limit = 4) {
-  const url = new URL("/api/articles", baseUrl);
-
-  url.search = qs.stringify({
+  const href = strapiUrl("/api/articles", {
     filters: {
       category: {
         slug: {
@@ -236,13 +248,12 @@ export async function getNewsByCategory(categorySlug: string, limit = 4) {
     },
   });
 
-  return await fetchData(url.href);
+  if (!href) return EMPTY_LIST;
+  return (await fetchData(href)) ?? EMPTY_LIST;
 }
 
 export async function getCategoryBySlug(categorySlug: string) {
-  const url = new URL("/api/categories", baseUrl);
-
-  url.search = qs.stringify({
+  const href = strapiUrl("/api/categories", {
     filters: {
       slug: {
         $eq: categorySlug,
@@ -254,14 +265,12 @@ export async function getCategoryBySlug(categorySlug: string) {
     },
   });
 
-  const data = await fetchData(url.href);
+  const data = href ? await fetchData(href) : null;
   return data?.data?.[0] || null;
 }
 
 export async function getPopularTags(limit = 20) {
-  const url = new URL("/api/tags", baseUrl);
-
-  url.search = qs.stringify({
+  const href = strapiUrl("/api/tags", {
     fields: ["name", "slug"],
     sort: ["name:asc"],
     pagination: {
@@ -269,14 +278,12 @@ export async function getPopularTags(limit = 20) {
     },
   });
 
-  const data = await fetchData(url.href);
+  const data = href ? await fetchData(href) : null;
   return data?.data || [];
 }
 
 export async function getTagBySlug(tagSlug: string) {
-  const url = new URL("/api/tags", baseUrl);
-
-  url.search = qs.stringify({
+  const href = strapiUrl("/api/tags", {
     filters: {
       slug: {
         $eq: tagSlug,
@@ -288,14 +295,12 @@ export async function getTagBySlug(tagSlug: string) {
     },
   });
 
-  const data = await fetchData(url.href);
+  const data = href ? await fetchData(href) : null;
   return data?.data?.[0] || null;
 }
 
 export async function getNewsByTag(tagSlug: string, limit = 20) {
-  const url = new URL("/api/articles", baseUrl);
-
-  url.search = qs.stringify({
+  const href = strapiUrl("/api/articles", {
     filters: {
       tags: {
         slug: {
@@ -320,7 +325,8 @@ export async function getNewsByTag(tagSlug: string, limit = 20) {
     },
   });
 
-  return await fetchData(url.href);
+  if (!href) return EMPTY_LIST;
+  return (await fetchData(href)) ?? EMPTY_LIST;
 }
 
 export async function getSearchedArticles(query: string, limit = 20) {
@@ -330,9 +336,7 @@ export async function getSearchedArticles(query: string, limit = 20) {
     return { data: [] };
   }
 
-  const url = new URL("/api/articles", baseUrl);
-
-  url.search = qs.stringify({
+  const href = strapiUrl("/api/articles", {
     filters: {
       $or: [
         {
@@ -373,13 +377,12 @@ export async function getSearchedArticles(query: string, limit = 20) {
     },
   });
 
-  return await fetchData(url.href);
+  if (!href) return EMPTY_LIST;
+  return (await fetchData(href)) ?? EMPTY_LIST;
 }
 
 export async function getPageData(slug: string) {
-  const url = new URL(`/api/pages`, baseUrl);
-
-  url.search = qs.stringify({
+  const href = strapiUrl(`/api/pages`, {
     filters: {
       slug: {
         $eq: slug,
@@ -392,15 +395,13 @@ export async function getPageData(slug: string) {
     },
   });
 
-  const data = await fetchData(url.href);
+  const data = href ? await fetchData(href) : null;
   return data?.data?.[0];
 }
 
 export async function getGlobalPageData() {
   noStore();
-  const url = new URL("/api/global", baseUrl);
-
-  url.search = qs.stringify({
+  const href = strapiUrl("/api/global", {
     populate: {
       header: {
         populate: {
@@ -423,15 +424,15 @@ export async function getGlobalPageData() {
     },
   });
 
-  return await fetchData(url.href);
+  if (!href) return null;
+  return await fetchData(href);
 }
 
 export async function getGlobalPageMetadata() {
-  const url = new URL("/api/global", baseUrl);
-
-  url.search = qs.stringify({
+  const href = strapiUrl("/api/global", {
     fields: ["title", "description"],
   });
 
-  return await fetchData(url.href);
+  if (!href) return null;
+  return await fetchData(href);
 }
