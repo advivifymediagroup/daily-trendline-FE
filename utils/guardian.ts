@@ -204,6 +204,16 @@ export function formatRelativeTime(isoDate: string): string {
   return `${Math.round(hours / 24)}d ago`;
 }
 
+/**
+ * Guardian thumbnails come back at 500px wide, which is soft in a wide lead
+ * slot. The CDN serves the same crop at 1000px, so swap the width segment
+ * where the URL follows that pattern. 1200 is not offered — it 403s.
+ */
+export function largerImage(url: string | null): string | null {
+  if (!url) return null;
+  return url.replace(/\/500\.(jpg|jpeg|png)$/i, "/1000.$1");
+}
+
 export function readingTime(article: GuardianArticle): number {
   const words =
     article.wordcount ??

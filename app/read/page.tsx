@@ -11,6 +11,7 @@ import {
   isValidGuardianId,
   formatRelativeTime,
   readingTime,
+  largerImage,
 } from "@/utils/guardian";
 
 type Props = {
@@ -72,14 +73,14 @@ const Page = async ({ searchParams }: Props) => {
         {/* Headline */}
         <Typography
           component="h1"
-          className="font-serif font-black text-4xl! md:text-5xl! leading-tight! mt-4!"
+          className="font-extrabold text-4xl! md:text-5xl! leading-tight! mt-4!"
         >
           {article.title}
         </Typography>
 
         {/* Standfirst */}
         {article.standfirst && (
-          <Typography className="font-serif text-xl! text-slate-600 dark:text-slate-400 mt-4! leading-relaxed!">
+          <Typography className="text-xl! text-slate-600 dark:text-slate-400 mt-4! leading-relaxed!">
             {article.standfirst}
           </Typography>
         )}
@@ -107,7 +108,7 @@ const Page = async ({ searchParams }: Props) => {
         {article.thumbnail && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={article.thumbnail}
+            src={largerImage(article.thumbnail) ?? article.thumbnail}
             alt=""
             className="w-full max-h-[520px] object-cover border hairline mb-8"
           />
@@ -121,7 +122,7 @@ const Page = async ({ searchParams }: Props) => {
                 <Typography
                   key={index}
                   component="h2"
-                  className="font-serif font-bold! text-2xl! mt-4!"
+                  className="font-extrabold text-2xl! mt-4!"
                 >
                   {block.text}
                 </Typography>
@@ -148,7 +149,7 @@ const Page = async ({ searchParams }: Props) => {
         <Reveal>
           <Box className="mt-10 border-2 border-slate-900 dark:border-slate-100 bg-white dark:bg-slate-900 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <Box>
-              <Typography className="font-serif font-bold! text-lg!">
+              <Typography className="font-bold! text-lg!">
                 Reporting by {article.byline || "The Guardian"}
               </Typography>
               <Typography className="text-sm! text-slate-600 dark:text-slate-400 mt-1!">

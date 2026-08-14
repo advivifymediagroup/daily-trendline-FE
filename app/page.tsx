@@ -1,11 +1,8 @@
-import NewsCard from "@/components/NewsCard";
-import { Box, Typography } from "@mui/material";
-import BreakingNewsTicker from "@/components/BreakingNewsTicker";
-import CategoryNewsCard from "@/components/CategoryNewsCard";
-import LiveHeadlines from "@/components/LiveHeadlines";
-import Reveal from "@/components/Reveal";
 import type { Metadata } from "next";
 import Link from "next/link";
+import FeedCard, { type FeedItem } from "@/components/FeedCard";
+import BreakingNewsTicker from "@/components/BreakingNewsTicker";
+import Reveal from "@/components/Reveal";
 import {
   getFeaturedNews,
   getNewsByCategory,
@@ -13,180 +10,106 @@ import {
   getTopStories,
 } from "./api/news";
 import { mapStrapiToNewsCard } from "@/utils/newsCard";
+import {
+  getGuardianHeadlines,
+  formatRelativeTime,
+  readingTime,
+  largerImage,
+} from "@/utils/guardian";
 
 export const metadata: Metadata = {
   title: "Home | DailyTrendline",
 };
 
-function SectionHeader({
-  label,
-  href,
-}: {
-  label: string;
-  href?: string;
-}) {
-  return (
-    <Box className="section-rule pt-3 mb-5 flex items-center justify-between">
-      <Typography component="h2" className="section-label">
-        {label}
-      </Typography>
-      {href && (
-        <Link
-          href={href}
-          className="text-xs uppercase tracking-widest font-bold text-slate-500 no-underline hover:text-slate-900 hover:underline dark:text-slate-400 dark:hover:text-slate-100"
-        >
-          View all →
-        </Link>
-      )}
-    </Box>
-  );
+/** Strapi article -> feed row. */
+function fromStrapi(item: any, layout: FeedItem["layout"]): FeedItem {
+  const mapped = mapStrapiToNewsCard(item);
+  const query = `documentId=${mapped.documentId ?? ""}&id=${mapped.id}`;
+
+  return {
+    href: `/${mapped.category.toLowerCase()}/${mapped.slug}?${query}`,
+    source: "Daily Trendline",
+    sourceNote: `newsroom · ${mapped.author}`,
+    verified: true,
+    headline: mapped.headline,
+    summary: mapped.description,
+    image: mapped.featuredImage,
+    timeAgo: mapped.date,
+    category: mapped.category,
+    layout,
+  };
 }
 
 export default async function Home() {
-  const [
-    featuredArticles,
-    topStories,
-    businessNews,
-    techNews,
-    sportsNews,
-    entertainmentNews,
-    tickerNews,
-  ] = await Promise.all([
+  const [featured, topStories, tickerNews, guardian] = await Promise.all([
     getFeaturedNews(),
     getTopStories(),
-    getNewsByCategory("business"),
-    getNewsByCategory("technology"),
-    getNewsByCategory("sports"),
-    getNewsByCategory("entertainment"),
     getTickerNews(),
+    getGuardianHeadlines("news", 10),
   ]);
 
-  const briefing = [
+  // Our own stories lead the feed, then live wire copy fills it out.
+  const ownStories: any[] = [
+    ...(featured?.data ?? []),
     ...(topStories?.data ?? []),
-    ...(featuredArticles?.data?.slice(1) ?? []),
-  ].slice(0, 5);
-
-  const categorySections = [
-    { label: "Business", href: "/business", items: businessNews?.data ?? [] },
-    { label: "Technology", href: "/technology", items: techNews?.data ?? [] },
-    { label: "Sports", href: "/sports", items: sportsNews?.data ?? [] },
-    {
-      label: "Entertainment",
-      href: "/entertainment",
-      items: entertainmentNews?.data ?? [],
-    },
   ];
 
+  const ownItems: FeedItem[] = ownStories.map((item, index) =>
+    fromStrapi(item, index === 0 ? "lead" : "compact"),
+  );
+
+  const guardianItems: FeedItem[] = guardian.map((article, index) => ({
+    href: `/read?g=${encodeURIComponent(article.id)}`,
+    source: "The Guardian",
+    sourceNote: `partner publisher · ${article.sectionName}`,
+    verified: true,
+    headline: article.title,
+    summary: article.standfirst ?? undefined,
+    image:
+      index % 4 === 0 ? largerImage(article.thumbnail) : article.thumbnail,
+    timeAgo: formatRelativeTime(article.publishedAt),
+    readingTime: readingTime(article),
+    // Give the wire feed a lead image every few rows for rhythm.
+    layout: index % 4 === 0 ? "lead" : "compact",
+  }));
+
+  const feed = [...ownItems, ...guardianItems];
+
   return (
-    <Box className="py-6 flex flex-col gap-12 text-slate-900 dark:text-slate-100">
-      <BreakingNewsTicker news={tickerNews?.data} />
+    <div className="text-slate-900 dark:text-slate-100">
+      {tickerNews?.data?.length ? (
+        <div className="mb-6">
+          <BreakingNewsTicker news={tickerNews.data} />
+        </div>
+      ) : null}
 
-      {/* Lead: hero + the briefing */}
-      <Box component="section">
-        <SectionHeader label="Top of the day" />
+      {/* Feed header */}
+      <div className="mb-2 flex items-baseline justify-between gap-4 border-b-2 border-slate-900 pb-3 dark:border-slate-100">
+        <h1 className="text-sm font-bold uppercase tracking-[0.15em] text-slate-900 dark:text-slate-100">
+          Latest headlines
+        </h1>
+        <Link
+          href="/search"
+          className="text-xs font-bold uppercase tracking-widest text-slate-500 no-underline hover:text-slate-900 hover:underline dark:text-slate-400 dark:hover:text-slate-100"
+        >
+          Search →
+        </Link>
+      </div>
 
-        <Box className="grid lg:grid-cols-3 gap-6">
-          {/* Hero story */}
-          <Box className="lg:col-span-2">
-            {featuredArticles?.data?.[0] && (
-              <NewsCard
-                {...mapStrapiToNewsCard(featuredArticles.data[0])}
-                height={500}
-              />
-            )}
-          </Box>
+      {/* The feed */}
+      <div className="flex flex-col">
+        {feed.map((item, index) => (
+          <Reveal key={`${item.href}-${index}`} delay={index < 3 ? 0 : 60}>
+            <FeedCard item={item} />
+          </Reveal>
+        ))}
 
-          {/* The briefing — numbered digest */}
-          <Box className="border hairline bg-white dark:bg-slate-900 p-5">
-            <Typography className="section-label pb-3 border-b-2 border-slate-900 dark:border-slate-100">
-              The Briefing
-            </Typography>
-
-            <Box className="flex flex-col">
-              {briefing.map((item: any, index: number) => {
-                const mapped = mapStrapiToNewsCard(item);
-                return (
-                  <Link
-                    key={item.id ?? index}
-                    href={`/${mapped.category.toLowerCase()}/${mapped.slug}?documentId=${mapped.documentId ?? ""}&id=${mapped.id}`}
-                    className="group flex gap-4 py-4 border-b hairline last:border-b-0 no-underline"
-                  >
-                    <span className="font-serif font-black text-3xl leading-none text-slate-300 dark:text-slate-700 group-hover:text-brand-dark transition-colors">
-                      {index + 1}
-                    </span>
-                    <Box>
-                      <Typography className="font-serif font-semibold! leading-snug text-slate-900 dark:text-slate-100 group-hover:underline decoration-2 underline-offset-2 line-clamp-2">
-                        {mapped.headline}
-                      </Typography>
-                      <Typography className="text-xs! uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-1!">
-                        {mapped.category} — {mapped.date}
-                      </Typography>
-                    </Box>
-                  </Link>
-                );
-              })}
-
-              {briefing.length === 0 && (
-                <Typography className="text-sm text-slate-500 py-4">
-                  No stories yet — check back soon.
-                </Typography>
-              )}
-            </Box>
-          </Box>
-        </Box>
-      </Box>
-
-      {/* Live external headlines (Guardian, full text) */}
-      <Reveal>
-        <LiveHeadlines
-          section="news"
-          title="Live from around the web"
-          max={6}
-        />
-      </Reveal>
-
-      {/* Category sections */}
-      <Box component="section">
-        <SectionHeader label="The Sections" />
-
-        <Box className="grid md:grid-cols-2 gap-6">
-          {categorySections.map((section, sectionIndex) => (
-            <Reveal
-              key={section.label}
-              delay={(sectionIndex % 2) * 100}
-              className="h-full"
-            >
-            <Box
-              className="border hairline bg-white dark:bg-slate-900 p-5 h-full"
-            >
-              <Box className="flex items-center justify-between pb-3 border-b-2 border-slate-900 dark:border-slate-100 mb-4">
-                <Typography className="section-label">
-                  {section.label}
-                </Typography>
-                <Link
-                  href={section.href}
-                  className="text-xs uppercase tracking-widest font-bold text-slate-500 no-underline hover:text-slate-900 hover:underline dark:text-slate-400 dark:hover:text-slate-100"
-                >
-                  More →
-                </Link>
-              </Box>
-
-              <Box className="flex flex-col gap-3">
-                {section.items.map((item: any, index: number) => (
-                  <CategoryNewsCard key={index} {...mapStrapiToNewsCard(item)} />
-                ))}
-
-                {section.items.length === 0 && (
-                  <Typography className="text-sm text-slate-500">
-                    Nothing here yet.
-                  </Typography>
-                )}
-              </Box>
-            </Box>
-            </Reveal>
-          ))}
-        </Box>
-      </Box>
-    </Box>
+        {feed.length === 0 && (
+          <p className="py-10 text-center text-slate-500">
+            No stories yet — check back soon.
+          </p>
+        )}
+      </div>
+    </div>
   );
 }

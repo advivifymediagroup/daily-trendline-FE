@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import NewsletterSignup from "@/components/NewsletterSignup";
 import ScrollProgress from "@/components/ScrollProgress";
+import SidebarNav from "@/components/SidebarNav";
+import RightRail from "@/components/RightRail";
+import MobileTopBar from "@/components/MobileTopBar";
+import TopUtilityBar from "@/components/TopUtilityBar";
 import { getGlobalPageData, getGlobalPageMetadata } from "./api/news";
 
 const geistSans = Geist({
@@ -70,11 +72,24 @@ export default async function RootLayout({
       </head>
       <body className="antialiased">
         <ScrollProgress />
-        <Header data={globalData?.header} />
-        <main className="mx-auto w-full max-w-[1310px] px-4 min-h-[85vh]">
-          {children}
-        </main>
-        <NewsletterSignup />
+        <MobileTopBar data={globalData?.header} />
+
+        {/* Three-column shell: nav rail | feed | widget rail */}
+        <div className="mx-auto flex w-full max-w-[1400px] gap-8 px-4 xl:px-6">
+          <div className="hidden w-[240px] shrink-0 xl:block">
+            <SidebarNav data={globalData?.header} />
+          </div>
+
+          <main className="min-w-0 flex-1 min-h-[85vh] pb-10">
+            <TopUtilityBar />
+            {children}
+          </main>
+
+          <div className="hidden w-[330px] shrink-0 lg:block">
+            <RightRail />
+          </div>
+        </div>
+
         <Footer data={globalData?.footer} />
       </body>
     </html>

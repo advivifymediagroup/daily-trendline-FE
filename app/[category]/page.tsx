@@ -1,21 +1,17 @@
 import React from "react";
 import type { Metadata } from "next";
-import { Box, Typography } from "@mui/material";
-import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
-import SearchCard from "@/components/SearchCard";
-import LiveHeadlines from "@/components/LiveHeadlines";
+import FeedCard, { type FeedItem } from "@/components/FeedCard";
 import Reveal from "@/components/Reveal";
+import { getCategoryBySlug, getNewsByCategory } from "../api/news";
+import { mapStrapiToNewsCard } from "@/utils/newsCard";
 import {
-  getCategoryBySlug,
-  getNewsByCategory,
-  getPopularTags,
-} from "../api/news";
-import { getStrapiMediaURL } from "@/utils/strapiUtils";
-import { toGuardianSection } from "@/utils/guardian";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+  getGuardianHeadlines,
+  toGuardianSection,
+  formatRelativeTime,
+  readingTime,
+  largerImage,
+} from "@/utils/guardian";
 
 type Props = {
   params: Promise<{ category: string }>;
@@ -32,235 +28,97 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const name = categoryData?.name ?? titleFromSlug(category);
 
   if (!categoryData && !toGuardianSection(category)) {
-    return {
-      title: "Page Not Found",
-    };
+    return { title: "Page Not Found" };
   }
 
-  return {
-    title: `${name} News`,
-  };
+  return { title: `${name} News` };
 }
 
 const Page = async ({ params }: Props) => {
   const { category } = await params;
-  const [categoryData, popularTags] = await Promise.all([
-    getCategoryBySlug(category),
-    getPopularTags(),
-  ]);
-
   const guardianSection = toGuardianSection(category);
+  const categoryData = await getCategoryBySlug(category);
 
-  // A section is valid if the CMS knows it OR it maps to a Guardian section,
-  // so the standard sections still work when Strapi is unavailable.
+  // Valid if the CMS knows it OR it maps to a Guardian section, so the
+  // standard sections keep working when Strapi is unavailable.
   if (!categoryData && !guardianSection) {
     notFound();
   }
 
   const categoryName = categoryData?.name ?? titleFromSlug(category);
 
-  const categoryNews = await getNewsByCategory(category, 12);
-  const data = categoryNews?.data ?? [];
+  const [categoryNews, guardian] = await Promise.all([
+    getNewsByCategory(category, 12),
+    guardianSection
+      ? getGuardianHeadlines(guardianSection, 10)
+      : Promise.resolve([]),
+  ]);
 
-  const normalizedNews = data.map((item: any) => ({
-    headline: item.title,
-    description: item.description,
-    featuredImage:
-      getStrapiMediaURL(item.featuredImage?.url) || "/fallback.jpg",
-    date: new Date(item.publishedAt).toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    }),
-    category: item.category?.name || "",
-    slug: item.slug,
-    isFeatured: item.isFeatured,
-    isTrending: item.isTrending,
-    documentId: item.documentId,
-    id: item.id,
+  const ownItems: FeedItem[] = (categoryNews?.data ?? []).map(
+    (item: any, index: number) => {
+      const mapped = mapStrapiToNewsCard(item);
+      const query = `documentId=${mapped.documentId ?? ""}&id=${mapped.id}`;
+
+      return {
+        href: `/${mapped.category.toLowerCase()}/${mapped.slug}?${query}`,
+        source: "Daily Trendline",
+        sourceNote: `newsroom · ${mapped.author}`,
+        verified: true,
+        headline: mapped.headline,
+        summary: mapped.description,
+        image: mapped.featuredImage,
+        timeAgo: mapped.date,
+        category: mapped.category,
+        layout: index === 0 ? "lead" : "compact",
+      };
+    },
+  );
+
+  const guardianItems: FeedItem[] = guardian.map((article, index) => ({
+    href: `/read?g=${encodeURIComponent(article.id)}`,
+    source: "The Guardian",
+    sourceNote: `partner publisher · ${article.sectionName}`,
+    verified: true,
+    headline: article.title,
+    summary: article.standfirst ?? undefined,
+    image:
+      index % 4 === 0 ? largerImage(article.thumbnail) : article.thumbnail,
+    timeAgo: formatRelativeTime(article.publishedAt),
+    readingTime: readingTime(article),
+    layout: index % 4 === 0 ? "lead" : "compact",
   }));
 
-  const featured =
-    normalizedNews.find((item: any) => item.isFeatured) || normalizedNews[0];
-
-  const restNews = normalizedNews.filter((item: any) => item !== featured);
-  const trendingNews = normalizedNews.filter((item: any) => item.isTrending);
-  const hasCmsContent = normalizedNews.length > 0;
+  const feed = [...ownItems, ...guardianItems];
 
   return (
-    <Box className="py-8 text-slate-900 dark:text-slate-100">
-      {/* Category masthead */}
-      <Box className="mb-10 border-b-4 border-slate-900 dark:border-slate-100 pb-6">
-        <Typography className="section-label text-brand-dark!">
+    <div className="text-slate-900 dark:text-slate-100">
+      {/* Section header */}
+      <div className="mb-2 border-b-2 border-slate-900 pb-3 dark:border-slate-100">
+        <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-brand-dark">
           Section
-        </Typography>
-        <Typography
-          component="h1"
-          className="font-serif font-black text-5xl! md:text-6xl! capitalize mt-1!"
-        >
+        </p>
+        <h1 className="mt-1 text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
           {categoryName}
-        </Typography>
-        <Typography className="text-slate-600 mt-2! dark:text-slate-400">
+        </h1>
+        <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
           Latest updates and breaking stories from {categoryName}.
-        </Typography>
-      </Box>
+        </p>
+      </div>
 
-      <Box className="grid lg:grid-cols-4 gap-10">
-        {/* Main column */}
-        <Box className={`${hasCmsContent ? "lg:col-span-3" : "lg:col-span-4"} flex flex-col gap-12`}>
-          {/* Featured article */}
-          {featured && (
-            <Link
-              href={{
-                pathname: `/${featured.category.toLowerCase()}/${featured.slug}`,
-                query: {
-                  documentId: featured.documentId,
-                  id: String(featured.id),
-                },
-              }}
-              className="no-underline block group"
-            >
-              <Box className="border border-slate-900 dark:border-slate-700 overflow-hidden bg-white dark:bg-slate-900">
-                <Box className="relative h-[400px] overflow-hidden">
-                  <Image
-                    src={featured.featuredImage}
-                    alt={featured.headline}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    unoptimized
-                  />
-                  <span className="absolute top-0 left-0 bg-brand px-3 py-1 text-xs font-bold uppercase tracking-widest text-slate-900">
-                    Featured
-                  </span>
-                </Box>
+      <div className="flex flex-col">
+        {feed.map((item, index) => (
+          <Reveal key={`${item.href}-${index}`} delay={index < 3 ? 0 : 60}>
+            <FeedCard item={item} />
+          </Reveal>
+        ))}
 
-                <Box className="p-6">
-                  <Typography
-                    variant="h5"
-                    className="font-serif font-bold! text-slate-900 dark:text-slate-100 group-hover:underline decoration-2 underline-offset-4"
-                  >
-                    {featured.headline}
-                  </Typography>
-
-                  {featured?.description && (
-                    <Typography className="text-slate-600 mt-2! dark:text-slate-400">
-                      {featured.description}
-                    </Typography>
-                  )}
-
-                  <Typography className="text-xs! uppercase tracking-widest text-slate-500 mt-4! dark:text-slate-400">
-                    {featured.date}
-                  </Typography>
-                </Box>
-              </Box>
-            </Link>
-          )}
-
-          {/* Latest list — CMS content only */}
-          {hasCmsContent && (
-          <Box>
-            <Box className="section-rule pt-3 mb-5">
-              <Typography component="h2" className="section-label capitalize">
-                Latest in {categoryName}
-              </Typography>
-            </Box>
-
-            <Box className="grid gap-4">
-              {restNews.map((item: any, index: number) => (
-                <Reveal key={index} delay={Math.min(index, 4) * 70}>
-                  <SearchCard {...item} />
-                </Reveal>
-              ))}
-            </Box>
-
-          </Box>
-          )}
-
-          {/* Live external headlines for this category */}
-          {guardianSection && (
-            <Reveal>
-              <LiveHeadlines
-                section={guardianSection}
-                title={`Live ${categoryName} headlines`}
-                max={6}
-              />
-            </Reveal>
-          )}
-        </Box>
-
-        {/* Sidebar — CMS content only */}
-        {hasCmsContent && (
-        <Box className="hidden lg:flex flex-col gap-6">
-          <Box className="border hairline bg-white p-5 dark:bg-slate-900">
-            <Box className="flex items-center gap-2 pb-3 border-b-2 border-slate-900 dark:border-slate-100 mb-4">
-              <TrendingUpIcon fontSize="small" />
-              <Typography className="section-label">Trending</Typography>
-            </Box>
-
-            <Box className="flex flex-col gap-3">
-              {trendingNews.map((item: any, index: number) => (
-                <Link
-                  key={index}
-                  href={{
-                    pathname: `/${item.category.toLowerCase()}/${item.slug}`,
-                    query: {
-                      documentId: item.documentId,
-                      id: String(item.id),
-                    },
-                  }}
-                  className="flex gap-3 group no-underline border-b hairline pb-3 last:border-b-0"
-                >
-                  <Image
-                    src={item.featuredImage || "/fallback.jpg"}
-                    alt={item.headline}
-                    width={400}
-                    height={300}
-                    className="w-20 h-16 object-cover border hairline"
-                    unoptimized
-                  />
-
-                  <Typography className="text-sm font-serif font-medium leading-snug line-clamp-3 text-slate-900 group-hover:underline dark:text-slate-200">
-                    {item.headline}
-                  </Typography>
-                </Link>
-              ))}
-
-              {trendingNews.length === 0 && (
-                <Typography className="text-sm text-slate-500">
-                  Nothing trending right now.
-                </Typography>
-              )}
-            </Box>
-          </Box>
-
-          <Box className="border hairline bg-white p-5 dark:bg-slate-900">
-            <Box className="flex items-center gap-2 pb-3 border-b-2 border-slate-900 dark:border-slate-100 mb-4">
-              <LocalOfferIcon fontSize="small" />
-              <Typography className="section-label">Popular Tags</Typography>
-            </Box>
-
-            <Box className="flex flex-wrap gap-2">
-              {popularTags.map((tag: any) => (
-                <Link
-                  key={tag.slug}
-                  href={`/tags/${tag.slug}`}
-                  className="no-underline border hairline px-3 py-1 text-xs uppercase tracking-widest font-bold text-slate-700 hover:bg-slate-900 hover:text-white transition-colors dark:text-slate-300 dark:hover:bg-slate-100 dark:hover:text-slate-900"
-                >
-                  {tag.name}
-                </Link>
-              ))}
-
-              {popularTags.length === 0 && (
-                <Typography className="text-sm text-slate-500">
-                  No tags yet.
-                </Typography>
-              )}
-            </Box>
-          </Box>
-        </Box>
+        {feed.length === 0 && (
+          <p className="py-10 text-center text-slate-500">
+            No stories in this section yet.
+          </p>
         )}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

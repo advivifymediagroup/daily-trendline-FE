@@ -115,14 +115,14 @@ const Page = async ({ params, searchParams }: Props) => {
         {/* Headline */}
         <Typography
           component="h1"
-          className="font-serif font-black text-4xl! md:text-5xl! leading-tight! mt-4! text-slate-900 dark:text-slate-100"
+          className="font-extrabold text-4xl! md:text-5xl! leading-tight! mt-4! text-slate-900 dark:text-slate-100"
         >
           {articleTitle}
         </Typography>
 
         {/* Standfirst */}
         {articleExcerpt && articleExcerpt !== articleContent && (
-          <Typography className="font-serif text-xl! text-slate-600 dark:text-slate-400 mt-4! leading-relaxed!">
+          <Typography className="text-xl! text-slate-600 dark:text-slate-400 mt-4! leading-relaxed!">
             {articleExcerpt}
           </Typography>
         )}
