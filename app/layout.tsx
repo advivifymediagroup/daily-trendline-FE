@@ -8,6 +8,7 @@ import RightRail from "@/components/RightRail";
 import MobileTopBar from "@/components/MobileTopBar";
 import TopUtilityBar from "@/components/TopUtilityBar";
 import { getGlobalPageData, getGlobalPageMetadata } from "./api/news";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -91,6 +92,7 @@ export default async function RootLayout({
         </div>
 
         <Footer data={globalData?.footer} />
+        <Analytics />
       </body>
     </html>
   );
