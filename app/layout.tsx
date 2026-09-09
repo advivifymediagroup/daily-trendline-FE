@@ -35,6 +35,9 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description:
       metadata?.description || "Latest news in short and concise format.",
+    icons: {
+      icon: "/favicon/16x16px.png",
+    },
   };
 }
 

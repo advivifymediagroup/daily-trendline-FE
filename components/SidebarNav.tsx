@@ -4,7 +4,6 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { getStrapiMedia } from "./StrapiImage";
 import { DEFAULT_NAV, withFallback } from "@/utils/siteNav";
 
 type SidebarNavProps = {
@@ -33,9 +32,6 @@ const SidebarNav = ({
   const pathname = usePathname();
 
   const navLink = withFallback(data?.navLink, DEFAULT_NAV);
-  const logo = data?.logo;
-  const wordmark = data?.logoText?.text || "Daily Trendline";
-
   const isActive = (url: string) =>
     url === "/" ? pathname === "/" : pathname === url || pathname.startsWith(url + "/");
 
@@ -53,19 +49,20 @@ const SidebarNav = ({
         onClick={onNavigate}
         className="flex items-center gap-2 no-underline px-1"
       >
-        {logo?.url && (
-          <Image
-            src={getStrapiMedia(logo.url) || "/fallback.jpg"}
-            alt=""
-            width={32}
-            height={32}
-            unoptimized
-          />
-        )}
-        <span className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
-          {wordmark}
-          <span className="text-brand-dark dark:text-brand">.</span>
-        </span>
+        <Image
+          src="/logos/2x/lightmode.png"
+          alt="Daily Trendline"
+          width={220}
+          height={18}
+          className="h-auto w-[220px] dark:hidden"
+        />
+        <Image
+          src="/logos/2x/darkmode.png"
+          alt="Daily Trendline"
+          width={220}
+          height={18}
+          className="hidden h-auto w-[220px] dark:block"
+        />
       </Link>
 
       {/* Section heading */}

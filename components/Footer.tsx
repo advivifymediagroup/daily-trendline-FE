@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Box, Typography, IconButton } from "@mui/material";
+import Image from "next/image";
 import Link from "next/link";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import XIcon from "@mui/icons-material/X";
@@ -25,10 +26,8 @@ type FooterProps = {
 };
 
 const Footer = ({ data }: FooterProps) => {
-  const { socialLink, logoText, footerText, footerSection } = data ?? {};
-
-  const wordmark =
-    typeof logoText === "string" ? logoText : logoText?.text || "Daily Trendline";
+  const { socialLink, footerText, footerSection } = data ?? {};
+  const wordmark = "Daily Trendline";
 
   // Fall back to the built-in sections when Strapi has nothing to give.
   const sections = withFallback(footerSection, DEFAULT_FOOTER_SECTIONS);
@@ -47,10 +46,13 @@ const Footer = ({ data }: FooterProps) => {
       <Box className="max-w-[1310px] mx-auto px-4 sm:px-6 lg:px-8 py-14 grid gap-10 md:grid-cols-5">
         {/* Wordmark + description + social */}
         <Box className="md:col-span-2 space-y-4">
-          <span className="font-serif font-black text-3xl text-white">
-            {wordmark}
-            <span className="text-brand">.</span>
-          </span>
+          <Image
+            src="/logos/2x/darkmode.png"
+            alt="Daily Trendline"
+            width={240}
+            height={20}
+            className="h-auto w-[240px]"
+          />
 
           <Typography variant="body2" className="text-slate-400 max-w-sm">
             {typeof footerText === "string"

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Drawer, IconButton } from "@mui/material";
+import Image from "next/image";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
@@ -15,8 +16,6 @@ import ThemeToggle from "./ThemeToggle";
  */
 const MobileTopBar = ({ data }: { data: any }) => {
   const [open, setOpen] = useState(false);
-  const wordmark = data?.logoText?.text || "Daily Trendline";
-
   return (
     <>
       <div className="sticky top-0 z-50 flex items-center justify-between border-b-2 border-slate-900 bg-white px-4 py-3 xl:hidden dark:border-slate-100 dark:bg-slate-950">
@@ -29,10 +28,20 @@ const MobileTopBar = ({ data }: { data: any }) => {
         </IconButton>
 
         <Link href="/" className="no-underline">
-          <span className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
-            {wordmark}
-            <span className="text-brand-dark dark:text-brand">.</span>
-          </span>
+          <Image
+            src="/logos/2x/lightmode.png"
+            alt="Daily Trendline"
+            width={180}
+            height={15}
+            className="h-auto w-[180px] dark:hidden"
+          />
+          <Image
+            src="/logos/2x/darkmode.png"
+            alt="Daily Trendline"
+            width={180}
+            height={15}
+            className="hidden h-auto w-[180px] dark:block"
+          />
         </Link>
 
         <div className="flex items-center">
