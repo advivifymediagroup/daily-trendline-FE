@@ -225,6 +225,43 @@ export async function getTopStories() {
   return (await fetchData(href)) ?? EMPTY_LIST;
 }
 
+/**
+ * Latest published articles, regardless of isFeatured/isTopStory flags.
+ *
+ * getFeaturedNews/getTopStories only surface articles an editor has
+ * explicitly flagged, so a normal published article with both flags left
+ * at their default `false` never appeared anywhere on the homepage. This
+ * backstops the home feed with everything else so newly published stories
+ * show up immediately instead of being crowded out by the Guardian feed.
+ */
+export async function getLatestNews(limit = 12) {
+  const href = strapiUrl("/api/articles", {
+    populate: {
+      category: {
+        fields: ["name", "slug"],
+      },
+      featuredImage: {
+        fields: ["url", "alternativeText"],
+      },
+      author: {
+        fields: ["name"],
+        populate: {
+          avatar: {
+            fields: ["url", "alternativeText"],
+          },
+        },
+      },
+    },
+    sort: ["publishedAt:desc"],
+    pagination: {
+      limit,
+    },
+  });
+
+  if (!href) return EMPTY_LIST;
+  return (await fetchData(href)) ?? EMPTY_LIST;
+}
+
 export async function getNewsByCategory(categorySlug: string, limit = 4) {
   const href = strapiUrl("/api/articles", {
     filters: {

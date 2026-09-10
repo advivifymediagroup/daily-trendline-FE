@@ -5,6 +5,7 @@ import BreakingNewsTicker from "@/components/BreakingNewsTicker";
 import Reveal from "@/components/Reveal";
 import {
   getFeaturedNews,
+  getLatestNews,
   getNewsByCategory,
   getTickerNews,
   getTopStories,
@@ -41,18 +42,30 @@ function fromStrapi(item: any, layout: FeedItem["layout"]): FeedItem {
 }
 
 export default async function Home() {
-  const [featured, topStories, tickerNews, guardian] = await Promise.all([
-    getFeaturedNews(),
-    getTopStories(),
-    getTickerNews(),
-    getGuardianHeadlines("news", 10),
-  ]);
+  const [featured, topStories, latest, tickerNews, guardian] =
+    await Promise.all([
+      getFeaturedNews(),
+      getTopStories(),
+      getLatestNews(12),
+      getTickerNews(),
+      getGuardianHeadlines("news", 10),
+    ]);
 
-  // Our own stories lead the feed, then live wire copy fills it out.
-  const ownStories: any[] = [
+  // Flagged stories lead the feed, then every other published article,
+  // then live wire copy fills out whatever's left. De-duped so a story
+  // that's both featured and in the latest batch isn't shown twice.
+  const seen = new Set<string | number>();
+  const ownStories: any[] = [];
+  for (const item of [
     ...(featured?.data ?? []),
     ...(topStories?.data ?? []),
-  ];
+    ...(latest?.data ?? []),
+  ]) {
+    const key = item.documentId ?? item.id;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    ownStories.push(item);
+  }
 
   const ownItems: FeedItem[] = ownStories.map((item, index) =>
     fromStrapi(item, index === 0 ? "lead" : "compact"),
