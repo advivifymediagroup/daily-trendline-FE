@@ -115,6 +115,7 @@ const Page = async ({ params, searchParams }: Props) => {
         {/* Headline */}
         <Typography
           component="h1"
+          style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
           className="font-extrabold text-4xl! md:text-5xl! leading-tight! mt-4! text-slate-900 dark:text-slate-100"
         >
           {articleTitle}
@@ -122,7 +123,9 @@ const Page = async ({ params, searchParams }: Props) => {
 
         {/* Standfirst */}
         {articleExcerpt && articleExcerpt !== articleContent && (
-          <Typography className="text-xl! text-slate-600 dark:text-slate-400 mt-4! leading-relaxed!">
+          <Typography 
+          style={{ fontFamily: "var(--font-source-sans), Arial, sans-serif" }}
+          className="text-xl! text-slate-600 dark:text-slate-400 mt-4! leading-relaxed!">
             {articleExcerpt}
           </Typography>
         )}
@@ -165,6 +168,7 @@ const Page = async ({ params, searchParams }: Props) => {
         {/* Body */}
         <Typography
           component="div"
+          style={{ fontFamily: "var(--font-source-sans), Arial, sans-serif" }}
           className="article-body whitespace-pre-line text-slate-900 dark:text-slate-200"
         >
           {articleContent || "No content available for this article yet."}

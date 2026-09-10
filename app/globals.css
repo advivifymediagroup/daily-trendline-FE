@@ -6,8 +6,8 @@
   --color-brand-dark: #d4c500;
   --color-ink: #0a0a0a;
   --color-paper: #f7f6f2;
-  --font-serif: var(--font-source-serif);
-  --font-sans: var(--font-geist-sans);
+  --font-serif: var(--font-playfair);
+  --font-sans: var(--font-source-sans);
 }
 
 :root {
@@ -20,6 +20,16 @@ html.dark {
 
 body {
   @apply bg-paper text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100;
+  font-family: var(--font-sans), Arial, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif), Georgia, serif;
 }
 
 /* Editorial design: no rounded corners anywhere, including MUI defaults. */
@@ -49,7 +59,7 @@ body {
 
 /* Reading measure for article body */
 .article-body {
-  font-family: var(--font-serif), Georgia, serif;
+  font-family: var(--font-sans), Arial, sans-serif;
   font-size: 1.15rem;
   line-height: 1.85;
 }

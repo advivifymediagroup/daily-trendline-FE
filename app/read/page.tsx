@@ -73,6 +73,7 @@ const Page = async ({ searchParams }: Props) => {
         {/* Headline */}
         <Typography
           component="h1"
+          style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
           className="font-extrabold text-4xl! md:text-5xl! leading-tight! mt-4!"
         >
           {article.title}
@@ -115,7 +116,10 @@ const Page = async ({ searchParams }: Props) => {
         )}
 
         {/* Full body — parsed to text blocks server-side, escaped by React */}
-        <Box className="article-body text-slate-900 dark:text-slate-200 flex flex-col gap-5">
+        <Box
+          style={{ fontFamily: "var(--font-source-sans), Arial, sans-serif" }}
+          className="article-body text-slate-900 dark:text-slate-200 flex flex-col gap-5"
+        >
           {article.blocks.map((block, index) => {
             if (block.type === "h2") {
               return (
@@ -134,7 +138,7 @@ const Page = async ({ searchParams }: Props) => {
                 <Box
                   key={index}
                   component="blockquote"
-                  className="border-l-4 border-brand pl-5 my-2 font-serif italic text-slate-700 dark:text-slate-300"
+                  className="border-l-4 border-brand pl-5 my-2 font-sans italic text-slate-700 dark:text-slate-300"
                 >
                   {block.text}
                 </Box>
