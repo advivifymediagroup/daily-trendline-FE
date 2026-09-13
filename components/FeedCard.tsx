@@ -18,6 +18,8 @@ export type FeedItem = {
   timeAgo?: string;
   readingTime?: number;
   category?: string;
+  /** Per-category accent for the category chip; falls back to brand yellow. */
+  chipColor?: string;
   /** Large lead image vs. a thumbnail beside the text. */
   layout?: "lead" | "compact";
 };
@@ -34,7 +36,10 @@ const FeedCard = ({ item }: { item: FeedItem }) => {
     : {};
 
   return (
-    <article className="border-b hairline py-6 first:pt-0">
+    // Border uses its own (rather than the shared .hairline) color so
+    // consecutive articles stay clearly separated in dark mode, where
+    // .hairline's slate-800 nearly disappears against the page background.
+    <article className="border-b border-slate-300 py-7 first:pt-2 dark:border-slate-700">
       {/* Source row */}
       <div className="mb-3 flex items-center gap-2">
         <span
@@ -118,9 +123,14 @@ const FeedCard = ({ item }: { item: FeedItem }) => {
       </Link>
 
       {/* Meta bar */}
-      <div className="mt-3 flex flex-wrap items-center gap-5 text-slate-500 dark:text-slate-400">
+      <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-slate-500 dark:text-slate-400">
         {item.category && (
-          <span className="bg-brand px-2 py-0.5 text-[11px] font-bold uppercase tracking-widest text-slate-900">
+          <span
+            className={`px-2 py-0.5 text-[11px] font-bold uppercase tracking-widest ${
+              item.chipColor ? "text-white" : "bg-brand text-slate-900"
+            }`}
+            style={item.chipColor ? { backgroundColor: item.chipColor } : undefined}
+          >
             {item.category}
           </span>
         )}
@@ -134,12 +144,22 @@ const FeedCard = ({ item }: { item: FeedItem }) => {
           </span>
         ) : null}
 
-        <span className="flex items-center gap-1 text-sm">
-          <ThumbUpOutlinedIcon sx={{ fontSize: 15 }} />
-        </span>
+        <span className="ml-auto flex items-center gap-1">
+          <button
+            type="button"
+            aria-label="Like"
+            className="rounded-full p-1.5 transition-colors hover:bg-stone-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+          >
+            <ThumbUpOutlinedIcon sx={{ fontSize: 15 }} />
+          </button>
 
-        <span className="flex items-center gap-1 text-sm">
-          <ChatBubbleOutlineIcon sx={{ fontSize: 15 }} />
+          <button
+            type="button"
+            aria-label="Comment"
+            className="rounded-full p-1.5 transition-colors hover:bg-stone-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+          >
+            <ChatBubbleOutlineIcon sx={{ fontSize: 15 }} />
+          </button>
         </span>
       </div>
     </article>

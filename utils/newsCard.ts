@@ -7,8 +7,9 @@ export const mapStrapiToNewsCard = (item: any) => {
     item.category?.name || item.category?.data?.attributes?.name;
 
   return {
-    featuredImage:
-      getStrapiMediaURL(imageUrl) ?? "https://via.placeholder.com/800x600",
+    // via.placeholder.com is no longer reliably reachable — use the same
+    // local fallback the article detail page already relies on.
+    featuredImage: getStrapiMediaURL(imageUrl) ?? "/fallback.jpg",
 
     headline: item.title,
     category: categoryName || "General",

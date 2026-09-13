@@ -143,7 +143,12 @@ const SearchCard: React.FC<SearchCardProps> = ({
           unoptimized
         />
 
-        <span className="absolute top-0 left-0 bg-brand px-2 py-0.5 text-[11px] font-bold uppercase tracking-widest text-slate-900">
+        <span
+          className={`absolute top-0 left-0 px-2 py-0.5 text-[11px] font-bold uppercase tracking-widest ${
+            chipColor ? "text-white" : "bg-brand text-slate-900"
+          }`}
+          style={chipColor ? { backgroundColor: chipColor } : undefined}
+        >
           {category}
         </span>
       </Box>

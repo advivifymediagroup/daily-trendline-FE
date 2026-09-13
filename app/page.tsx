@@ -37,6 +37,7 @@ function fromStrapi(item: any, layout: FeedItem["layout"]): FeedItem {
     image: mapped.featuredImage,
     timeAgo: mapped.date,
     category: mapped.category,
+    chipColor: mapped.chipColor,
     layout,
   };
 }
@@ -97,7 +98,7 @@ export default async function Home() {
       ) : null}
 
       {/* Feed header */}
-      <div className="mb-2 flex items-baseline justify-between gap-4 border-b-2 border-slate-900 pb-3 dark:border-slate-100">
+      <div className="mb-6 flex items-baseline justify-between gap-4 border-b-2 border-slate-900 pb-3 dark:border-slate-100">
         <h1 className="text-sm font-bold uppercase tracking-[0.15em] text-slate-900 dark:text-slate-100">
           Latest headlines
         </h1>

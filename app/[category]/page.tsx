@@ -69,6 +69,7 @@ const Page = async ({ params }: Props) => {
         image: mapped.featuredImage,
         timeAgo: mapped.date,
         category: mapped.category,
+        chipColor: mapped.chipColor,
         layout: index === 0 ? "lead" : "compact",
       };
     },
@@ -93,7 +94,7 @@ const Page = async ({ params }: Props) => {
   return (
     <div className="text-slate-900 dark:text-slate-100">
       {/* Section header */}
-      <div className="mb-2 border-b-2 border-slate-900 pb-3 dark:border-slate-100">
+      <div className="mb-6 border-b-2 border-slate-900 pb-3 dark:border-slate-100">
         <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-brand-dark">
           Section
         </p>

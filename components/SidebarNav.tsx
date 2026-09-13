@@ -80,7 +80,7 @@ const SidebarNav = ({
       </div>
 
       {/* Primary nav */}
-      <nav className="flex flex-col border-t hairline pt-4">
+      <nav className="flex flex-col gap-1 border-t hairline pt-4">
         <Link
           href="/"
           onClick={onNavigate}
