@@ -17,6 +17,5 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
   }
 
-  console.log(`[newsletter] subscription request: ${email}`);
   return NextResponse.json({ ok: true });
 }

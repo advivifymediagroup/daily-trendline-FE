@@ -31,11 +31,7 @@ type Props = {
  * The legacy ?documentId=&id= query params are kept as a fallback for old
  * links whose slug may have changed.
  */
-async function resolveArticle(
-  slug: string,
-  documentId?: string,
-  id?: string,
-) {
+async function resolveArticle(slug: string, documentId?: string, id?: string) {
   const bySlug = await getArticleBySlug(slug);
   if (bySlug) return bySlug;
 
@@ -86,8 +82,18 @@ const Page = async ({ params, searchParams }: Props) => {
       })
     : "";
 
-  const articleImage =
-    getStrapiMediaURL(article.featuredImage?.url) || "/fallback.jpg";
+const rawArticleImage = getStrapiMediaURL(
+  article.featuredImage?.url,
+);
+
+const articleImage =
+  rawArticleImage?.startsWith("https://res.cloudinary.com/")
+    ? rawArticleImage
+    : "/fallback.jpg";
+
+  const isCloudinaryImage = articleImage.startsWith(
+    "https://res.cloudinary.com/",
+  );
   const articleTitle = article.title || "Untitled article";
   const articleAuthor = article.author?.name || "Admin";
   const authorAvatar = getStrapiMediaURL(article.author?.avatar?.url);
@@ -123,9 +129,10 @@ const Page = async ({ params, searchParams }: Props) => {
 
         {/* Standfirst */}
         {articleExcerpt && articleExcerpt !== articleContent && (
-          <Typography 
-          style={{ fontFamily: "var(--font-source-sans), Arial, sans-serif" }}
-          className="text-xl! text-slate-600 dark:text-slate-400 mt-4! leading-relaxed!">
+          <Typography
+            style={{ fontFamily: "var(--font-source-sans), Arial, sans-serif" }}
+            className="text-xl! text-slate-600 dark:text-slate-400 mt-4! leading-relaxed!"
+          >
             {articleExcerpt}
           </Typography>
         )}
@@ -155,14 +162,23 @@ const Page = async ({ params, searchParams }: Props) => {
 
         {/* Featured image */}
         <Box className="relative w-full h-[420px] md:h-[520px] border hairline overflow-hidden mb-8">
-          <Image
-            src={articleImage}
-            alt={articleTitle}
-            fill
-            className="object-cover"
-            unoptimized
-            priority
-          />
+          {isCloudinaryImage ? (
+            <Image
+              src={articleImage}
+              alt={articleTitle}
+              fill
+              className="object-cover"
+              unoptimized
+              priority
+            />
+          ) : (
+            <img
+              src={articleImage}
+              alt={articleTitle}
+              className="h-full w-full object-cover"
+              loading="eager"
+            />
+          )}
         </Box>
 
         {/* Body */}

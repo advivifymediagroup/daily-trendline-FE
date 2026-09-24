@@ -259,7 +259,10 @@ export async function getLatestNews(limit = 12) {
   });
 
   if (!href) return EMPTY_LIST;
-  return (await fetchData(href)) ?? EMPTY_LIST;
+
+  const result = await fetchData(href);
+
+  return result ?? EMPTY_LIST;
 }
 
 export async function getNewsByCategory(categorySlug: string, limit = 4) {
